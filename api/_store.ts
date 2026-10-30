@@ -22,12 +22,6 @@ export interface StoredBooking {
   syncing?: boolean;
 }
 
-/**
- * ⚠️ TEMPORARY STORAGE (in memory).
- * Good enough for `npm run dev` and for testing the whole flow.
- * On Vercel every invocation can run in a different instance, so before going live
- * replace this Map by a real database (Vercel Postgres / KV, Supabase, ...).
- * Only this file has to change: bookings.ts just uses get / set.
- */
+ 
 const g = globalThis as unknown as { __bookingStore?: Map<string, StoredBooking> };
 export const store: Map<string, StoredBooking> = (g.__bookingStore ??= new Map());
