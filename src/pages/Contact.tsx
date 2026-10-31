@@ -11,18 +11,12 @@ import {
   MapPin,
   Clock,
   MessageCircle,
-  Music2,
   Send,
   ChevronRight,
   CheckCircle2,
   AlertCircle,
   ArrowRight,
-  BedDouble,
-  MoonStar,
-  Luggage,
-  PlaneTakeoff,
-  Route,
-  BusFront,
+
 } from "lucide-react";
 
 /* -------------------------------------------------------------------------- */
@@ -164,15 +158,7 @@ const EN: typeof FR = {
 type SubjectKey = keyof typeof FR.subjects;
 const SUBJECT_KEYS = Object.keys(FR.subjects) as SubjectKey[];
 
-// Same icons as the home "Nos services" section
-const QUICK_LINKS: { key: SubjectKey; to: string; Icon: typeof BedDouble }[] = [
-  { key: "hotels", to: "/hotels-tunisie", Icon: BedDouble },
-  { key: "omra", to: "/omra", Icon: MoonStar },
-  { key: "trips", to: "/voyage-organise", Icon: Luggage },
-  { key: "flights", to: "/vol", Icon: PlaneTakeoff },
-  { key: "circuits", to: "/circuit", Icon: Route },
-  { key: "transport", to: "/transport", Icon: BusFront },
-];
+
 
 /* -------------------------------------------------------------------------- */
 /*  Icons                                                                     */

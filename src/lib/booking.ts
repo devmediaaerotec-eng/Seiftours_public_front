@@ -1,10 +1,3 @@
-/**
- * Pure booking helpers: ISO dates (local time), date-range picking rules, rooms <-> URL.
- * No React and no imports, so `npm test` runs it directly with Node (booking.test.ts).
- */
-
-/* ---------------------------------- Dates --------------------------------- */
-// Dates are "YYYY-MM-DD" strings in local time: no timezone shifts, safe in URLs and APIs.
 
 const pad = (n: number) => String(n).padStart(2, "0");
 

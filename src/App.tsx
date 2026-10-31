@@ -15,7 +15,7 @@ import Circuitdetailpage from "./pages/Circuitdetailpage";
 
 const pages = {
   HotelsTunisie: () => import('./pages/HotelsTunisie'),
-  HotelsEtranger: () => import('./pages/HotelsEtranger'),
+
   VoyageOrganise: () => import('./pages/VoyageOrganise'),
   Circuit: () => import('./pages/Circuit'),
   Omra: () => import('./pages/Omra'),
@@ -28,7 +28,6 @@ const pages = {
 
 };
 const HotelsTunisie = lazy(pages.HotelsTunisie);
-const HotelsEtranger = lazy(pages.HotelsEtranger);
 const VoyageOrganise = lazy(pages.VoyageOrganise);
 const Circuit = lazy(pages.Circuit);
 const Omra = lazy(pages.Omra);
@@ -70,7 +69,6 @@ const AppRoutes = () => {
     <Route path="/" element={<Index />} />
     <Route path="/hotels-tunisie" element={<HotelsTunisie />} />
     <Route path="/hotels/:id" element={<HotelDetail />} />
-    <Route path="/hotels-etranger" element={<HotelsEtranger />} />
     <Route path="/voyage-organise" element={<VoyageOrganise />} />
     <Route path="/circuit" element={<Circuit />} />
     <Route path="/omra" element={<Omra />} />

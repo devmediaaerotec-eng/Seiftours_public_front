@@ -10,8 +10,7 @@ import {
   Search,
   Phone,
   MessageCircle,
-  Music2,
- } from "lucide-react";
+} from "lucide-react";
 import { getHotelCatalog } from "@/lib/hotelCatalog";
 import { useNav } from "@/hooks/Usenav";
 

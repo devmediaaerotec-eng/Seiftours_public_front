@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent, type Re
 import { createPortal } from "react-dom";
 import { Link, useLocation } from "react-router-dom";
 import {
-  AlertCircle, ArrowRight, Briefcase, Bus, BusFront, CalendarDays, Check, CheckCircle2, ChevronLeft, ChevronRight,
+  AlertCircle, ArrowRight, Briefcase, Bus, BusFront, CalendarDays, CheckCircle2, ChevronLeft, ChevronRight,
   Clock, Expand, GraduationCap, ImageOff, Loader2, Mail, MapPin, Map as MapIcon, PartyPopper, Phone, Plane,
   RefreshCw, Route as RouteIcon, Send, ShieldCheck, Sparkles, UserRound, Users, X,
 } from "lucide-react";
@@ -13,7 +13,7 @@ import {
   type BusType, type FleetBus, type Purpose, type Vehicle,
 } from "@/hooks/usePublicFleet";
 
-/* ------------------------------------------------------------------ constantes */
+
 
 const TYPE_LABEL: Record<BusType, string> = { minibus: "Minibus", microbus: "Microbus" };
 const TYPE_ICON = { minibus: Bus, microbus: BusFront } as const;
@@ -32,11 +32,8 @@ const SERVICES = [
   { icon: RouteIcon, title: "Circuits de groupe", text: "Itinéraires sur plusieurs jours, adaptés à la taille de votre groupe." },
 ];
 
-const STEPS = [
-  { icon: CalendarDays, title: "Décrivez votre trajet", text: "Indiquez les dates, les horaires, le lieu de départ et le nombre de passagers." },
-  { icon: Phone, title: "Recevez votre devis", text: "Nous vous contactons pour confirmer la disponibilité et le tarif." },
-  { icon: ShieldCheck, title: "Voyagez sereinement", text: "Votre bus et votre chauffeur vous attendent à l'heure convenue." },
-];
+
+
 
 const PURPOSES: [Purpose, string][] = [
   ["wedding", "Mariage / événement"],

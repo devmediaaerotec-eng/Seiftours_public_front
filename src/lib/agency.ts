@@ -1,4 +1,4 @@
-/** Agency contact details, in one place (values from the original site footer). */
+
 export const AGENCY = {
   phones: [
     { display: "+216 22 389 042", href: "tel:+21622389042" },

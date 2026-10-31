@@ -1,4 +1,4 @@
-import type { RoomConfig } from "@/lib/booking";
+import type { RoomConfig } from "./booking";
 import type { Amounts, BookingMode } from "./Payment";
 
 const BASE: string = (import.meta as any).env?.VITE_BOOKING_API ?? "/api";
@@ -79,6 +79,13 @@ export class BookingApiError extends Error {
   }
 }
 
+interface ApiErrorResponse {
+  error?: {
+    message?: string;
+    code?: string;
+  };
+}
+
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   let res: Response;
   try {
@@ -94,7 +101,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     );
   }
 
-  const data = await res.json().catch(() => null);
+const data = (await res.json().catch(() => null)) as ApiErrorResponse | null;
   if (!res.ok) {
     throw new BookingApiError(
       data?.error?.message ?? "Une erreur est survenue. Merci de réessayer.",

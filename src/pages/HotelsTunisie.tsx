@@ -12,13 +12,12 @@ import {
   AlertCircle,
   Search,
   Star,
-  Phone,
   ChevronRight,
   RotateCcw,
 } from "lucide-react";
 import { mygoApi, extractSearchHotels, extractHotelId, extractLowestPrice } from "@/lib/mygoApi";
 import { getHotelCatalog, friendlyApiError } from "@/lib/hotelCatalog";
-import { AGENCY } from "@/lib/agency";
+
 import {
   addDays,
   decodeRooms,
@@ -33,8 +32,6 @@ import {
 /* -------------------------------------------------------------------------- */
 /*  Settings                                                                  */
 /* -------------------------------------------------------------------------- */
-const PHONE_DISPLAY = AGENCY.phones[0].display;
-const PHONE_HREF = AGENCY.phones[0].href;
 
 // Replace with one of your own photos (e.g. "/images/hotels-hero.jpg")
 const BANNER_IMAGE =
