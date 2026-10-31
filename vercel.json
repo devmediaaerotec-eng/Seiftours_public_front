@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/api/:path*",     "destination": "https://jihene.alwaysdata.net/api/:path*" },
     { "source": "/uploads/:path*", "destination": "https://jihene.alwaysdata.net/uploads/:path*" },
-    { "source": "/(.*)",           "destination": "/index.html" }
+    { "source": "/api/((?!mygo).*)", "destination": "https://jihene.alwaysdata.net/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
