@@ -85,7 +85,7 @@ export default function Features() {
   const items: { icon: LucideIcon; value: string; label: string }[] = [
     { icon: Users, value: stats?.clients ?? "10K+", label: t("feat.clients") },
     ...(stats && stats.destinations > 0 ? [{ icon: MapPinned, value: String(stats.destinations), label: t("feat.destinations") }] : []),
-    { icon: Award, value: stats?.years ?? "15+", label: t("feat.experience") },
+    { icon: Award, value: stats?.years ?? "11+", label: t("feat.experience") },
   ];
 
   return (
