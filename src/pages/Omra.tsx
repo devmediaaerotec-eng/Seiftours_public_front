@@ -1,4 +1,5 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import Layout from "@/components/Layout";
 import PageHero from "@/components/PageHero";
 import SectionHeading from "@/components/SectionHeading";
@@ -6,10 +7,10 @@ import ListState from "@/components/ListState";
 import { CardGridSkeleton } from "@/components/Loader";
 import { CircleCheck, MoonStar,  Building2, Footprints, Clock, ArrowRight } from "lucide-react";
 import { usePublicTrips } from "@/hooks/usePublicTrips";
-import ReservationModal from "../component/ReservationModal";
 
 interface OmraPackage {
   id: string;
+  slug: string;
   name: string;
   duration: string;
   hotel_makkah?: string;
@@ -30,6 +31,7 @@ export default function OmraPage() {
     () =>
       trips.map((t) => ({
         id: String(t.id),
+        slug: t.slug,
         name: t.title,
         duration: t.duration,
         price: t.new_price,
@@ -39,7 +41,6 @@ export default function OmraPage() {
       })),
     [trips]
   );
-  const [selected, setSelected] = useState<OmraPackage | null>(null);
   // With three offers or more, the middle one is put forward
   const featuredIndex = packages.length >= 3 ? 1 : -1;
 
@@ -166,17 +167,17 @@ export default function OmraPage() {
                             ) : (
                               <p className={`text-2xl font-extrabold ${hl ? "text-[#FFC94D]" : "text-[#0A7C95]"}`}>Prix sur devis</p>
                             )}
-                            <button
-                              onClick={() => setSelected(p)}
+                            <Link
+                              to={`/reserver/${p.slug}`}
                               className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                                 hl
                                   ? "bg-gradient-to-r from-[#F28C0F] to-[#F2B705] text-[#06303A] shadow-md hover:brightness-105 focus-visible:ring-[#F2B705] focus-visible:ring-offset-[#06303A]"
                                   : "bg-[#064B5C] text-white hover:bg-[#0A7C95] focus-visible:ring-[#0A7C95]"
                               }`}
                             >
-                              Réserver ce forfait
+                              {p.price != null ? "Réserver ce forfait" : "Demander un devis"}
                               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       </article>
@@ -189,17 +190,6 @@ export default function OmraPage() {
         </div>
       </section>
 
-      {selected && (
-        <ReservationModal
-          isOpen={true}
-          onClose={() => setSelected(null)}
-          type="omra"
-          itemId={selected.id}
-          itemName={selected.name}
-          price={selected.price ?? 0}
-          imageUrl={selected.image_url}
-        />
-      )}
     </Layout>
   );
 }

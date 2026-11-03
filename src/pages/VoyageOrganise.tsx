@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import Layout from "@/components/Layout";
 import PageHero from "@/components/PageHero";
@@ -6,13 +5,11 @@ import SectionHeading from "@/components/SectionHeading";
 import ListState from "@/components/ListState";
 import { CardGridSkeleton } from "@/components/Loader";
 import { CalendarDays, CircleCheck, MapPin, Clock, Globe, ArrowRight } from "lucide-react";
-import { usePublicTrips, type TripCard } from "@/hooks/usePublicTrips";
-import ReservationModal from "../component/ReservationModal";
+import { usePublicTrips } from "@/hooks/usePublicTrips";
 
 const price = (n: number) => n.toLocaleString("fr-FR");
 const fmtDate = (iso: string) =>
   new Date(iso + "T00:00:00").toLocaleDateString("fr-FR", { day: "2-digit", month: "short", year: "numeric" });
-type Trip = TripCard;
 
 export default function VoyageOrganise() {
    const { destination: pathSlug } = useParams();
@@ -22,7 +19,6 @@ export default function VoyageOrganise() {
     destination ? { type: "organized", destination } : { type: "organized" }
   );
   const placeName = trips[0]?.destination ?? destination.charAt(0).toUpperCase() + destination.slice(1);
-  const [selected, setSelected] = useState<Trip | null>(null);
 
   return (
     <Layout>
@@ -153,13 +149,14 @@ export default function VoyageOrganise() {
                                 <p className="text-lg font-extrabold text-[#0A7C95]">Prix sur devis</p>
                               )}
                             </div>
-                            <button
-                              onClick={() => setSelected(pkg)}
+ 
+                            <Link
+                              to={`/reserver/${pkg.slug}`}
                               className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
                             >
-                              Réserver
+                              {pkg.new_price != null ? "Réserver" : "Demander un devis"}
                               <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                            </button>
+                            </Link>
                           </div>
                         </div>
                       </div>
@@ -172,18 +169,6 @@ export default function VoyageOrganise() {
         </div>
       </section>
 
-      {selected && (
-        <ReservationModal
-          isOpen={true}
-          onClose={() => setSelected(null)}
-          type="trip"
-          itemId={String(selected.id)}
-          itemName={selected.title}
-          price={selected.new_price ?? 0}
-          departureDates={selected.departure_dates}
-          imageUrl={selected.image_url ?? undefined}
-        />
-      )}
     </Layout>
   );
 }

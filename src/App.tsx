@@ -9,15 +9,17 @@ import { PageLoader } from './component/Loader';
 import Index from './pages/Index';
 import Checkout from './pages/Checkout';
 import BookingStatus from './pages/BookingStatus';
-import TripDetail from "./pages/Tripdetail";
 import Circuitdetailpage from "./pages/Circuitdetailpage";
+ import Reservation from "./pages/Reservation";
+ import TripDetail from "./pages/Tripdetail"
+
 
 
 const pages = {
   HotelsTunisie: () => import('./pages/HotelsTunisie'),
 
   VoyageOrganise: () => import('./pages/VoyageOrganise'),
-  Circuit: () => import('./pages/Circuit'),
+  CircuitPage: () => import('./pages/CircuitPage'),
   Omra: () => import('./pages/Omra'),
   Transport: () => import('./pages/Transport'),
   Vol: () => import('./pages/Vol'),
@@ -29,7 +31,7 @@ const pages = {
 };
 const HotelsTunisie = lazy(pages.HotelsTunisie);
 const VoyageOrganise = lazy(pages.VoyageOrganise);
-const Circuit = lazy(pages.Circuit);
+const Circuit = lazy(pages.CircuitPage);
 const Omra = lazy(pages.Omra);
 const Transport = lazy(pages.Transport);
 const Vol = lazy(pages.Vol);
@@ -84,7 +86,9 @@ const AppRoutes = () => {
 <Route path="/voyage-organise" element={<VoyageOrganise />} />
 <Route path="/voyage-organise/:slug" element={<TripDetail />} />
 <Route path="/omra/:slug" element={<TripDetail />} /> 
-  
+ 
+ 
+<Route path="/reserver/:slug" element={<Reservation />} />
  
   </Routes>
   </Suspense>
@@ -104,8 +108,7 @@ const App = () => (
         </TooltipProvider>
       </AuthProvider>
     </LanguageProvider>
-    {/* MODULE_PROVIDERS_CLOSE */}
-  </QueryClientProvider>
+   </QueryClientProvider>
 );
 
 export default App;

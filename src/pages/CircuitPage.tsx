@@ -12,14 +12,6 @@ const amount = (n: number, cur: string) =>
   cur === "TND" ? `${n.toLocaleString("fr-FR")} TND` : `${n.toLocaleString("fr-FR")} ${CURRENCY[cur] ?? cur}`;
 const days = (c: TripCard) => `${c.duration_nights + 1} jours`;
 
-/** Contact page with the circuit already named in the message */
-const requestLink = (c: TripCard) =>
-  `/contact?subject=circuits&message=${encodeURIComponent(
-    `Bonjour, je suis intéressé(e) par le circuit « ${c.title} » (${days(c)}${
-      c.new_price != null ? `, à partir de ${amount(c.new_price, c.currency)} / pers.` : ""
-    }).\nDates souhaitées : \nNombre de personnes : `
-  )}#contact-form`;
-
 export default function CircuitPage() {
   // /circuit?region=nord  ou  ?region=sud : le slug vient de la table circuit_regions
   const [search] = useSearchParams();
@@ -160,10 +152,10 @@ export default function CircuitPage() {
                                 )}
                               </div>
                               <Link
-                                to={requestLink(c)}
+                                to={`/reserver/${c.slug}`}
                                 className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
                               >
-                                Demander ce circuit
+                                {c.new_price != null ? "Réserver ce circuit" : "Demander un devis"}
                                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
                               </Link>
                             </div>

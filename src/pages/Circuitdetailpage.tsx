@@ -156,6 +156,7 @@ export default function CircuitDetailPage() {
   const sortedDays = [...trip.days].sort((a, b) => a.day_number - b.day_number);
   const selected = trip.departures.find((d) => d.id === departureId) ?? null;
   const priceShown = selected?.price ?? trip.new_price;
+  const reserveTo = `/reserver/${trip.slug}${selected ? `?departure=${selected.id}` : ""}`;
   const allOpen = sortedDays.length > 0 && openDays.size === sortedDays.length;
 
   const main = photos[0];
@@ -172,12 +173,7 @@ export default function CircuitDetailPage() {
   const go = (delta: number) =>
     setLightbox((i) => (i === null ? i : (i + delta + photos.length) % photos.length));
 
-  const requestLink = `/contact?subject=circuits&message=${encodeURIComponent(
-    `Bonjour, je suis intéressé(e) par le circuit « ${trip.title} » (${nbDays} jours${
-      priceShown != null ? `, à partir de ${amount(priceShown, trip.currency)} / pers.` : ""
-    }).\nDate souhaitée : ${selected ? fmtDate(selected.departure_date) : ""}\nNombre de personnes : `
-  )}#contact-form`;
-
+ 
   return (
     <Layout>
       {/* ─────────────── Title + photo mosaic ─────────────── */}
@@ -277,7 +273,7 @@ export default function CircuitDetailPage() {
       </section>
 
       {/* ─────────────── Content ─────────────── */}
-      <section className="bg-[#F2F9FB] py-8 lg:py-10">
+      <section className="bg-[#F2F9FB] py-8 pb-28 lg:py-10">
         <div className="mx-auto grid max-w-[1400px] gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_380px] lg:px-8">
           <div className="min-w-0 space-y-6">
             {(trip.summary || trip.description || stops.length > 0 || highlights.length > 0) && (
@@ -436,8 +432,9 @@ export default function CircuitDetailPage() {
                             type="button"
                             role="radio"
                             aria-checked={active}
+                            disabled={d.seats_left === 0}
                             onClick={() => setDepartureId(active ? null : d.id)}
-                            className={`flex w-full items-center justify-between gap-3 rounded-xl border px-3 py-2.5 text-left transition ${
+                            className={`flex w-full items-center justify-between gap-3 rounded-xl border px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-50 ${
                               active
                                 ? "border-[#0A7C95] bg-[#E8F5F8] ring-1 ring-[#0A7C95]"
                                 : "border-gray-200 hover:border-[#0A7C95]"
@@ -463,10 +460,10 @@ export default function CircuitDetailPage() {
               )}
 
               <Link
-                to={requestLink}
-                className="mt-5 flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+                to={reserveTo}
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-3.5 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
               >
-                Demander ce circuit
+                {priceShown != null ? "Réserver ce circuit" : "Demander un devis"}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
               </Link>
 
@@ -481,6 +478,19 @@ export default function CircuitDetailPage() {
           </aside>
         </div>
       </section>
+
+      {/* Barre d'action mobile */}
+      <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-gray-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
+        <div className="min-w-0">
+          <p className="text-[11px] text-gray-500">{priceShown != null ? "À partir de" : "Tarif"}</p>
+          <p className="truncate text-lg font-extrabold leading-none text-[#0A7C95]">
+            {priceShown != null ? amount(priceShown, trip.currency) : "Sur devis"}
+          </p>
+        </div>
+        <Link to={reserveTo} className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-2.5 text-sm font-bold text-[#06303A] shadow-md">
+          {priceShown != null ? "Réserver" : "Demander un devis"}
+        </Link>
+      </div>
 
 {lightbox !== null &&
   photos[lightbox] &&

@@ -6,7 +6,6 @@ import {
   ArrowLeft, ArrowRight, CalendarDays, ChevronDown, CircleCheck, CircleX, Clock, Globe, MapPin, Plane, Users,
 } from "lucide-react";
 import { usePublicTrip, type TripDeparture } from "@/hooks/usePublicTrips";
-import ReservationModal from "../component/ReservationModal";
 
 const money = (n: number) => n.toLocaleString("fr-FR");
 const fmt = (iso: string, opts: Intl.DateTimeFormatOptions = { day: "2-digit", month: "short", year: "numeric" }) =>
@@ -23,7 +22,6 @@ export default function TripDetail() {
   const { data: trip, loading, error, notFound, retry } = usePublicTrip(slug);
   const [photo, setPhoto] = useState(0);
   const [departureId, setDepartureId] = useState<number | null>(null);
-  const [open, setOpen] = useState(false);
 
   // Galerie = couverture + photos (sans doublon)
   const photos = useMemo(() => {
@@ -64,7 +62,8 @@ export default function TripDetail() {
   }
 
   const back = BACK[trip.type] ?? BACK.organized;
-  const reserveDates = departure ? [departure.departure_date] : trip.departures.map((d) => d.departure_date);
+  // La page de réservation reprend le départ choisi ici (?departure=ID)
+  const reserveTo = `/reserver/${trip.slug}${departure ? `?departure=${departure.id}` : ""}`;
   const discount = trip.new_price && trip.old_price && trip.old_price > trip.new_price
     ? Math.round((1 - trip.new_price / trip.old_price) * 100) : 0;
 
@@ -243,13 +242,12 @@ export default function TripDetail() {
                   <p className="mt-5 rounded-xl bg-[#F2F9FB] p-3 text-sm text-gray-600">Les dates de départ seront communiquées à la demande de devis.</p>
                 )}
 
-                <button
-                  type="button"
-                  onClick={() => setOpen(true)}
+                <Link
+                  to={reserveTo}
                   className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] py-3.5 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
                 >
                   {price != null ? "Réserver" : "Demander un devis"} <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </button>
+                </Link>
                 <Link to={`/contact?subject=trips#contact-form`} className="mt-3 block text-center text-sm font-semibold text-[#064B5C] hover:underline">
                   Une question ? Contactez-nous
                 </Link>
@@ -265,23 +263,11 @@ export default function TripDetail() {
           <p className="text-[11px] text-gray-500">{price != null ? "À partir de" : "Tarif"}</p>
           <p className="text-lg font-extrabold leading-none text-[#0A7C95]">{price != null ? `${money(price)} ${trip.currency}` : "Sur devis"}</p>
         </div>
-        <button type="button" onClick={() => setOpen(true)} className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-2.5 text-sm font-bold text-[#06303A] shadow-md">
+        <Link to={reserveTo} className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-2.5 text-sm font-bold text-[#06303A] shadow-md">
           {price != null ? "Réserver" : "Demander un devis"}
-        </button>
+        </Link>
       </div>
 
-      {open && (
-        <ReservationModal
-          isOpen={true}
-          onClose={() => setOpen(false)}
-          type={trip.type === "omra" ? "omra" : "trip"}
-          itemId={String(trip.id)}
-          itemName={trip.title}
-          price={price ?? 0}
-          departureDates={reserveDates}
-          imageUrl={trip.image_url ?? undefined}
-        />
-      )}
     </Layout>
   );
 }
