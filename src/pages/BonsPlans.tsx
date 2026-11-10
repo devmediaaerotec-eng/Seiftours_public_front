@@ -22,7 +22,7 @@ function expiry(iso: string | null): string | null {
   return `Jusqu'au ${end.toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}`;
 }
 
-export default function BonsPlansPage() {
+export default function BonsPlans() {
   const { lang } = useLanguage();
   const { categories, items, updatedAt, loading, error, retry } = useDeals(lang === "FR" ? "fr" : "en");
   const [params, setParams] = useSearchParams();

@@ -12,7 +12,6 @@ import BookingStatus from './pages/BookingStatus';
 import Circuitdetailpage from "./pages/Circuitdetailpage";
  import Reservation from "./pages/Reservation";
  import TripDetail from "./pages/TripDetail"
-import BonsPlansPage from './pages/BonsPlans';
 import DealDetailPage from './pages/DealDetailPage';
 
 
@@ -82,7 +81,7 @@ const AppRoutes = () => {
     <Route path="/contact" element={<Contact />} />
          import DealDetailPage from "./pages/DealDetailPage";
 
-   <Route path="/bons-plans" element={<BonsPlansPage />} />
+   <Route path="/bons-plans" element={<BonsPlans />} />
    <Route path="/bons-plans/:id" element={<DealDetailPage />} />
     <Route path="/checkout" element={<Checkout />} />
         <Route path="/reservation/:reference" element={<BookingStatus />} />
