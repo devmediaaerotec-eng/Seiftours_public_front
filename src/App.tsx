@@ -11,7 +11,7 @@ import Checkout from './pages/Checkout';
 import BookingStatus from './pages/BookingStatus';
 import Circuitdetailpage from "./pages/Circuitdetailpage";
  import Reservation from "./pages/Reservation";
- import TripDetail from "./pages/TripDetail"
+ import TripDetail from "./pages/Tripdetailpage"
 import DealDetailPage from './pages/DealDetailPage';
 
 
