@@ -19,10 +19,9 @@ import {
 
 } from "lucide-react";
 
-/* -------------------------------------------------------------------------- */
-/*  Agency details: REPLACE with the real information                         */
-/* -------------------------------------------------------------------------- */
-// Real agency details (src/lib/agency.ts), shared with the footer
+
+const API = import.meta.env.VITE_API_URL ?? "";
+
 const PHONE_DISPLAY = AGENCY.phones[0].display;
 const PHONE_HREF = AGENCY.phones[0].href;
 const WHATSAPP_NUMBER = AGENCY.whatsapp;
@@ -60,7 +59,7 @@ const FR = {
   hours: "Horaires d'ouverture",
   follow: "Suivez-nous",
   formTitle: "Envoyez-nous un message",
-  formSubtitle: "Remplissez le formulaire : il s'enverra par WhatsApp ou par e-mail, au choix.",
+  formSubtitle: "Remplissez le formulaire : notre équipe reçoit votre message et vous répond rapidement.",
   name: "Nom complet",
   namePh: "Votre nom",
   phone: "Téléphone",
@@ -70,15 +69,17 @@ const FR = {
   subject: "Sujet",
   message: "Votre message",
   messagePh: "Destination, dates, nombre de voyageurs, budget…",
-  sendWhatsapp: "Envoyer par WhatsApp",
-  sendEmail: "Envoyer par e-mail",
+  send: "Envoyer le message",
+  sending: "Envoi en cours…",
+  sendWhatsapp: "Écrire sur WhatsApp",
   errName: "Veuillez indiquer votre nom.",
   errContact: "Indiquez un numéro de téléphone ou un e-mail valide.",
   errPhone: "Numéro de téléphone invalide.",
   errEmail: "Adresse e-mail invalide.",
   errMessage: "Votre message est trop court (10 caractères minimum).",
   sentWhatsapp: "WhatsApp s'ouvre avec votre message prêt à envoyer. Il ne vous reste qu'à valider.",
-  sentEmail: "Votre application e-mail s'ouvre avec votre message prêt à envoyer.",
+  sentOk: "Message envoyé. Notre équipe vous répond très vite.",
+  errServer: "Envoi impossible pour le moment. Réessayez ou écrivez-nous sur WhatsApp.",
   required: "Champs obligatoires : nom, message, et un téléphone ou un e-mail.",
    quickSubtitle: "Consultez directement nos offres.",
   subjects: {
@@ -97,7 +98,6 @@ const FR = {
   msgEmail: "E-mail",
   msgSubject: "Sujet",
   msgMessage: "Message",
-  mailSubject: "Demande d'information",
 };
 
 const EN: typeof FR = {
@@ -115,7 +115,7 @@ const EN: typeof FR = {
   hours: "Opening hours",
   follow: "Follow us",
   formTitle: "Send us a message",
-  formSubtitle: "Fill in the form: it will be sent through WhatsApp or email, your choice.",
+  formSubtitle: "Fill in the form: our team receives your message and replies quickly.",
   name: "Full name",
   namePh: "Your name",
   phone: "Phone",
@@ -125,15 +125,17 @@ const EN: typeof FR = {
   subject: "Subject",
   message: "Your message",
   messagePh: "Destination, dates, number of travelers, budget…",
-  sendWhatsapp: "Send via WhatsApp",
-  sendEmail: "Send by email",
+  send: "Send message",
+  sending: "Sending…",
+  sendWhatsapp: "Write on WhatsApp",
   errName: "Please enter your name.",
   errContact: "Enter a valid phone number or email.",
   errPhone: "Invalid phone number.",
   errEmail: "Invalid email address.",
   errMessage: "Your message is too short (10 characters minimum).",
   sentWhatsapp: "WhatsApp is opening with your message ready. Just press send.",
-  sentEmail: "Your email app is opening with your message ready.",
+  sentOk: "Message sent. Our team will reply very soon.",
+  errServer: "Could not send right now. Please try again or write to us on WhatsApp.",
   required: "Required: name, message, and a phone number or an email.",
    quickSubtitle: "Browse our offers directly.",
   subjects: {
@@ -152,7 +154,6 @@ const EN: typeof FR = {
   msgEmail: "Email",
   msgSubject: "Subject",
   msgMessage: "Message",
-  mailSubject: "Information request",
 };
 
 type SubjectKey = keyof typeof FR.subjects;
@@ -286,12 +287,16 @@ export default function Contact() {
     message: (params.get("message") ?? "").slice(0, 1000),
   });
   const [errors, setErrors] = useState<Partial<Record<keyof FormValues | "contact", string>>>({});
-  const [sent, setSent] = useState<"whatsapp" | "email" | null>(null);
+  const [sent, setSent] = useState<"whatsapp" | "api" | null>(null);
+  const [sending, setSending] = useState(false);
+  const [serverError, setServerError] = useState("");
+  const [trap, setTrap] = useState(""); // champ piège pour les robots : doit rester vide
 
   const set = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
     setValues((v) => ({ ...v, [key]: value }));
     setErrors((e) => ({ ...e, [key]: undefined, ...(key === "phone" || key === "email" ? { contact: undefined } : {}) }));
     setSent(null);
+    setServerError("");
   };
 
   const validate = () => {
@@ -329,16 +334,42 @@ export default function Contact() {
     setSent("whatsapp");
   };
 
-  const sendEmail = () => {
-    if (!validate()) return;
-    const subject = `${L.mailSubject} — ${L.subjects[values.subject]}`;
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildMessage())}`;
-    setSent("email");
+  /** Enregistre le message dans l'espace d'administration de Seif Tours */
+  const sendMessage = async () => {
+    if (sending || !validate()) return;
+    setSending(true);
+    setServerError("");
+    try {
+      const res = await fetch(`${API}/api/public/contact-messages`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          name: values.name.trim(),
+          phone: values.phone.trim() || undefined,
+          email: values.email.trim() || undefined,
+          subject: values.subject,
+          message: values.message.trim(),
+          website: trap,
+        }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (res.status === 422 && json.violations) setErrors(json.violations);
+        else setServerError(json.message ?? L.errServer);
+        return;
+      }
+      setSent("api");
+      setValues((v) => ({ ...v, name: "", phone: "", email: "", message: "" }));
+    } catch {
+      setServerError(L.errServer);
+    } finally {
+      setSending(false);
+    }
   };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-    sendWhatsapp(); // Enter key = WhatsApp, the main channel
+    sendMessage(); // Enter key = envoi vers l'administration
   };
 
   const describedBy = (id: string, error?: string) => (error ? `${id}-error` : undefined);
@@ -495,7 +526,7 @@ export default function Contact() {
             <div className="mt-2 h-1 w-12 rounded-full bg-[#E3A312]" />
             <p className="mt-3 text-sm text-gray-600">{L.formSubtitle}</p>
 
-            <form onSubmit={handleSubmit} noValidate className="mt-6">
+            <form onSubmit={handleSubmit} noValidate className="relative mt-6">
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field id={ids.name} label={L.name} error={errors.name}>
                   <input
@@ -570,24 +601,39 @@ export default function Contact() {
 
               <p className="mt-3 text-xs text-gray-500">{L.required}</p>
 
+              {/* Piège à robots : invisible pour les humains */}
+              <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                <label>
+                  Site web
+                  <input tabIndex={-1} autoComplete="off" value={trap} onChange={(e) => setTrap(e.target.value)} />
+                </label>
+              </div>
+
               <div className="mt-5 flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="submit"
+                  disabled={sending}
+                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  <Send className="h-5 w-5" aria-hidden="true" />
+                  {sending ? L.sending : L.send}
+                </button>
                 <button
                   type="button"
                   onClick={sendWhatsapp}
-                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
+                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#0A7C95] px-6 text-base font-bold text-[#0A7C95] transition hover:bg-[#0A7C95] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
                 >
                   <MessageCircle className="h-5 w-5" aria-hidden="true" />
                   {L.sendWhatsapp}
                 </button>
-                <button
-                  type="button"
-                  onClick={sendEmail}
-                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#0A7C95] px-6 text-base font-bold text-[#0A7C95] transition hover:bg-[#0A7C95] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
-                >
-                  <Send className="h-5 w-5" aria-hidden="true" />
-                  {L.sendEmail}
-                </button>
               </div>
+
+              {serverError && (
+                <p role="alert" className="mt-4 flex items-start gap-2 rounded-xl bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                  {serverError}
+                </p>
+              )}
 
               {sent && (
                 <p
@@ -595,7 +641,7 @@ export default function Contact() {
                   className="mt-4 flex items-start gap-2 rounded-xl bg-[#E8F5F8] px-4 py-3 text-sm font-medium text-gray-800"
                 >
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
-                  {sent === "whatsapp" ? L.sentWhatsapp : L.sentEmail}
+                  {sent === "whatsapp" ? L.sentWhatsapp : L.sentOk}
                 </p>
               )}
             </form>

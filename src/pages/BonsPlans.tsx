@@ -12,7 +12,7 @@ const CURRENCY: Record<string, string> = { EUR: "€", USD: "$" };
 const amount = (n: number, cur: string) =>
   cur === "TND" ? `${n.toLocaleString("fr-FR")} TND` : `${n.toLocaleString("fr-FR")} ${CURRENCY[cur] ?? cur}`;
 
-/** « Dans 3 jours » tant que c'est proche, sinon la date de fin. */
+
 function expiry(iso: string | null): string | null {
   if (!iso) return null;
   const end = new Date(`${iso}T23:59:59`);

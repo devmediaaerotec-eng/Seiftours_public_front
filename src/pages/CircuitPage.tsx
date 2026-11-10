@@ -24,8 +24,7 @@ export default function CircuitPage() {
     <Layout>
       <PageHero
         title="Circuits touristiques"
-        subtitle="Des itinéraires pensés pour découvrir l'essentiel de chaque destination"
-        badge="Aventures guidées"
+         badge="Aventures guidées"
         breadcrumb="Circuits"
       />
 
