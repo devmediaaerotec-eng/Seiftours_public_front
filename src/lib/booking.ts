@@ -98,3 +98,37 @@ export function decodeRooms(s: string | null | undefined): RoomConfig[] | null {
   );
   return valid ? rooms : null;
 }
+
+/** One bookable choice: a room type with a board, priced for ALL requested rooms (supplier price, per night). */
+export interface RoomOption {
+  RoomId: number;
+  Name: string;
+  BoardingId: number;
+  BoardingName: string;
+  Price: number;
+  CancellationPolicy?: any[];
+}
+
+/**
+ * Flattens MyGo's Price.Boarding[].Pax[].Rooms[] into room options.
+ * MyGo sends one Pax group per requested room, each with its own price, and ids are sometimes strings ("453").
+ * An option is offered only if the room type is bookable in every group; its price is the sum of the groups.
+ * Same rule on the server: backend MyGoClient::searchHotel.
+ */
+export function toRoomOptions(match: any): RoomOption[] {
+  return (match?.Price?.Boarding ?? []).flatMap((b: any) => {
+    const groups: any[][] = (b.Pax ?? []).map((p: any) => (p.Rooms ?? []).filter((r: any) => !r.StopReservation));
+    return (groups[0] ?? []).flatMap((r: any) => {
+      const same = groups.map((g) => g.find((x: any) => Number(x.Id) === Number(r.Id)));
+      if (same.some((x) => !x)) return [];
+      return [{
+        RoomId: Number(r.Id),
+        Name: r.Name ?? "Chambre",
+        BoardingId: Number(b.Id),
+        BoardingName: b.Name ?? "",
+        Price: same.reduce((sum, x) => sum + parseFloat(x.Price ?? "0"), 0),
+        CancellationPolicy: r.CancellationPolicy,
+      }];
+    });
+  });
+}

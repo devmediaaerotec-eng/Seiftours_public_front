@@ -1,15 +1,28 @@
 /**
- * Payment rules shown in the interface.
- * The SERVER applies the same rules and is the only source of truth:
- * the browser only displays them (see server/bookings.mjs, DEPOSIT_RATE / DEPOSIT_MIN).
+ * Pricing and payment rules shown in the interface.
+ * They come from the API (GET /api/public/booking-config: markup_rules + settings tables) and the
+ * SERVER applies exactly the same formulas when the booking is made (HotelPricing.php):
+ * it re-checks the price with MyGo and refuses the booking if it no longer matches.
  */
-export const PAYMENT = {
+export interface PricingConfig {
+  markup: { percent: number; fixedPerNight: number }; // agency margin on the supplier price
+  deposit: { rate: number; min: number }; // online deposit: max(min, total × rate), capped at total
+  offerTtlMinutes: number;
+  paymentAvailable: boolean; // false = only "pay at the agency" can be offered
+  currency: string;
+}
+
+/** Used until the API answers (same values as the database defaults). */
+export const DEFAULT_PRICING: PricingConfig = {
+  markup: { percent: 15, fixedPerNight: 0 },
+  deposit: { rate: 0.15, min: 30 },
+  offerTtlMinutes: 10,
+  paymentAvailable: false, // online payment is switched off for now (HOTEL_ONLINE_PAYMENT_ENABLED on the server)
   currency: "TND",
-  depositRate: 0.15, // PLACEHOLDER: put the agency's real rule here AND in the server .env
-  minDeposit: 30, // PLACEHOLDER
 };
 
-export type BookingMode = "agency" | "deposit";
+/** request = reservation request without payment (default) · deposit = online deposit (kept for later) · agency = legacy */
+export type BookingMode = "request" | "agency" | "deposit";
 
 export interface Amounts {
   total: number;
@@ -18,16 +31,26 @@ export interface Amounts {
   currency: string;
 }
 
-export function depositFor(total: number): number {
+/** Customer price (whole TND) for a supplier price covering `nights` nights. Same formula as the server. */
+export function withMarkup(supplierPrice: number, nights: number, markup = DEFAULT_PRICING.markup): number {
+  return Math.round(supplierPrice * (1 + markup.percent / 100) + markup.fixedPerNight * nights);
+}
+
+/** Per-night customer price, for display only (cards, "from … / night"). */
+export function perNightWithMarkup(supplierPerNight: number, markup = DEFAULT_PRICING.markup): number {
+  return supplierPerNight * (1 + markup.percent / 100) + markup.fixedPerNight;
+}
+
+export function depositFor(total: number, rules = DEFAULT_PRICING.deposit): number {
   if (!(total > 0)) return 0;
-  const raw = Math.max(PAYMENT.minDeposit, Math.round(total * PAYMENT.depositRate));
+  const raw = Math.max(rules.min, Math.round(total * rules.rate));
   return Math.min(raw, Math.round(total));
 }
 
-export function amountsFor(total: number): Amounts {
+export function amountsFor(total: number, rules = DEFAULT_PRICING.deposit, currency = DEFAULT_PRICING.currency): Amounts {
   const t = Math.round(total);
-  const deposit = depositFor(t);
-  return { total: t, deposit, remaining: Math.max(0, t - deposit), currency: PAYMENT.currency };
+  const deposit = depositFor(t, rules);
+  return { total: t, deposit, remaining: Math.max(0, t - deposit), currency };
 }
 
 /* -------------------------------------------------------------------------- */

@@ -19,9 +19,9 @@ export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 | 4 }) {
             <span
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
                 done
-                  ? "bg-[#0A7C95] text-white"
+                  ? "bg-brand-600 text-white"
                   : active
-                    ? "border-2 border-[#0A7C95] bg-white text-[#0A7C95]"
+                    ? "border-2 border-brand-600 bg-white text-brand-600"
                     : "bg-gray-100 text-gray-400"
               }`}
             >
@@ -35,7 +35,7 @@ export default function CheckoutSteps({ current }: { current: 1 | 2 | 3 | 4 }) {
               {label}
             </span>
             {n < STEPS.length && (
-              <span aria-hidden="true" className={`h-px flex-1 ${done ? "bg-[#0A7C95]" : "bg-gray-300"}`} />
+              <span aria-hidden="true" className={`h-px flex-1 ${done ? "bg-brand-600" : "bg-gray-300"}`} />
             )}
           </li>
         );

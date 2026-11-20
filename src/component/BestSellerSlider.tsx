@@ -45,14 +45,14 @@ export default function BestSellerSlider() {
   const prev = () => { setDirection("prev"); setActiveIndex((i) => (i - 1 + count) % count); };
 
   if (loading) {
-    return <div className={`${frame} animate-pulse bg-gradient-to-br from-[#064B5C] to-[#0A7C95]`} aria-busy="true" />;
+    return <div className={`${frame} animate-pulse bg-gradient-to-br from-brand-800 to-brand-600`} aria-busy="true" />;
   }
 
   // Aucune offre mise à la une (ou API indisponible) : bandeau neutre, jamais un trou dans la page
   if (error || count === 0) {
     return (
-      <div className={`${frame} flex flex-col items-center justify-center bg-gradient-to-br from-[#064B5C] to-[#0A7C95] px-6 text-center text-white`}>
-        <Award className="h-10 w-10 text-[#F2B705]" aria-hidden="true" />
+      <div className={`${frame} flex flex-col items-center justify-center bg-gradient-to-br from-brand-800 to-brand-600 px-6 text-center text-white`}>
+        <Award className="h-10 w-10 text-gold-400" aria-hidden="true" />
         <h2 className="mt-3 text-2xl font-extrabold sm:text-3xl">{FR ? "Nos meilleures offres arrivent" : "Our best deals are coming"}</h2>
         <p className="mt-2 max-w-md text-sm text-white/80">
           {error
@@ -65,7 +65,7 @@ export default function BestSellerSlider() {
               {FR ? "Réessayer" : "Retry"}
             </button>
           )}
-          <Link to="/bons-plans" className="rounded-xl bg-[#E3A312] px-5 py-2.5 text-sm font-bold text-[#06303A] hover:bg-[#F2B705]">
+          <Link to="/bons-plans" className="rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-bold text-brand-950 hover:bg-gold-400">
             {t("deals.view_all")} →
           </Link>
         </div>
@@ -81,7 +81,7 @@ export default function BestSellerSlider() {
   const seeOfferLabel = FR ? "Voir l'offre" : "See offer";
 
   const arrowClass =
-    "absolute top-[42%] z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur-sm transition hover:bg-black/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B705]";
+    "absolute top-[42%] z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/30 bg-black/25 text-white backdrop-blur-sm transition hover:bg-black/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400";
 
   return (
     <div
@@ -95,7 +95,7 @@ export default function BestSellerSlider() {
       onBlur={() => setPaused(false)}
     >
       {/* Fond de repli si une offre n'a pas d'image */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#064B5C] to-[#0A7C95]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-800 to-brand-600" />
 
       {/* Images en fondu enchaîné (toutes montées : pas de flash) */}
       {items.map((slide, i) =>
@@ -111,8 +111,8 @@ export default function BestSellerSlider() {
         ) : null
       )}
 
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-[#031E26]/60 to-transparent" />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#031E26]/90 via-[#064B5C]/25 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-brand-950/60 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-800/25 to-transparent" />
 
       {count > 1 && (
         <>
@@ -135,7 +135,7 @@ export default function BestSellerSlider() {
             <Icon className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             <span>{category}</span>
           </div>
-          <div className="flex items-center gap-1.5 rounded-full bg-[#F2B705] px-3 py-1.5 text-[11px] font-extrabold text-[#06303A] shadow-md">
+          <div className="flex items-center gap-1.5 rounded-full bg-gold-50 ring-1 ring-gold-500/30 px-3 py-1.5 text-[11px] font-extrabold text-gold-700 shadow-md">
             <Award className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
             <span>Best Seller</span>
           </div>
@@ -147,7 +147,7 @@ export default function BestSellerSlider() {
         <div className="px-5 pb-[112px] sm:px-8">
           {current.discount && (
             <div className="mb-3 flex items-center gap-2.5">
-              <span className="rounded-full bg-[#F2B705] px-2.5 py-0.5 text-[11px] font-extrabold text-[#06303A] shadow">{current.discount}</span>
+              <span className="rounded-full bg-gold-50 ring-1 ring-gold-500/30 px-2.5 py-0.5 text-[11px] font-extrabold text-gold-700 shadow">{current.discount}</span>
             </div>
           )}
 
@@ -174,16 +174,16 @@ export default function BestSellerSlider() {
               {current.price != null ? (
                 <>
                   {current.old_price && <p className="mb-1 text-xs leading-none text-white/60 line-through">{money(current.old_price)}</p>}
-                  <p className="text-[28px] font-extrabold leading-none text-[#F2B705] drop-shadow">{money(current.price)}</p>
+                  <p className="text-[28px] font-extrabold leading-none text-gold-400 drop-shadow">{money(current.price)}</p>
                 </>
               ) : (
-                <p className="text-xl font-extrabold text-[#F2B705]">{FR ? "Prix sur devis" : "Price on request"}</p>
+                <p className="text-xl font-extrabold text-gold-400">{FR ? "Prix sur devis" : "Price on request"}</p>
               )}
             </div>
 
             <Link
               to={current.to}
-              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl bg-[#E3A312] px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-xl transition hover:-translate-y-0.5 hover:bg-[#F2B705] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-bold text-brand-950 shadow-xl transition hover:-translate-y-0.5 hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               {seeOfferLabel}
               <span aria-hidden="true">→</span>
@@ -201,12 +201,12 @@ export default function BestSellerSlider() {
               onClick={() => goTo(i)}
               aria-label={`Slide ${i + 1}`}
               aria-current={i === activeIndex}
-              className={`h-2 rounded-full transition-all duration-300 ${i === activeIndex ? "w-8 bg-[#F2B705]" : "w-2 bg-white/45 hover:bg-white/80"}`}
+              className={`h-2 rounded-full transition-all duration-300 ${i === activeIndex ? "w-8 bg-white" : "w-2 bg-white/45 hover:bg-white/80"}`}
             />
           ))}
         </div>
 
-        <Link to="/bons-plans" className="flex items-center gap-1.5 text-xs font-semibold text-white/90 transition-colors hover:text-[#F2B705]">
+        <Link to="/bons-plans" className="flex items-center gap-1.5 text-xs font-semibold text-white/90 transition-colors hover:text-gold-400">
           {t("deals.view_all")}
           <span aria-hidden="true">→</span>
         </Link>

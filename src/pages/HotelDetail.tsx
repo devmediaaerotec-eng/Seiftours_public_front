@@ -5,13 +5,16 @@ import ImageCarousel from "@/components/ImageCarousel";
 import StayEditor, { type Stay } from "@/components/Stayeditor";
 import { mygoApi, extractSearchHotels, extractHotelId } from "@/lib/mygoApi";
 import { friendlyApiError } from "@/lib/hotelCatalog";
-import { decodeRooms, diffDays, encodeRooms, fromISO, isISO, todayISO } from "@/lib/booking";
+import { decodeRooms, diffDays, encodeRooms, fromISO, isISO, todayISO, toRoomOptions, type RoomOption } from "@/lib/booking";
 import { saveDraft } from "@/lib/checkoutDraft";
-import { amountsFor, cancellationSummary } from "@/lib/Payment";
+import { amountsFor, cancellationSummary, withMarkup } from "@/lib/Payment";
+import { useBookingConfig } from "@/hooks/useBookingConfig";
+import { AGENCY } from "@/lib/agency";
 import {
   AlertCircle,
   Star,
   MapPin,
+  MessageCircle,
   Phone,
   ChevronLeft,
   ChevronRight,
@@ -49,17 +52,6 @@ const OFFER_TTL_MS = 10 * 60 * 1000;
 
 const FALLBACK_IMAGE =
   "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&q=80";
-
-  
-interface RoomOption {
-  RoomId: number;
-  Name: string;
-  BoardingId: number;
-  BoardingName: string;
-  Price: number;
-  CancellationPolicy?: any[];
-}
-
 
 
 function htmlToText(html: string): string {
@@ -103,24 +95,6 @@ function describePolicy(p: any): string {
   const n = Number(p?.Fees ?? 0);
   const fees = p?.Type === "PERCENT" ? `${n} %` : p?.Type === "NIGHT" ? `${n} nuit${n > 1 ? "s" : ""}` : `${n}`;
   return `${label}${p?.FromDate ? ` (à partir du ${p.FromDate})` : ""} : ${fees} de frais`;
-}
-
-/** Flattens MyGo's Price.Boarding[].Pax[].Rooms[] into flat room options */
-function toRoomOptions(match: any): RoomOption[] {
-  return (match?.Price?.Boarding ?? []).flatMap((b: any) =>
-    (b.Pax ?? []).flatMap((p: any) =>
-      (p.Rooms ?? [])
-        .filter((r: any) => !r.StopReservation)
-        .map((r: any) => ({
-          RoomId: r.Id as number,
-          Name: r.Name ?? "Chambre",
-          BoardingId: b.Id as number,
-          BoardingName: b.Name ?? "",
-          Price: parseFloat(r.Price ?? "0"),
-          CancellationPolicy: r.CancellationPolicy,
-        }))
-    )
-  );
 }
 
 // Hotel details do not change between searches: keep them for the session (saves supplier calls)
@@ -307,19 +281,20 @@ export default function HotelDetail() {
   const hotelPhone: string = detail?.Phone ?? detail?.Tel ?? "";
   const hotelAddress: string = detail?.Adress ?? detail?.Address ?? "";
 
-  const stayTotal = (r: RoomOption) => (PRICE_BASIS === "night" ? r.Price * nights : r.Price);
-  const perNight = (r: RoomOption) => (PRICE_BASIS === "night" ? r.Price : r.Price / Math.max(1, nights));
+  // Customer prices = supplier price + agency markup (same rule the server applies when booking)
+  const pricing = useBookingConfig(hotelId, hasDates ? checkIn : undefined);
+  const supplierStay = (r: RoomOption) => (PRICE_BASIS === "night" ? r.Price * nights : r.Price);
+  const stayTotal = (r: RoomOption) => withMarkup(supplierStay(r), Math.max(1, nights), pricing.markup);
+  const perNight = (r: RoomOption) => stayTotal(r) / Math.max(1, nights);
 
   // The same room can come with several boards (half board, all inclusive…): match both
   const selected = offers.find((o) => o.RoomId === pick?.roomId && o.BoardingId === pick?.boardingId) ?? null;
   const total = selected ? stayTotal(selected) : 0;
-  const amounts = selected && total > 0 ? amountsFor(total) : null;
+  const amounts = selected && total > 0 ? amountsFor(total, pricing.deposit, pricing.currency) : null;
   const cancellation = cancellationSummary(selected?.CancellationPolicy);
   const lowestTotal = offers.length ? Math.min(...offers.map(stayTotal)) : null;
   const lowestPerNight = offers.length ? Math.min(...offers.map(perNight)) : null;
   const canBook = offers.length > 0 && hasDates;
-
-const totalWithMarkup = total * 1.15;
 
   /* ------------------------------- Booking flow ------------------------------- */
   // Step 1 -> step 2: remember what the visitor chose, then open the checkout page (/checkout).
@@ -350,6 +325,8 @@ const totalWithMarkup = total * 1.15;
     isISO(iso)
       ? new Intl.DateTimeFormat("fr-FR", { weekday: "short", day: "numeric", month: "short" }).format(fromISO(iso))
       : iso;
+
+  const unavailableMessage = `Bonjour, je cherche une chambre à l'hôtel ${hotelName} du ${fmtDay(checkIn)} au ${fmtDay(checkOut)} (${adults} adulte${adults > 1 ? "s" : ""}${children ? `, ${children} enfant${children > 1 ? "s" : ""}` : ""}).`;
 
   const card = "rounded-3xl border border-gray-200/70 bg-white p-5 shadow-sm sm:p-6";
 
@@ -385,7 +362,7 @@ const totalWithMarkup = total * 1.15;
           <p className="mt-2 text-gray-600">{detailError}</p>
           <button
             onClick={() => navigate(-1)}
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-[#0A7C95] px-5 py-2.5 text-sm font-bold text-white transition hover:bg-[#064B5C]"
+            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-brand-800"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" /> Retour
           </button>
@@ -399,9 +376,9 @@ const totalWithMarkup = total * 1.15;
       <div className="mx-auto max-w-[1400px] px-4 pb-28 pt-6 sm:px-6 lg:px-8 lg:pb-16">
         {/* ── Breadcrumb ─────────────────────────────────────────────── */}
         <nav aria-label="Fil d'Ariane" className="flex items-center gap-1.5 text-sm text-gray-500">
-          <Link to="/" className="transition-colors hover:text-[#0A7C95]">Accueil</Link>
+          <Link to="/" className="transition-colors hover:text-brand-600">Accueil</Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-          <Link to="/hotels-tunisie" className="shrink-0 transition-colors hover:text-[#0A7C95]">Hôtels Tunisie</Link>
+          <Link to="/hotels-tunisie" className="shrink-0 transition-colors hover:text-brand-600">Hôtels Tunisie</Link>
           <ChevronRight className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
           <span className="line-clamp-1 font-medium text-gray-900">{hotelName}</span>
         </nav>
@@ -411,16 +388,16 @@ const totalWithMarkup = total * 1.15;
           <div>
             <div className="flex flex-wrap items-center gap-2">
               <span
-                className="inline-flex items-center gap-0.5 rounded-full bg-[#FFF6DD] px-2.5 py-1"
+                className="inline-flex items-center gap-0.5 rounded-full bg-gold-50 px-2.5 py-1"
                 role="img"
                 aria-label={`${hotelStars} étoiles`}
               >
                 {Array.from({ length: hotelStars }).map((_, i) => (
-                  <Star key={i} className="h-3.5 w-3.5 fill-[#E3A312] text-[#E3A312]" aria-hidden="true" />
+                  <Star key={i} className="h-3.5 w-3.5 fill-gold-500 text-gold-500" aria-hidden="true" />
                 ))}
               </span>
               {hotelCity && (
-                <span className="rounded-full bg-[#E8F5F8] px-2.5 py-1 text-xs font-semibold text-[#064B5C]">
+                <span className="rounded-full bg-brand-100 px-2.5 py-1 text-xs font-semibold text-brand-800">
                   {hotelCity}
                 </span>
               )}
@@ -431,13 +408,13 @@ const totalWithMarkup = total * 1.15;
             <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-600">
               {(hotelCity || hotelAddress) && (
                 <span className="inline-flex items-center gap-1.5">
-                  <MapPin className="h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                  <MapPin className="h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
                   {[hotelAddress, hotelCity].filter(Boolean).join(", ")}
                 </span>
               )}
               {hotelPhone && (
-                <a href={`tel:${hotelPhone}`} className="inline-flex items-center gap-1.5 hover:text-[#0A7C95]">
-                  <Phone className="h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                <a href={`tel:${hotelPhone}`} className="inline-flex items-center gap-1.5 hover:text-brand-600">
+                  <Phone className="h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
                   {hotelPhone}
                 </a>
               )}
@@ -447,7 +424,7 @@ const totalWithMarkup = total * 1.15;
           {lowestTotal !== null && (
             <div className="hidden text-right sm:block">
               <p className="text-xs text-gray-500">À partir de</p>
-              <p className="text-3xl font-extrabold text-[#0A7C95]">{money(lowestTotal)}</p>
+              <p className="text-3xl font-extrabold text-brand-600">{money(lowestTotal)}</p>
               <p className="text-xs text-gray-500">
                 pour {nights} nuit{nights > 1 ? "s" : ""}
                 {lowestPerNight !== null && ` · ${money(Math.round(lowestPerNight))} / nuit`}
@@ -485,8 +462,8 @@ const totalWithMarkup = total * 1.15;
               </div>
 
               {!hasDates ? (
-                <div className="mt-4 flex items-center gap-3 rounded-2xl bg-[#E8F5F8] p-4 text-sm text-[#064B5C]">
-                  <CalendarDays className="h-5 w-5 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                <div className="mt-4 flex items-center gap-3 rounded-2xl bg-brand-100 p-4 text-sm text-brand-800">
+                  <CalendarDays className="h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
                   Choisissez vos dates ci-dessus pour voir les chambres et les prix.
                 </div>
               ) : searching && offers.length === 0 ? (
@@ -511,21 +488,42 @@ const totalWithMarkup = total * 1.15;
                   </div>
                 </div>
               ) : offers.length === 0 ? (
-                <div className="mt-4 flex items-start gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#FFF6DD] text-[#7A5200]">
-                    <BedDouble className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <p className="font-bold text-gray-900">Aucune chambre disponible à ces dates</p>
-                    <p className="mt-1 text-sm text-gray-600">
-                      Essayez d'autres dates avec le bouton « Modifier », ou contactez-nous : nous vérifions
-                      directement auprès de l'hôtel.
-                    </p>
+                <div className="mt-4 overflow-hidden rounded-2xl border border-gold-400/40 bg-gold-50">
+                  <div className="flex items-start gap-4 p-4 sm:p-5">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gold-400/20 text-gold-700">
+                      <BedDouble className="h-6 w-6" aria-hidden="true" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-base font-extrabold text-gray-900">Aucune chambre disponible à ces dates</p>
+                      <p className="mt-1 text-sm text-gray-700">
+                        Essayez d'autres dates avec le bouton « Modifier », ou contactez-nous : nous vérifions
+                        directement auprès de l'hôtel.
+                      </p>
+                      <p className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-brand-800 ring-1 ring-brand-600/15">
+                        <CalendarDays className="h-3.5 w-3.5" aria-hidden="true" />
+                        {fmtDay(checkIn)} → {fmtDay(checkOut)} · {adults} adulte{adults > 1 ? "s" : ""}
+                        {children ? `, ${children} enfant${children > 1 ? "s" : ""}` : ""}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex flex-wrap gap-2 border-t border-gold-400/25 bg-white/60 px-4 py-3 sm:px-5">
+                    <a
+                      href={`https://wa.me/${AGENCY.whatsapp}?text=${encodeURIComponent(unavailableMessage)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-brand-800 sm:flex-none"
+                    >
+                      <MessageCircle className="h-4 w-4" aria-hidden="true" /> WhatsApp
+                    </a>
+                    <a
+                      href={AGENCY.phones[0].href}
+                      className="inline-flex flex-1 items-center justify-center gap-2 rounded-xl border-2 border-brand-600 px-4 py-2 text-sm font-bold text-brand-600 transition hover:bg-brand-100 sm:flex-none"
+                    >
+                      <Phone className="h-4 w-4" aria-hidden="true" /> Appeler
+                    </a>
                     <Link
-                      to={`/contact?subject=hotels&message=${encodeURIComponent(
-                        `Bonjour, je cherche une chambre à l'hôtel ${hotelName} du ${fmtDay(checkIn)} au ${fmtDay(checkOut)} (${adults} adulte${adults > 1 ? "s" : ""}${children ? `, ${children} enfant${children > 1 ? "s" : ""}` : ""}).`
-                      )}`}
-                      className="mt-3 inline-block rounded-xl bg-[#0A7C95] px-4 py-2 text-sm font-bold text-white transition hover:bg-[#064B5C]"
+                      to={`/contact?subject=hotels&message=${encodeURIComponent(unavailableMessage)}`}
+                      className="inline-flex flex-1 items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-brand-800 underline-offset-2 transition hover:underline sm:flex-none"
                     >
                       Nous contacter
                     </Link>
@@ -545,37 +543,37 @@ const totalWithMarkup = total * 1.15;
                         key={`${o.BoardingId}-${o.RoomId}`}
                         className={`flex cursor-pointer items-center justify-between gap-4 rounded-2xl border-2 p-4 transition-all ${
                           isSelected
-                            ? "border-[#0A7C95] bg-[#E8F5F8]/60 shadow-sm"
-                            : "border-gray-200 hover:border-[#0A7C95]/40"
+                            ? "border-brand-600 bg-brand-100/60 shadow-sm"
+                            : "border-gray-200 hover:border-brand-600/40"
                         }`}
                       >
                         <span className="flex min-w-0 items-start gap-3">
                           <input
                             type="radio"
                             name="room"
-                            className="mt-1 h-4 w-4 shrink-0 accent-[#0A7C95]"
+                            className="mt-1 h-4 w-4 shrink-0 accent-brand-600"
                             checked={isSelected}
                             onChange={() => setPick({ roomId: o.RoomId, boardingId: o.BoardingId })}
                           />
                           <span className="min-w-0">
                             <span className="flex flex-wrap items-center gap-x-2 gap-y-1 font-semibold text-gray-900">
-                              <BedDouble className="h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                              <BedDouble className="h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
                               {o.Name}
                               {isBest && (
-                                <span className="rounded-full bg-[#F2B705] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#06303A]">
+                                <span className="rounded-full bg-gold-50 ring-1 ring-gold-500/30 px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-gold-700">
                                   Meilleur prix
                                 </span>
                               )}
                             </span>
                             {o.BoardingName && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-[#FFF6DD] px-2 py-0.5 text-xs font-medium text-[#7A5200]">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-800">
                                 <Utensils className="h-3 w-3" aria-hidden="true" /> {o.BoardingName}
                               </span>
                             )}
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className="block text-lg font-extrabold text-[#0A7C95] sm:text-xl">
+                          <span className="block text-lg font-extrabold text-brand-600 sm:text-xl">
                             {money(stayTotal(o))}
                           </span>
                           <span className="block text-[11px] text-gray-500">
@@ -603,7 +601,7 @@ const totalWithMarkup = total * 1.15;
                   <button
                     type="button"
                     onClick={() => setShowFullDescription((v) => !v)}
-                    className="mt-2 text-sm font-semibold text-[#0A7C95] hover:underline"
+                    className="mt-2 text-sm font-semibold text-brand-600 hover:underline"
                   >
                     {showFullDescription ? "Réduire" : "Lire la suite"}
                   </button>
@@ -619,7 +617,7 @@ const totalWithMarkup = total * 1.15;
                     const Icon = amenityIcon(f);
                     return (
                       <li key={i} className="flex items-center gap-3 text-sm text-gray-700">
-                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E8F5F8] text-[#0A7C95]">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
                           <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
                         </span>
                         {f}
@@ -633,7 +631,7 @@ const totalWithMarkup = total * 1.15;
             {selected?.CancellationPolicy && selected.CancellationPolicy.length > 0 && (
               <section className={card}>
                 <h2 className="flex items-center gap-2 text-lg font-bold text-gray-900">
-                  <ShieldCheck className="h-5 w-5 text-[#0A7C95]" aria-hidden="true" />
+                  <ShieldCheck className="h-5 w-5 text-brand-600" aria-hidden="true" />
                   Politique d'annulation
                 </h2>
                 <ul className="mt-3 space-y-2">
@@ -651,7 +649,7 @@ const totalWithMarkup = total * 1.15;
           {/* ── Right column: booking card (details are asked on /checkout) ───────── */}
           <aside className="scroll-mt-28 lg:col-span-1" id="reserver">
             <div className="lg:sticky lg:top-24">
-              <div className="overflow-hidden rounded-3xl border border-gray-200/70 border-t-4 border-t-[#E3A312] bg-white shadow-xl shadow-[#064B5C]/5">
+              <div className="overflow-hidden rounded-3xl border border-gray-200/70 border-t-4 border-t-gold-500 bg-white shadow-xl shadow-brand-800/5">
                 <div className="space-y-4 p-5 sm:p-6">
                   <div>
                     <h2 className="text-lg font-bold text-gray-900">Votre réservation</h2>
@@ -666,7 +664,7 @@ const totalWithMarkup = total * 1.15;
                   </div>
 
                   {stale && (
-                    <div className="flex items-start gap-2 rounded-xl border border-[#E3A312]/40 bg-[#FFF6DD] p-3 text-sm text-[#7A5200]">
+                    <div className="flex items-start gap-2 rounded-xl border border-gold-500/40 bg-gold-50 p-3 text-sm text-gold-700">
                       <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
                       <div className="flex-1">
                         Les tarifs datent de plus de 10 minutes.
@@ -710,7 +708,7 @@ const totalWithMarkup = total * 1.15;
 </div>
 
 <p className="text-3xl font-extrabold leading-none text-gray-900">
-  {priceFormat.format(totalWithMarkup)}
+  {priceFormat.format(total)}
   <sup className="ml-0.5 text-xs font-bold">TND</sup>
 </p>
 
@@ -719,11 +717,17 @@ const totalWithMarkup = total * 1.15;
                       </div>
                       <p className="mt-1 text-right text-xs text-gray-500">Des frais peuvent s'appliquer</p>
 
-                      {amounts && (
-                        <dl className="mt-3 space-y-1 rounded-xl bg-[#E8F5F8]/70 px-3 py-2.5 text-xs">
+                      {amounts && !pricing.paymentAvailable && (
+                        <p className="mt-3 rounded-xl bg-brand-100/70 px-3 py-2.5 text-xs text-gray-700">
+                          <span className="font-bold text-brand-800">Aucun paiement en ligne.</span> Envoyez votre demande : notre
+                          agence vérifie la disponibilité, vous confirme le prix final, puis vous réglez en agence.
+                        </p>
+                      )}
+                      {amounts && pricing.paymentAvailable && (
+                        <dl className="mt-3 space-y-1 rounded-xl bg-brand-100/70 px-3 py-2.5 text-xs">
                           <div className="flex justify-between">
                             <dt className="text-gray-600">À payer maintenant (acompte)</dt>
-                            <dd className="font-bold text-[#0A7C95]">{money(amounts.deposit)}</dd>
+                            <dd className="font-bold text-brand-600">{money(amounts.deposit)}</dd>
                           </div>
                           <div className="flex justify-between">
                             <dt className="text-gray-600">Reste à régler à l'hôtel</dt>
@@ -737,7 +741,7 @@ const totalWithMarkup = total * 1.15;
                   {cancellation && (
                     <p
                       className={`flex items-center justify-center gap-1.5 text-center text-sm font-medium ${
-                        cancellation.tone === "free" ? "text-emerald-700" : "text-[#8A5A00]"
+                        cancellation.tone === "free" ? "text-emerald-700" : "text-gold-700"
                       }`}
                     >
                       {cancellation.tone === "free" ? (
@@ -753,9 +757,9 @@ const totalWithMarkup = total * 1.15;
                     type="button"
                     onClick={goToCheckout}
                     disabled={!selected || !canBook || searching || stale}
-                    className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-4 text-[15px] font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-4 text-[15px] font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    Réserver
+                    {pricing.paymentAvailable ? "Réserver" : "Demander la réservation"}
                     <ChevronRight className="h-5 w-5" aria-hidden="true" />
                   </button>
                   <p className="text-center text-xs text-gray-500">Vous ne payez rien à cette étape.</p>
@@ -771,13 +775,13 @@ const totalWithMarkup = total * 1.15;
           <div className="mx-auto flex max-w-xl items-center justify-between gap-3">
             <div>
               <p className="text-[11px] text-gray-500">{selected ? "Total" : "À partir de"}</p>
-              <p className="text-lg font-extrabold text-[#0A7C95]">
+              <p className="text-lg font-extrabold text-brand-600">
                 {selected ? money(total) : lowestTotal !== null ? money(lowestTotal) : "—"}
               </p>
             </div>
             <a
               href={selected ? "#reserver" : "#chambres"}
-              className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-3 text-sm font-bold text-[#06303A] shadow-md"
+              className="rounded-xl bg-gold-500 px-5 py-3 text-sm font-bold text-brand-950 shadow-md"
             >
               {selected ? "Réserver" : "Choisir une chambre"}
             </a>

@@ -9,6 +9,7 @@ import {
   encodeRooms,
   isISO,
   pickDay,
+  toRoomOptions,
 } from "./booking.ts";
 
 test("date helpers cross month and year ends", () => {
@@ -73,4 +74,24 @@ test("decodeRooms rejects invalid or hostile values", () => {
     assert.equal(decodeRooms(bad), null, bad);
   }
   assert.equal(decodeRooms(null), null);
+});
+
+test("toRoomOptions: numeric ids, one price per requested room summed, room missing in a group dropped", () => {
+  const match = {
+    Price: {
+      Boarding: [{
+        Id: 5, Name: "Demi pension",
+        Pax: [
+          { Adult: 2, Rooms: [{ Id: "453", Name: "Villa", Price: "100.5" }, { Id: 47, Name: "Double", Price: "80" }] },
+          { Adult: 1, Child: [5], Rooms: [{ Id: "453", Name: "Villa", Price: "90" }, { Id: 9, Name: "Stop", Price: "1", StopReservation: true }] },
+        ],
+      }],
+    },
+  };
+  const opts = toRoomOptions(match);
+  assert.equal(opts.length, 1);
+  assert.deepEqual({ ...opts[0], CancellationPolicy: undefined }, {
+    RoomId: 453, Name: "Villa", BoardingId: 5, BoardingName: "Demi pension", Price: 190.5, CancellationPolicy: undefined,
+  });
+  assert.deepEqual(toRoomOptions(null), []);
 });

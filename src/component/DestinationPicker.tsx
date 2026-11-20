@@ -149,11 +149,11 @@ export default function DestinationPicker({
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-controls={open ? listId : undefined}
-        className={`flex w-full items-center gap-3 rounded-xl border bg-white px-3.5 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]/30 ${
-          open ? "border-[#0A7C95] ring-2 ring-[#0A7C95]/20" : "border-gray-300 hover:border-gray-400"
+        className={`flex w-full items-center gap-3 rounded-xl border bg-white px-3.5 py-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600/30 ${
+          open ? "border-brand-600 ring-2 ring-brand-600/20" : "border-gray-300 hover:border-gray-400"
         }`}
       >
-        <MapPin className="h-5 w-5 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+        <MapPin className="h-5 w-5 shrink-0 text-brand-600" aria-hidden="true" />
         <span className="block min-w-0 flex-1">
           <span className="block text-[11px] font-medium leading-4 text-gray-500">{label}</span>
           <span className="block truncate text-[15px] font-medium text-gray-900">
@@ -162,7 +162,7 @@ export default function DestinationPicker({
         </span>
         {selected && (
           <span
-            className="shrink-0 rounded-full bg-[#E8F5F8] px-2 py-0.5 text-xs font-semibold text-[#0A7C95]"
+            className="shrink-0 rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-600"
             title={`${selected.count} hôtel${selected.count > 1 ? "s" : ""}`}
           >
             {selected.count}
@@ -176,7 +176,7 @@ export default function DestinationPicker({
 
       {open && (
         <div className="absolute left-0 top-full z-30 mt-2 w-full min-w-[300px] rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl">
-          <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2 focus-within:ring-2 focus-within:ring-[#0A7C95]/25">
+          <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2 focus-within:ring-2 focus-within:ring-brand-600/25">
             <Search className="h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" />
             <input
               ref={inputRef}
@@ -222,21 +222,21 @@ export default function DestinationPicker({
                     onMouseEnter={() => setActive(i)}
                     onClick={() => select(item.name)}
                     className={`flex cursor-pointer items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors ${
-                      isActive ? "bg-[#E8F5F8]" : ""
-                    } ${isSelected ? "font-semibold text-[#0A7C95]" : "text-gray-800"}`}
+                      isActive ? "bg-brand-100" : ""
+                    } ${isSelected ? "font-semibold text-brand-600" : "text-gray-800"}`}
                   >
                     <span className="flex min-w-0 items-center gap-2.5">
                       <MapPin
-                        className={`h-4 w-4 shrink-0 ${isSelected ? "text-[#0A7C95]" : "text-gray-300"}`}
+                        className={`h-4 w-4 shrink-0 ${isSelected ? "text-brand-600" : "text-gray-300"}`}
                         aria-hidden="true"
                       />
                       <span className="truncate">{item.label}</span>
                     </span>
                     <span className="flex shrink-0 items-center gap-2">
-                      {isSelected && <Check className="h-4 w-4 text-[#0A7C95]" aria-hidden="true" />}
+                      {isSelected && <Check className="h-4 w-4 text-brand-600" aria-hidden="true" />}
                       <span
                         className={`min-w-[2rem] rounded-full px-2 py-0.5 text-center text-xs font-semibold ${
-                          isSelected ? "bg-white text-[#0A7C95]" : "bg-gray-100 text-gray-600"
+                          isSelected ? "bg-white text-brand-600" : "bg-gray-100 text-gray-600"
                         }`}
                         title={`${item.count} hôtel${item.count > 1 ? "s" : ""}`}
                       >

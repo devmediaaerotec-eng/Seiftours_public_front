@@ -32,7 +32,7 @@ export default function Hero() {
   const FR = lang === "FR";
 
   return (
-    <section className="relative bg-gradient-to-b from-[#E8F5F8] to-white py-6 lg:py-10">
+    <section className="relative bg-gradient-to-b from-brand-100 to-white py-6 lg:py-10">
      <div className="mx-auto max-w-[1700px] px-1 sm:px-2 lg:px-3">
          <h1 className="sr-only">
           {t("hero.title_1")} {t("hero.title_2")}
@@ -49,7 +49,7 @@ export default function Hero() {
             <Link
               key={panel.id}
               to={panel.to}
-              className={`group relative block h-56 overflow-hidden rounded-3xl shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E3A312] lg:h-auto lg:min-h-[560px] ${
+              className={`group relative block h-56 overflow-hidden rounded-3xl shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500 lg:h-auto lg:min-h-[560px] ${
                 index === 0 ? "order-2 lg:order-1" : "order-3"
               }`}
             >
@@ -59,14 +59,14 @@ export default function Hero() {
                 loading="lazy"
                 className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#031E26]/90 via-[#064B5C]/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-800/30 to-transparent" />
 
               <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6">
                 <h2 className="text-lg font-extrabold leading-tight text-white sm:text-2xl">
                   {FR ? panel.titleFr : panel.titleEn}
                 </h2>
                  
-                <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#E3A312] px-4 py-2 text-xs font-bold text-[#06303A] transition-colors group-hover:bg-[#F2B705] sm:text-sm">
+                <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gold-500 px-4 py-2 text-xs font-bold text-brand-950 transition-colors group-hover:bg-gold-400 sm:text-sm">
                   {FR ? panel.ctaFr : panel.ctaEn}
                   <span aria-hidden="true">→</span>
                 </span>

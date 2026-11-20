@@ -325,11 +325,11 @@ export default function Navbar() {
   const renderDesktopGroup = (g: MenuGroup, isHotelsColumn: boolean) => (
     <div key={g.title} className="min-w-0">
       <div className="mb-2 flex items-center gap-2">
-        <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#E3A312]">
+        <p className="text-[11px] font-extrabold uppercase tracking-wider text-gold-600">
           {g.title}
         </p>
         {isHotelsColumn && g.links.length > 0 && (
-          <span className="rounded-full bg-[#E8F5F8] px-2 py-0.5 text-[10px] font-bold text-[#0A7C95]">
+          <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-600">
             {g.links.length}
           </span>
         )}
@@ -360,7 +360,7 @@ export default function Navbar() {
             <Link
               to={l.to}
               onClick={closeAll}
-              className="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-[#06303A] hover:bg-[#E8F5F8] hover:text-[#0A7C95]"
+              className="flex items-center justify-between gap-2 rounded-lg px-2 py-1.5 text-sm font-medium text-brand-900 hover:bg-brand-100 hover:text-brand-600"
             >
               <span className="truncate">{l.label}</span>
               {isHotelsColumn && g.title === "Destinations" && (
@@ -393,11 +393,11 @@ export default function Navbar() {
     return (
       <div key={g.title} className="mb-3 last:mb-0">
         <div className="mb-1 flex items-center gap-2">
-          <p className="text-[11px] font-extrabold uppercase tracking-wider text-[#E3A312]">
+          <p className="text-[11px] font-extrabold uppercase tracking-wider text-gold-600">
             {g.title}
           </p>
           {isHotelsColumn && g.links.length > 0 && (
-            <span className="rounded-full bg-[#E8F5F8] px-2 py-0.5 text-[10px] font-bold text-[#0A7C95]">
+            <span className="rounded-full bg-brand-100 px-2 py-0.5 text-[10px] font-bold text-brand-600">
               {g.links.length}
             </span>
           )}
@@ -409,7 +409,7 @@ export default function Navbar() {
               <Link
                 to={l.to}
                 onClick={closeAll}
-                className="block rounded-lg px-2 py-2.5 text-sm font-medium text-[#06303A] hover:bg-[#E8F5F8]"
+                className="block rounded-lg px-2 py-2.5 text-sm font-medium text-brand-900 hover:bg-brand-100"
               >
                 {l.label}
               </Link>
@@ -432,7 +432,7 @@ export default function Navbar() {
           <Link
             to="/hotels-tunisie"
             onClick={closeAll}
-            className="mt-1 block px-2 py-2 text-sm font-bold text-[#0A7C95] hover:underline"
+            className="mt-1 block px-2 py-2 text-sm font-bold text-brand-600 hover:underline"
           >
             Voir les {g.links.length} résultats →
           </Link>
@@ -444,13 +444,13 @@ export default function Navbar() {
   return (
     <>
       {/* ====================== TOP BAR ====================== */}
-      <div className="relative z-30 border-b border-[#D9A21B]/40 bg-[#064B5C] text-white">
+      <div className="relative z-30 border-b border-gold-400/40 bg-brand-800 text-white">
         <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-3 px-3 py-1.5 sm:px-6 lg:px-8">
           <a
             href={PHONE_HREF}
             className="flex items-center gap-1.5 text-[11px] font-semibold hover:underline sm:text-sm"
           >
-            <Phone className="h-3.5 w-3.5 text-[#F2B705]" aria-hidden="true" />
+            <Phone className="h-3.5 w-3.5 text-gold-400" aria-hidden="true" />
             <span>{PHONE_DISPLAY}</span>
           </a>
 
@@ -499,7 +499,7 @@ export default function Navbar() {
               className="h-9 w-auto lg:h-11"
               onError={(e) => (e.currentTarget.style.display = "none")}
             />
-            <span className="text-base font-extrabold tracking-tight text-[#064B5C] sm:text-lg lg:text-xl">
+            <span className="text-base font-extrabold tracking-tight text-brand-800 sm:text-lg lg:text-xl">
               Seif Tours
             </span>
           </Link>
@@ -525,8 +525,8 @@ export default function Navbar() {
                       }}
                       className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors xl:px-3 xl:text-sm ${
                         isActive(it.to) || open === it.key
-                          ? "text-[#0A7C95]"
-                          : "text-[#06303A] hover:text-[#0A7C95]"
+                          ? "text-brand-600"
+                          : "text-brand-900 hover:text-brand-600"
                       }`}
                     >
                       {it.label}
@@ -546,11 +546,11 @@ export default function Navbar() {
                             : "w-64"
                         }`}
                       >
-                        <div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-xl shadow-[#064B5C]/10">
+                        <div className="overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-xl shadow-brand-800/10">
                           {/* Recherche (hôtels) */}
                           {it.key === "hotels" && (
                             <div className="border-b border-gray-100 p-3">
-                              <label className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 focus-within:border-[#0A7C95] focus-within:ring-1 focus-within:ring-[#0A7C95]">
+                              <label className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 focus-within:border-brand-600 focus-within:ring-1 focus-within:ring-brand-600">
                                 <Search className="h-4 w-4 shrink-0 text-gray-400" aria-hidden="true" />
                                 <input
                                   type="search"
@@ -578,7 +578,7 @@ export default function Navbar() {
                             <Link
                               to={it.all.to}
                               onClick={closeAll}
-                              className="block border-t border-gray-100 bg-[#F2F9FB] px-5 py-3 text-sm font-bold text-[#064B5C] hover:text-[#0A7C95]"
+                              className="block border-t border-gray-100 bg-brand-50 px-5 py-3 text-sm font-bold text-brand-800 hover:text-brand-600"
                             >
                               {it.all.label} →
                             </Link>
@@ -593,7 +593,7 @@ export default function Navbar() {
                     onClick={closeAll}
                     className={({ isActive: a }) =>
                       `inline-flex items-center rounded-lg px-2.5 py-2 text-[13px] font-semibold transition-colors xl:px-3 xl:text-sm ${
-                        a ? "text-[#0A7C95]" : "text-[#06303A] hover:text-[#0A7C95]"
+                        a ? "text-brand-600" : "text-brand-900 hover:text-brand-600"
                       }`
                     }
                   >
@@ -608,7 +608,7 @@ export default function Navbar() {
           <div className="flex shrink-0 items-center gap-2">
             <a
               href={PHONE_HREF}
-              className="hidden items-center gap-2 rounded-full bg-[#E3A312] px-4 py-2 text-sm font-bold text-[#06303A] shadow-sm transition-colors hover:bg-[#F2B705] lg:inline-flex"
+              className="hidden items-center gap-2 rounded-full bg-gold-500 px-4 py-2 text-sm font-bold text-brand-950 shadow-sm transition-colors hover:bg-gold-400 lg:inline-flex"
             >
               <Phone className="h-4 w-4" aria-hidden="true" />
               <span className="hidden xl:inline">{PHONE_DISPLAY}</span>
@@ -618,14 +618,14 @@ export default function Navbar() {
             <a
               href={PHONE_HREF}
               aria-label={`Appeler ${PHONE_DISPLAY}`}
-              className="rounded-full bg-[#E3A312] p-2 text-[#06303A] lg:hidden"
+              className="rounded-full bg-gold-500 p-2 text-brand-950 lg:hidden"
             >
               <Phone className="h-5 w-5" />
             </a>
 
             <button
               type="button"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-[#064B5C] hover:bg-[#E8F5F8] lg:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-xl text-brand-800 hover:bg-brand-100 lg:hidden"
               aria-label={drawer ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={drawer}
               aria-controls="mobile-menu"
@@ -683,11 +683,11 @@ export default function Navbar() {
                             setMobileOpen(mobileOpen === it.key ? null : it.key);
                             if (it.key === "hotels") loadHotels();
                           }}
-                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[15px] font-bold text-[#06303A] hover:bg-[#E8F5F8]"
+                          className="flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-[15px] font-bold text-brand-900 hover:bg-brand-100"
                         >
                           <span className="flex items-center gap-2">
                             {it.key === "hotels" && (
-                              <HotelIcon className="h-4 w-4 text-[#0A7C95]" />
+                              <HotelIcon className="h-4 w-4 text-brand-600" />
                             )}
                             {it.label}
                           </span>
@@ -699,7 +699,7 @@ export default function Navbar() {
                         </button>
 
                         {mobileOpen === it.key && (
-                          <div className="mb-2 ml-2 space-y-3 border-l-2 border-[#E8F5F8] pl-3">
+                          <div className="mb-2 ml-2 space-y-3 border-l-2 border-brand-100 pl-3">
                             {/* Recherche (hôtels) */}
                             {it.key === "hotels" && (
                               <label className="mt-1 flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2">
@@ -734,7 +734,7 @@ export default function Navbar() {
                               <Link
                                 to={it.all.to}
                                 onClick={closeAll}
-                                className="block px-2 py-2 text-sm font-bold text-[#0A7C95]"
+                                className="block px-2 py-2 text-sm font-bold text-brand-600"
                               >
                                 {it.all.label} →
                               </Link>
@@ -747,8 +747,8 @@ export default function Navbar() {
                         to={it.to}
                         onClick={closeAll}
                         className={({ isActive: a }) =>
-                          `flex items-center justify-between rounded-xl px-3 py-3 text-[15px] font-bold hover:bg-[#E8F5F8] ${
-                            a ? "text-[#0A7C95]" : "text-[#06303A]"
+                          `flex items-center justify-between rounded-xl px-3 py-3 text-[15px] font-bold hover:bg-brand-100 ${
+                            a ? "text-brand-600" : "text-brand-900"
                           }`
                         }
                       >
@@ -766,7 +766,7 @@ export default function Navbar() {
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href={PHONE_HREF}
-                  className="flex items-center justify-center gap-2 rounded-xl bg-[#0A7C95] px-3 py-2.5 text-sm font-semibold text-white"
+                  className="flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-3 py-2.5 text-sm font-semibold text-white"
                 >
                   <Phone className="h-4 w-4" /> Appeler
                 </a>

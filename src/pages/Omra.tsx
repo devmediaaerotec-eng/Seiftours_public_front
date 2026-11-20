@@ -85,8 +85,8 @@ export default function OmraPage() {
                       <article
                         className={`relative flex h-full flex-col overflow-hidden rounded-3xl transition-all duration-300 hover:-translate-y-1 ${
                           hl
-                            ? "bg-gradient-to-b from-[#064B5C] to-[#06303A] text-white shadow-2xl ring-2 ring-[#E3A312] lg:-my-3"
-                            : "border border-gray-200/70 bg-white text-[#06303A] shadow-sm hover:shadow-xl"
+                            ? "bg-gradient-to-b from-brand-800 to-brand-900 text-white shadow-2xl ring-2 ring-gold-500 lg:-my-3"
+                            : "border border-gray-200/70 bg-white text-brand-900 shadow-sm hover:shadow-xl"
                         }`}
                       >
                         {p.image_url && (
@@ -94,13 +94,13 @@ export default function OmraPage() {
                             <img src={p.image_url} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
                             <div
                               className={`absolute inset-0 ${
-                                hl ? "bg-gradient-to-t from-[#064B5C] to-transparent" : "bg-gradient-to-t from-black/30 to-transparent"
+                                hl ? "bg-gradient-to-t from-brand-800 to-transparent" : "bg-gradient-to-t from-black/30 to-transparent"
                               }`}
                             />
                           </div>
                         )}
                         {(p.badge || hl) && (
-                          <span className="absolute right-4 top-4 rounded-full bg-[#F2B705] px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#06303A] shadow">
+                          <span className="absolute right-4 top-4 rounded-full bg-white px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-800 shadow">
                             {p.badge || "Recommandé"}
                           </span>
                         )}
@@ -108,7 +108,7 @@ export default function OmraPage() {
                         <div className="flex flex-1 flex-col p-6">
                           <span
                             className={`flex h-11 w-11 items-center justify-center rounded-xl ${
-                              hl ? "bg-white/10 text-[#FFC94D]" : "bg-[#E8F5F8] text-[#0A7C95]"
+                              hl ? "bg-white/10 text-gold-400" : "bg-brand-100 text-brand-600"
                             }`}
                           >
                             <MoonStar className="h-5 w-5" aria-hidden="true" />
@@ -130,7 +130,7 @@ export default function OmraPage() {
                               .map(({ icon: Icon, label, value }) => (
                                 <div key={label} className="flex items-start gap-2">
                                   <Icon
-                                    className={`mt-0.5 h-4 w-4 shrink-0 ${hl ? "text-[#F2B705]" : "text-[#0A7C95]"}`}
+                                    className={`mt-0.5 h-4 w-4 shrink-0 ${hl ? "text-gold-400" : "text-brand-600"}`}
                                     aria-hidden="true"
                                   />
                                   <dt className="font-semibold">{label} :</dt>
@@ -144,7 +144,7 @@ export default function OmraPage() {
                               {p.inclusions.map((inc, k) => (
                                 <li key={k} className="flex items-start gap-2 text-sm">
                                   <CircleCheck
-                                    className={`mt-0.5 h-4 w-4 shrink-0 ${hl ? "text-[#FFC94D]" : "text-[#0A7C95]"}`}
+                                    className={`mt-0.5 h-4 w-4 shrink-0 ${hl ? "text-gold-400" : "text-brand-600"}`}
                                     aria-hidden="true"
                                   />
                                   <span className={hl ? "text-white" : "text-gray-700"}>{inc}</span>
@@ -158,21 +158,21 @@ export default function OmraPage() {
                               <>
                                 <p className={`text-xs ${muted}`}>À partir de</p>
                                 <p className="flex items-baseline gap-1">
-                                  <span className={`text-3xl font-extrabold ${hl ? "text-[#FFC94D]" : "text-[#0A7C95]"}`}>
+                                  <span className={`text-3xl font-extrabold ${hl ? "text-gold-400" : "text-brand-600"}`}>
                                     {p.price.toLocaleString("fr-FR")}
                                   </span>
                                   <span className={`text-sm ${muted}`}>TND / pers.</span>
                                 </p>
                               </>
                             ) : (
-                              <p className={`text-2xl font-extrabold ${hl ? "text-[#FFC94D]" : "text-[#0A7C95]"}`}>Prix sur devis</p>
+                              <p className={`text-2xl font-extrabold ${hl ? "text-gold-400" : "text-brand-600"}`}>Prix sur devis</p>
                             )}
                             <Link
                               to={`/reserver/${p.slug}`}
                               className={`mt-4 flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${
                                 hl
-                                  ? "bg-gradient-to-r from-[#F28C0F] to-[#F2B705] text-[#06303A] shadow-md hover:brightness-105 focus-visible:ring-[#F2B705] focus-visible:ring-offset-[#06303A]"
-                                  : "bg-[#064B5C] text-white hover:bg-[#0A7C95] focus-visible:ring-[#0A7C95]"
+                                  ? "bg-gold-500 text-brand-950 shadow-md hover:bg-gold-400 focus-visible:ring-gold-400 focus-visible:ring-offset-brand-900"
+                                  : "bg-brand-800 text-white hover:bg-brand-600 focus-visible:ring-brand-600"
                               }`}
                             >
                               {p.price != null ? "Réserver ce forfait" : "Demander un devis"}

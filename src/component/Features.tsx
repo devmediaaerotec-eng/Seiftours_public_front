@@ -61,19 +61,19 @@ const PROMISES: Promise[] = [
   { icon: ShieldCheck,
     fr: ["Sécurité garantie", "Voyage protégé avec assurance complète et assistance 24/7"],
     en: ["Guaranteed security", "Protected trips with full insurance and 24/7 assistance"],
-    tile: "from-[#0A7C95] to-[#064B5C]", glow: "bg-[#0A7C95]/15", accent: "text-[#0A7C95]" },
+    tile: "from-brand-600 to-brand-800", glow: "bg-brand-600/15", accent: "text-brand-600" },
   { icon: Gem,
     fr: ["Qualité premium", "Hôtels et prestataires sélectionnés rigoureusement"],
     en: ["Premium quality", "Rigorously selected hotels and providers"],
-    tile: "from-[#E3A312] to-[#B8800A]", glow: "bg-[#E3A312]/20", accent: "text-[#8A5F00]" },
+    tile: "from-brand-800 to-brand-950", glow: "bg-brand-800/15", accent: "text-brand-800" },
   { icon: BadgePercent,
     fr: ["Meilleurs prix", "Tarifs compétitifs garantis, paiement en plusieurs fois"],
     en: ["Best prices", "Competitive prices guaranteed, installment payment available"],
-    tile: "from-[#F28C0F] to-[#E3A312]", glow: "bg-[#F28C0F]/15", accent: "text-[#B8680A]" },
+    tile: "from-brand-600 to-brand-900", glow: "bg-brand-600/15", accent: "text-brand-800" },
   { icon: Headset,
     fr: ["Support 24/7", "Notre équipe est disponible à tout moment pour vous aider"],
     en: ["24/7 Support", "Our team is available anytime to help you"],
-    tile: "from-[#2BA3BD] to-[#0A7C95]", glow: "bg-[#2BA3BD]/15", accent: "text-[#0A7C95]" },
+    tile: "from-brand-400 to-brand-600", glow: "bg-brand-400/15", accent: "text-brand-600" },
 ];
 
 export default function Features() {
@@ -89,12 +89,12 @@ export default function Features() {
   ];
 
   return (
-    <section className=" bg-gradient-to-b from-[#F2F9FB] to-white  py-14 lg:py-20">
+    <section className=" bg-gradient-to-b from-brand-50 to-white  py-14 lg:py-20">
       <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[2rem] border border-[#0A7C95]/10 bg-gradient-to-br from-[#E8F5F8] via-white to-[#FFF6DD] p-5 shadow-sm sm:p-8 lg:p-12">
+        <div className="relative overflow-hidden rounded-[2rem] border border-brand-600/10 bg-brand-50 p-5 shadow-sm sm:p-8 lg:p-12">
           <div className="pointer-events-none absolute inset-0" aria-hidden="true">
-            <Arcs className="absolute -right-32 -top-32 h-[420px] w-[420px] text-[#E3A312] opacity-25" />
-            <Arcs className="absolute -bottom-40 -left-40 h-[380px] w-[380px] text-[#0A7C95] opacity-[0.14]" />
+            <Arcs className="absolute -right-32 -top-32 h-[420px] w-[420px] text-brand-600 opacity-25" />
+            <Arcs className="absolute -bottom-40 -left-40 h-[380px] w-[380px] text-brand-600 opacity-[0.14]" />
           </div>
 
           <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-14">
@@ -111,10 +111,10 @@ export default function Features() {
               <dl className={`mt-8 grid gap-3 sm:gap-4 ${items.length === 3 ? "grid-cols-3" : "grid-cols-2"}`}>
                 {items.map(({ icon: Icon, value, label }) => (
                   <div key={label} className="flex flex-col items-start rounded-2xl border border-white bg-white/80 p-3 shadow-sm backdrop-blur sm:p-4">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-[#0A7C95] to-[#064B5C] text-white shadow-md shadow-[#0A7C95]/20 sm:h-10 sm:w-10">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 text-white shadow-md shadow-brand-600/20 sm:h-10 sm:w-10">
                       <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                     </span>
-                    <dd className="order-2 mt-3 text-2xl font-extrabold leading-none text-[#064B5C] sm:text-3xl">
+                    <dd className="order-2 mt-3 text-2xl font-extrabold leading-none text-brand-800 sm:text-3xl">
                       <CountUp value={value} />
                     </dd>
                     <dt className="order-3 mt-1 text-[11px] font-medium leading-tight text-gray-500 sm:text-xs">{label}</dt>
@@ -124,7 +124,7 @@ export default function Features() {
 
               <Link
                 to="/contact"
-                className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-3 text-sm font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+                className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gold-500 px-6 py-3 text-sm font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
               >
                 {fr ? "Parler à un conseiller" : "Talk to an advisor"}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -138,7 +138,7 @@ export default function Features() {
                 return (
                   <li
                     key={f[0]}
-                    className="group relative flex gap-4 overflow-hidden rounded-3xl border border-gray-200/70 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl hover:shadow-[#064B5C]/10 sm:flex-col sm:p-6"
+                    className="group relative flex gap-4 overflow-hidden rounded-3xl border border-gray-200/70 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-transparent hover:shadow-xl hover:shadow-brand-800/10 sm:flex-col sm:p-6"
                   >
                     <span className={`pointer-events-none absolute -left-10 -top-10 h-32 w-32 rounded-full blur-2xl transition-transform duration-500 group-hover:scale-125 ${glow}`} aria-hidden="true" />
                     <Icon
@@ -150,7 +150,7 @@ export default function Features() {
                       <Icon className="h-6 w-6 sm:h-7 sm:w-7" strokeWidth={1.75} aria-hidden="true" />
                     </span>
                     <div className="relative">
-                      <h3 className="font-extrabold text-[#06303A]">{title}</h3>
+                      <h3 className="font-extrabold text-brand-900">{title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-gray-600">{description}</p>
                     </div>
                   </li>

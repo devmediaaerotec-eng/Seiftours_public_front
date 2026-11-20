@@ -26,9 +26,11 @@ export default function VoyageOrganise() {
         title={  placeName }
          badge="Tout inclus"
         breadcrumb="Voyages organisés"
+        image="/side-left.png"
+        imagePosition="center 35%"
       />
 
-      <section className="bg-[#F2F9FB] py-12 lg:py-16">
+      <section className="bg-brand-50 py-12 lg:py-16">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Vol + hôtel + transferts"
@@ -39,7 +41,7 @@ export default function VoyageOrganise() {
 
           {destination && !loading && (
             <p className="mt-6 text-sm">
-              <Link to="/voyage-organise" className="font-semibold text-[#0A7C95] hover:underline">← Toutes les destinations</Link>
+              <Link to="/voyage-organise" className="font-semibold text-brand-600 hover:underline">← Toutes les destinations</Link>
             </p>
           )}
 
@@ -59,7 +61,7 @@ export default function VoyageOrganise() {
               <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {trips.map((pkg) => (
                   <li key={pkg.id}>
-                    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#064B5C]/10">
+                    <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-800/10">
                       <div className="skeleton relative aspect-[16/10] overflow-hidden">
                         {pkg.image_url ? (
                           <img
@@ -70,19 +72,19 @@ export default function VoyageOrganise() {
                             className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                           />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#064B5C] to-[#0A7C95]">
+                          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-800 to-brand-600">
                             <Globe className="h-14 w-14 text-white/35" strokeWidth={1.5} aria-hidden="true" />
                           </div>
                         )}
-                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[#031E26]/80 to-transparent" />
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-brand-950/80 to-transparent" />
                         {pkg.badge && (
-                          <span className="absolute left-3 top-3 rounded-full bg-[#F2B705] px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-[#06303A] shadow">
+                          <span className="absolute left-3 top-3 rounded-full bg-white px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider text-brand-800 shadow">
                             {pkg.badge}
                           </span>
                         )}
                         <div className="absolute inset-x-4 bottom-3 flex items-center justify-between gap-2 text-xs font-medium text-white">
                           <span className="flex items-center gap-1">
-                            <MapPin className="h-3.5 w-3.5 text-[#F2B705]" aria-hidden="true" />
+                            <MapPin className="h-3.5 w-3.5 text-gold-400" aria-hidden="true" />
                             {pkg.destination ?? pkg.title}
                           </span>
                           {pkg.duration && (
@@ -95,7 +97,7 @@ export default function VoyageOrganise() {
                       </div>
 
                       <div className="flex flex-1 flex-col p-5 sm:p-6">
-                        <h3 className="text-lg font-bold leading-snug text-[#06303A] transition-colors group-hover:text-[#0A7C95]">
+                        <h3 className="text-lg font-bold leading-snug text-brand-900 transition-colors group-hover:text-brand-600">
                           {/* lien étendu à toute la carte (le bouton Réserver reste au-dessus) */}
                           <Link to={`/voyage-organise/${pkg.slug}`} className="after:absolute after:inset-0 after:content-['']">
                             {pkg.title}
@@ -106,7 +108,7 @@ export default function VoyageOrganise() {
                           <ul className="mt-3 space-y-1.5">
                             {pkg.inclusions.slice(0, 4).map((inc, k) => (
                               <li key={k} className="flex items-start gap-2 text-sm text-gray-700">
-                                <CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                                <CircleCheck className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
                                 {inc}
                               </li>
                             ))}
@@ -122,7 +124,7 @@ export default function VoyageOrganise() {
                               {pkg.departure_dates.slice(0, 4).map((d) => (
                                 <span
                                   key={d}
-                                  className="rounded-full bg-[#E8F5F8] px-2.5 py-0.5 text-xs font-medium text-[#064B5C]"
+                                  className="rounded-full bg-brand-100 px-2.5 py-0.5 text-xs font-medium text-brand-800"
                                 >
                                   {fmtDate(d)}
                                 </span>
@@ -141,18 +143,18 @@ export default function VoyageOrganise() {
                                 <>
                                   <p className="text-[11px] text-gray-500">À partir de</p>
                                   <p className="flex items-baseline gap-1">
-                                    <span className="text-2xl font-extrabold text-[#0A7C95]">{price(pkg.new_price)}</span>
+                                    <span className="text-2xl font-extrabold text-brand-600">{price(pkg.new_price)}</span>
                                     <span className="text-xs text-gray-500">{pkg.currency} / pers.</span>
                                   </p>
                                 </>
                               ) : (
-                                <p className="text-lg font-extrabold text-[#0A7C95]">Prix sur devis</p>
+                                <p className="text-lg font-extrabold text-brand-600">Prix sur devis</p>
                               )}
                             </div>
  
                             <Link
                               to={`/reserver/${pkg.slug}`}
-                              className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+                              className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
                             >
                               {pkg.new_price != null ? "Réserver" : "Demander un devis"}
                               <ArrowRight className="h-4 w-4" aria-hidden="true" />

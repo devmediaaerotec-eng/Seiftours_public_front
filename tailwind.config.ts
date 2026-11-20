@@ -21,6 +21,25 @@ export default {
     },
     extend: {
       colors: {
+        // Seif Tours palette. Teal = brand and every action; gold = rare accent (stars, small highlights).
+        brand: {
+          50: '#F2F9FB',
+          100: '#E8F5F8',
+          200: '#D6EEF3',
+          300: '#7FD3E3',
+          400: '#2BA3BD',
+          600: '#0A7C95', // primary: buttons, links, active states
+          800: '#064B5C', // hover / headings
+          900: '#06303A', // dark sections, body headings
+          950: '#031E26',
+        },
+        gold: {
+          50: '#FFF6DD', // soft badge background
+          400: '#F2B705', // highlight text on dark backgrounds only
+          500: '#E3A312', // primary call-to-action buttons, stars, thin accent bars and dots
+          600: '#9C6C00', // small gold labels on white (readable: 4.6:1)
+          700: '#8A5A00', // gold text on light backgrounds (readable contrast)
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

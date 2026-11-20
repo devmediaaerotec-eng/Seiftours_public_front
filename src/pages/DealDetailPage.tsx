@@ -48,7 +48,7 @@ export default function DealDetailPage() {
             contactSubject="general"
           />
           <p className="mt-6 text-center">
-            <Link to="/bons-plans" className="font-semibold text-[#0A7C95] hover:underline">Tous les bons plans</Link>
+            <Link to="/bons-plans" className="font-semibold text-brand-600 hover:underline">Tous les bons plans</Link>
           </p>
         </div>
       </Layout>
@@ -66,22 +66,22 @@ export default function DealDetailPage() {
     <Layout>
       <div className="mx-auto max-w-[1100px] px-4 pb-20 pt-8 sm:px-6 lg:px-8">
         <nav aria-label="Fil d'Ariane" className="mb-5 flex flex-wrap items-center gap-2 text-sm text-gray-500">
-          <Link to="/" className="hover:text-[#0A7C95]">Accueil</Link>
+          <Link to="/" className="hover:text-brand-600">Accueil</Link>
           <span aria-hidden="true">/</span>
-          <Link to="/bons-plans" className="hover:text-[#0A7C95]">Bons plans</Link>
+          <Link to="/bons-plans" className="hover:text-brand-600">Bons plans</Link>
           <span aria-hidden="true">/</span>
-          <span className="truncate font-semibold text-[#06303A]">{deal.title}</span>
+          <span className="truncate font-semibold text-brand-900">{deal.title}</span>
         </nav>
 
-        <div className="overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-xl shadow-[#064B5C]/5">
-          <div className="relative aspect-[16/8] bg-gradient-to-br from-[#064B5C] to-[#0A7C95]">
+        <div className="overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-xl shadow-brand-800/5">
+          <div className="relative aspect-[16/8] bg-gradient-to-br from-brand-800 to-brand-600">
             {deal.image_url && <img src={deal.image_url} alt={deal.title} className="h-full w-full object-cover" />}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-[#031E26]/80 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-brand-950/80 to-transparent" />
             {deal.discount_label && (
-              <span className="absolute left-4 top-4 rounded-full bg-[#F2B705] px-4 py-1.5 text-base font-extrabold text-[#06303A] shadow-lg">{deal.discount_label}</span>
+              <span className="absolute left-4 top-4 rounded-full bg-brand-600 px-4 py-1.5 text-base font-extrabold text-white shadow-lg">{deal.discount_label}</span>
             )}
             <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
-              <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#F2B705]">
+              <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gold-400">
                 <Tag className="h-3.5 w-3.5" aria-hidden="true" /> {deal.category_name}
               </p>
               <h1 className="mt-1 text-2xl font-extrabold text-white sm:text-4xl">{deal.title}</h1>
@@ -97,22 +97,22 @@ export default function DealDetailPage() {
           <div className="grid gap-8 p-5 sm:p-8 lg:grid-cols-[1fr_340px]">
             <div>
               {end && (
-                <p className={`mb-5 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold ${end.urgent ? "bg-orange-50 text-orange-700" : "bg-[#EAF3F5] text-[#064B5C]"}`}>
+                <p className={`mb-5 inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold ${end.urgent ? "bg-orange-50 text-orange-700" : "bg-brand-100 text-brand-800"}`}>
                   <Clock className="h-4 w-4" aria-hidden="true" /> {end.label}
                 </p>
               )}
-              <h2 className="text-lg font-bold text-[#06303A]">À propos de cette offre</h2>
+              <h2 className="text-lg font-bold text-brand-900">À propos de cette offre</h2>
               <p className="mt-2 whitespace-pre-line leading-relaxed text-gray-600">
                 {deal.description || "Contactez-nous pour connaître le détail de cette offre et ses conditions."}
               </p>
               {deal.trip_to && (
-                <Link to={deal.trip_to} className="mt-5 inline-flex items-center gap-1.5 font-semibold text-[#0A7C95] hover:underline">
+                <Link to={deal.trip_to} className="mt-5 inline-flex items-center gap-1.5 font-semibold text-brand-600 hover:underline">
                   {isTrip ? "Voir le programme complet du voyage" : "Voir la fiche de l'hôtel"} <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               )}
             </div>
 
-            <aside className="h-fit rounded-2xl border border-gray-200 bg-[#F7FBFC] p-5 lg:sticky lg:top-24">
+            <aside className="h-fit rounded-2xl border border-gray-200 bg-brand-50 p-5 lg:sticky lg:top-24">
               {deal.price != null ? (
                 <>
                   {deal.old_price && (
@@ -124,16 +124,16 @@ export default function DealDetailPage() {
                     </p>
                   )}
                   <p className="mt-1 flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-[#0A7C95]">{amount(deal.price, deal.currency)}</span>
+                    <span className="text-3xl font-extrabold text-brand-600">{amount(deal.price, deal.currency)}</span>
                     <span className="text-sm text-gray-500">/ pers.</span>
                   </p>
                 </>
               ) : (
-                <p className="text-2xl font-extrabold text-[#0A7C95]">Prix sur devis</p>
+                <p className="text-2xl font-extrabold text-brand-600">Prix sur devis</p>
               )}
 
               {(() => {
-                const cls = "mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-3 text-base font-bold text-[#06303A] shadow-md transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2";
+                const cls = "mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-5 py-3 text-base font-bold text-brand-950 shadow-md transition hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2";
                 const label = isTrip ? "Réserver cette offre" : isHotel ? "Voir les disponibilités" : "Profiter de l'offre";
                 const icon = <ArrowRight className="h-5 w-5" aria-hidden="true" />;
                 return external
@@ -142,7 +142,7 @@ export default function DealDetailPage() {
               })()}
               <Link
                 to={contact}
-                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#064B5C]/25 bg-white px-5 py-2.5 text-sm font-semibold text-[#064B5C] transition hover:border-[#0A7C95] hover:text-[#0A7C95]"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-brand-800/25 bg-white px-5 py-2.5 text-sm font-semibold text-brand-800 transition hover:border-brand-600 hover:text-brand-600"
               >
                 <MessageCircle className="h-4 w-4" aria-hidden="true" /> Poser une question
               </Link>
@@ -154,7 +154,7 @@ export default function DealDetailPage() {
         </div>
 
         <p className="mt-6">
-          <Link to="/bons-plans" className="inline-flex items-center gap-1.5 text-sm font-semibold text-[#0A7C95] hover:underline">
+          <Link to="/bons-plans" className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:underline">
             <ArrowLeft className="h-4 w-4" aria-hidden="true" /> Retour aux bons plans
           </Link>
         </p>

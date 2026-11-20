@@ -172,3 +172,53 @@
   background-color: #cbd5e1;
   border-radius: 9999px;
 }
+/* ── Calendrier de dates (component/DateRangePicker.tsx, react-day-picker) ── */
+.st-cal {
+  --rdp-accent-color: #0a7c95;
+  --rdp-accent-background-color: #e8f5f8;
+  --rdp-day-height: 42px;
+  --rdp-day-width: 42px;
+  --rdp-day_button-height: 40px;
+  --rdp-day_button-width: 40px;
+  --rdp-day_button-border-radius: 12px;
+  --rdp-selected-border: 2px solid #0a7c95;
+  --rdp-today-color: #b46d00;
+  --rdp-range_middle-background-color: #e8f5f8;
+  --rdp-range_middle-color: #064b5c;
+  --rdp-range_start-date-background-color: #064b5c;
+  --rdp-range_end-date-background-color: #064b5c;
+  --rdp-months-gap: 2rem;
+  --rdp-nav-height: 2.5rem;
+  --rdp-nav_button-height: 2.25rem;
+  --rdp-nav_button-width: 2.25rem;
+  --rdp-disabled-opacity: 1;
+}
+.st-cal .rdp-month_caption { font-size: 1rem; font-weight: 800; color: #064b5c; text-transform: capitalize; }
+.st-cal .rdp-weekday { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: #94a3b8; }
+.st-cal .rdp-day_button { font-size: 0.9rem; font-weight: 600; color: #1f2937; transition: background-color 0.15s, color 0.15s; }
+.st-cal .rdp-day:not(.rdp-disabled):not(.rdp-selected) .rdp-day_button:hover { background: #f1f5f9; }
+.st-cal .rdp-selected .rdp-day_button { font-weight: 800; }
+.st-cal .rdp-range_start .rdp-day_button,
+.st-cal .rdp-range_end .rdp-day_button { color: #fff; border-color: #064b5c; }
+.st-cal .rdp-range_middle .rdp-day_button { color: #064b5c; }
+/* Aujourd'hui : chiffre ambré + point (repris dans la légende) */
+.st-cal .rdp-today:not(.rdp-selected) .rdp-day_button { position: relative; color: #b46d00; font-weight: 800; }
+.st-cal .rdp-today:not(.rdp-selected) .rdp-day_button::after {
+  content: ""; position: absolute; bottom: 5px; left: 50%; width: 5px; height: 5px; margin-left: -2.5px;
+  border-radius: 9999px; background: #e3a312;
+}
+/* Jours passés / non réservables : barrés */
+.st-cal .rdp-disabled .rdp-day_button { color: #cbd5e1; text-decoration: line-through; cursor: not-allowed; }
+.st-cal .rdp-button_previous,
+.st-cal .rdp-button_next { border: 1px solid #e2e8f0; border-radius: 9999px; background: #fff; transition: background-color 0.15s; }
+.st-cal .rdp-button_previous:not(:disabled):hover,
+.st-cal .rdp-button_next:not(:disabled):hover { background: #e8f5f8; border-color: #0a7c95; }
+.st-cal .rdp-button_previous:disabled,
+.st-cal .rdp-button_next:disabled { opacity: 0.35; }
+.st-cal .rdp-chevron { fill: #064b5c; width: 16px; height: 16px; }
+@media (max-width: 380px) {
+  .st-cal { --rdp-day-height: 38px; --rdp-day-width: 38px; --rdp-day_button-height: 36px; --rdp-day_button-width: 36px; }
+}
+@media (min-width: 640px) {
+  .st-cal .rdp-months { flex-wrap: nowrap; }
+}

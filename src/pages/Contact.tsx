@@ -198,7 +198,7 @@ const inputClass = (error?: string) =>
   `w-full rounded-xl border bg-white px-3.5 py-3 text-[15px] text-gray-900 outline-none transition placeholder:text-gray-400 focus:ring-2 ${
     error
       ? "border-red-400 focus:border-red-500 focus:ring-red-200"
-      : "border-gray-300 focus:border-[#0A7C95] focus:ring-[#0A7C95]/20"
+      : "border-gray-300 focus:border-brand-600 focus:ring-brand-600/20"
   }`;
 
 function Field({
@@ -241,7 +241,7 @@ function InfoRow({
 }) {
   return (
     <div className="flex items-start gap-4">
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E8F5F8] text-[#0A7C95]">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-100 text-brand-600">
         {icon}
       </span>
       <div className="min-w-0">
@@ -377,10 +377,10 @@ export default function Contact() {
   return (
     <Layout>
       {/* ─────────────────────────── Banner ─────────────────────────── */}
-     <section className="relative overflow-hidden bg-[#064B5C] pb-28 pt-14 text-white lg:pb-18 lg:pt-16">
-      <div className="absolute inset-0 bg-gradient-to-br from-[#06303A] via-[#064B5C] to-[#0A7C95] " />
+     <section className="relative overflow-hidden bg-brand-800 pb-28 pt-14 text-white lg:pb-18 lg:pt-16">
+      <div className="absolute inset-0 bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 " />
         <svg
-          className="pointer-events-none absolute -right-24 -top-24 h-[520px] w-[520px] text-[#E3A312] opacity-45"
+          className="pointer-events-none absolute -right-24 -top-24 h-[520px] w-[520px] text-brand-600 opacity-45"
           viewBox="0 0 200 200"
           fill="none"
           aria-hidden="true"
@@ -391,7 +391,7 @@ export default function Contact() {
 
         <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <nav aria-label="Breadcrumb" className="mb-6 flex items-center gap-1.5 text-sm text-white/75">
-            <Link to="/" className="transition-colors hover:text-[#F2B705]">
+            <Link to="/" className="transition-colors hover:text-gold-400">
               {L.home}
             </Link>
             <ChevronRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -399,27 +399,27 @@ export default function Contact() {
           </nav>
 
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#F2B705]" />
+            <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-gold-400" />
             {L.badge}
           </span>
           <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">{L.title}</h1>
-          <div className="mt-4 h-1 w-20 rounded-full bg-[#E3A312]" />
+          <div className="mt-4 h-1 w-20 rounded-full bg-gold-500" />
  
            <div className="mt-6 flex flex-wrap gap-3">
             <a
               href={PHONE_HREF}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-lg transition hover:bg-[#E8F5F8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B705]"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-bold text-brand-900 shadow-lg transition hover:bg-brand-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
             >
-              <Phone className="h-4 w-4 text-[#0A7C95]" aria-hidden="true" />
+              <Phone className="h-4 w-4 text-brand-600" aria-hidden="true" />
               {PHONE_DISPLAY}
             </a>
             <a
               href={`https://wa.me/${WHATSAPP_NUMBER}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B705]"
+              className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-5 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
             >
-              <MessageCircle className="h-4 w-4 text-[#F2B705]" aria-hidden="true" />
+              <MessageCircle className="h-4 w-4 text-gold-400" aria-hidden="true" />
               WhatsApp
             </a>
           </div>
@@ -427,14 +427,13 @@ export default function Contact() {
       </section>
 
       {/* flow-root keeps the tint from covering the banner where the cards overlap it */}
-      <div className="flow-root bg-gradient-to-b from-[#E3F3F7] to-[#F2F9FB]">
-      {/* ─────────────────── Info card + form (overlap the banner) ─────────────────── */}
+<div className="flow-root bg-gradient-to-b from-brand-100 to-brand-50 pb-16">      {/* ─────────────────── Info card + form (overlap the banner) ─────────────────── */}
       <div className="relative z-10 mx-auto -mt-12 max-w-[1400px] px-4 sm:px-6 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[1fr_1.45fr]">
           {/* Contact details */}
-          <aside className="relative overflow-hidden rounded-3xl border border-gray-100 border-t-4 border-t-[#E3A312] bg-white p-7 shadow-2xl sm:p-9">
+          <aside className="relative overflow-hidden rounded-3xl border border-gray-100 border-t-4 border-t-gold-500 bg-white p-7 shadow-2xl sm:p-9">
             <svg
-              className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 text-[#E3A312] opacity-25"
+              className="pointer-events-none absolute -bottom-20 -right-20 h-72 w-72 text-brand-600 opacity-25"
               viewBox="0 0 200 200"
               fill="none"
               aria-hidden="true"
@@ -443,11 +442,11 @@ export default function Contact() {
             </svg>
 
             <h2 className="relative text-xl font-extrabold text-gray-900">{L.infoTitle}</h2>
-            <div className="mt-2 h-1 w-12 rounded-full bg-[#E3A312]" />
+            <div className="mt-2 h-1 w-12 rounded-full bg-gold-500" />
 
             <div className="relative mt-7 space-y-6">
               <InfoRow icon={<Phone className="h-5 w-5" aria-hidden="true" />} label={L.call}>
-                <a href={PHONE_HREF} className="hover:text-[#0A7C95] hover:underline">
+                <a href={PHONE_HREF} className="hover:text-brand-600 hover:underline">
                   {PHONE_DISPLAY}
                 </a>
               </InfoRow>
@@ -457,14 +456,14 @@ export default function Contact() {
                   href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-[#0A7C95] hover:underline"
+                  className="hover:text-brand-600 hover:underline"
                 >
                   {L.whatsappHint}
                 </a>
               </InfoRow>
 
               <InfoRow icon={<Mail className="h-5 w-5" aria-hidden="true" />} label={L.email}>
-                <a href={`mailto:${EMAIL}`} className="break-all hover:text-[#0A7C95] hover:underline">
+                <a href={`mailto:${EMAIL}`} className="break-all hover:text-brand-600 hover:underline">
                   {EMAIL}
                 </a>
               </InfoRow>
@@ -480,7 +479,7 @@ export default function Contact() {
                     href={ADDRESS_MAPS_LINK}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-[#0A7C95] hover:underline"
+                    className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline"
                   >
                     {L.directions}
                     <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
@@ -508,7 +507,7 @@ export default function Contact() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#E8F5F8] text-[#0A7C95] transition-colors hover:bg-[#0A7C95] hover:text-white"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-brand-600 transition-colors hover:bg-brand-600 hover:text-white"
                   >
                     <Icon className="h-[18px] w-[18px]" />
                   </a>
@@ -523,7 +522,7 @@ export default function Contact() {
             className="order-first scroll-mt-24 rounded-3xl border border-gray-100 bg-white p-6 shadow-2xl sm:p-9 lg:order-none"
           >
             <h2 className="text-xl font-extrabold text-gray-900 sm:text-2xl">{L.formTitle}</h2>
-            <div className="mt-2 h-1 w-12 rounded-full bg-[#E3A312]" />
+            <div className="mt-2 h-1 w-12 rounded-full bg-gold-500" />
             <p className="mt-3 text-sm text-gray-600">{L.formSubtitle}</p>
 
             <form onSubmit={handleSubmit} noValidate className="relative mt-6">
@@ -613,7 +612,7 @@ export default function Contact() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 text-base font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
                 >
                   <Send className="h-5 w-5" aria-hidden="true" />
                   {sending ? L.sending : L.send}
@@ -621,7 +620,7 @@ export default function Contact() {
                 <button
                   type="button"
                   onClick={sendWhatsapp}
-                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-[#0A7C95] px-6 text-base font-bold text-[#0A7C95] transition hover:bg-[#0A7C95] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
+                  className="flex min-h-[52px] flex-1 items-center justify-center gap-2 rounded-xl border-2 border-brand-600 px-6 text-base font-bold text-brand-600 transition hover:bg-brand-600 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
                 >
                   <MessageCircle className="h-5 w-5" aria-hidden="true" />
                   {L.sendWhatsapp}
@@ -638,9 +637,9 @@ export default function Contact() {
               {sent && (
                 <p
                   role="status"
-                  className="mt-4 flex items-start gap-2 rounded-xl bg-[#E8F5F8] px-4 py-3 text-sm font-medium text-gray-800"
+                  className="mt-4 flex items-start gap-2 rounded-xl bg-brand-100 px-4 py-3 text-sm font-medium text-gray-800"
                 >
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#0A7C95]" aria-hidden="true" />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-600" aria-hidden="true" />
                   {sent === "whatsapp" ? L.sentWhatsapp : L.sentOk}
                 </p>
               )}

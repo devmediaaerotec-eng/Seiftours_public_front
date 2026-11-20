@@ -32,7 +32,9 @@ const day = (iso: string) =>
     : iso;
 
 const WORKING = new Set(["awaiting_payment", "paid", "confirming"]);
-const DONE = new Set(["confirmed", "pending_agency", "paid"]);
+const DONE = new Set(["confirmed", "pending_agency", "paid", "pending_confirmation", "contacted"]);
+/** Saved requests waiting for the agency (no payment involved) */
+const REQUESTED = new Set(["pending_confirmation", "contacted", "pending_agency"]);
  
 export default function BookingStatus() {
   const { reference = "" } = useParams<{ reference: string }>();
@@ -80,11 +82,11 @@ export default function BookingStatus() {
 
   /* ------------------------- recap card (used by both layouts) ------------------------- */
   const summaryCard = booking && (
-    <div className="w-full rounded-2xl border border-[#0A7C95]/20 bg-[#E8F5F8] px-6 py-5 text-left">
-      <p className="text-center text-xs font-semibold uppercase tracking-wider text-[#064B5C]">Référence</p>
-      <p className="mt-1 text-center text-2xl font-extrabold tracking-wide text-[#0A7C95]">{booking.reference}</p>
+    <div className="w-full rounded-2xl border border-brand-600/20 bg-brand-100 px-6 py-5 text-left">
+      <p className="text-center text-xs font-semibold uppercase tracking-wider text-brand-800">Référence</p>
+      <p className="mt-1 text-center text-2xl font-extrabold tracking-wide text-brand-600">{booking.reference}</p>
 
-      <dl className="mt-4 space-y-2 border-t border-[#0A7C95]/15 pt-4 text-sm">
+      <dl className="mt-4 space-y-2 border-t border-brand-600/15 pt-4 text-sm">
         <div className="flex justify-between gap-4">
           <dt className="text-gray-500">Hôtel</dt>
           <dd className="text-right font-semibold text-gray-900">{booking.hotelName}</dd>
@@ -104,21 +106,32 @@ export default function BookingStatus() {
             </dd>
           </div>
         )}
-        <div className="flex justify-between gap-4 border-t border-[#0A7C95]/15 pt-2">
+        <div className="flex justify-between gap-4 border-t border-brand-600/15 pt-2">
           <dt className="text-gray-500">Total du séjour</dt>
           <dd className="font-bold text-gray-900">{money(booking.amounts.total, booking.amounts.currency)}</dd>
         </div>
         {booking.mode === "agency" && (
           <div className="flex justify-between gap-4">
             <dt className="text-gray-500">À régler à l'agence</dt>
-            <dd className="font-semibold text-[#0A7C95]">{money(booking.amounts.total, booking.amounts.currency)}</dd>
+            <dd className="font-semibold text-brand-600">{money(booking.amounts.total, booking.amounts.currency)}</dd>
           </div>
+        )}
+        {booking.mode === "request" && (
+          <>
+            <div className="flex justify-between gap-4">
+              <dt className="text-gray-500">Payé en ligne</dt>
+              <dd className="font-semibold text-brand-600">{money(0, booking.amounts.currency)}</dd>
+            </div>
+            <p className="text-xs text-gray-500">
+              Prix indicatif. Le prix final vous est confirmé par notre agence ; le règlement se fait en agence.
+            </p>
+          </>
         )}
         {booking.mode === "deposit" && (
           <>
             <div className="flex justify-between gap-4">
               <dt className="text-gray-500">Acompte en ligne</dt>
-              <dd className="font-semibold text-[#0A7C95]">{money(booking.amounts.deposit, booking.amounts.currency)}</dd>
+              <dd className="font-semibold text-brand-600">{money(booking.amounts.deposit, booking.amounts.currency)}</dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-gray-500">Reste à régler à l'hôtel</dt>
@@ -131,8 +144,10 @@ export default function BookingStatus() {
   );
 
   /* ------------------------------ agency quote saved ------------------------------ */
-  if (booking?.status === "pending_agency") {
+  if (booking && REQUESTED.has(booking.status)) {
     const branch = getBranch(booking.branchId);
+    const isRequest = booking.mode === "request";
+    const contacted = booking.status === "contacted";
     return (
       <Layout>
         <div className="mx-auto max-w-6xl px-4 py-8">
@@ -142,7 +157,7 @@ export default function BookingStatus() {
             <div>
               <p className="flex items-center gap-1.5 font-semibold text-emerald-700" role="status">
                 <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
-                Devis sauvegardé
+                {isRequest ? (contacted ? "Demande en cours de traitement" : "Demande de réservation envoyée") : "Devis sauvegardé"}
               </p>
               <p className="mt-1 text-sm text-gray-600">
                 Réf. n° <span className="font-bold text-gray-900">{booking.reference}</span>
@@ -152,10 +167,22 @@ export default function BookingStatus() {
                 Merci{state?.firstName ? ` ${state.firstName}` : ""} !
               </h1>
               <p className="mt-2 text-xl font-bold leading-snug text-gray-900 sm:text-2xl">
-                {branch
-                  ? `RDV à l'${branch.name.replace(/^Agence/, "agence")} pour confirmer votre devis.`
-                  : "Notre équipe vous contacte pour confirmer votre devis."}
+                {isRequest
+                  ? contacted
+                    ? "Notre agence vous a contacté : votre réservation sera confirmée après votre accord."
+                    : "Notre agence vérifie la disponibilité et vous appelle pour confirmer le prix final."
+                  : branch
+                    ? `RDV à l'${branch.name.replace(/^Agence/, "agence")} pour confirmer votre devis.`
+                    : "Notre équipe vous contacte pour confirmer votre devis."}
               </p>
+              {isRequest && (
+                <p className="mt-2 text-sm text-gray-600">
+                  Aucun paiement n'a été effectué en ligne.{" "}
+                  {branch
+                    ? `Après confirmation, vous réglerez à l'${branch.name.replace(/^Agence/, "agence")}.`
+                    : "Après confirmation, vous réglerez dans l'une de nos agences."}
+                </p>
+              )}
 
               {branch && (
                 <div className="mt-6 rounded-3xl border border-gray-200/70 bg-white p-5 shadow-sm sm:p-6">
@@ -183,7 +210,7 @@ export default function BookingStatus() {
 
               <Link
                 to="/hotels-tunisie"
-                className="mt-8 inline-flex items-center gap-1.5 rounded-xl px-1 py-2 text-sm font-semibold text-gray-600 transition hover:text-[#0A7C95]"
+                className="mt-8 inline-flex items-center gap-1.5 rounded-xl px-1 py-2 text-sm font-semibold text-gray-600 transition hover:text-brand-600"
               >
                 <ChevronLeft className="h-4 w-4" aria-hidden="true" />
                 Retour aux hôtels
@@ -194,7 +221,7 @@ export default function BookingStatus() {
               {summaryCard}
               <div className="rounded-2xl border border-emerald-600/60 bg-white p-5">
                 <h2 className="text-lg font-bold text-gray-900">Besoin d'aide ?</h2>
-                <a href={phone.href} className="mt-3 flex items-center gap-2 font-semibold text-[#0A7C95] hover:underline">
+                <a href={phone.href} className="mt-3 flex items-center gap-2 font-semibold text-brand-600 hover:underline">
                   <Phone className="h-4 w-4" aria-hidden="true" />
                   {phone.display}
                 </a>
@@ -211,8 +238,8 @@ export default function BookingStatus() {
   }
 
   /* ------------------------------ other statuses ------------------------------ */
-  let icon = <Loader2 className="h-9 w-9 animate-spin text-[#0A7C95]" aria-hidden="true" />;
-  let ring = "bg-[#E8F5F8]";
+  let icon = <Loader2 className="h-9 w-9 animate-spin text-brand-600" aria-hidden="true" />;
+  let ring = "bg-brand-100";
   let title = "Validation en cours…";
   let text = "Nous vérifions votre paiement et finalisons votre réservation. Merci de ne pas fermer cette page.";
 
@@ -242,10 +269,16 @@ export default function BookingStatus() {
         text = "Aucun montant n'a été débité. Vous pouvez recommencer ou choisir de passer à l'agence.";
         break;
       case "failed":
-        icon = <AlertCircle className="h-9 w-9 text-[#B45F00]" aria-hidden="true" />;
-        ring = "bg-[#FFF6DD]";
+        icon = <AlertCircle className="h-9 w-9 text-gold-700" aria-hidden="true" />;
+        ring = "bg-gold-50";
         title = "Réservation impossible";
         text = "L'hôtel n'a pas pu confirmer ce séjour. Votre acompte sera remboursé : notre équipe vous contacte.";
+        break;
+      case "rejected":
+        icon = <XCircle className="h-9 w-9 text-gray-500" aria-hidden="true" />;
+        ring = "bg-gray-100";
+        title = "Demande non retenue";
+        text = "Nous n'avons pas pu donner suite à cette demande (par exemple : hôtel complet). Contactez-nous pour une autre proposition.";
         break;
       case "cancelled":
       case "expired":
@@ -256,8 +289,8 @@ export default function BookingStatus() {
         break;
       default:
         if (timedOut) {
-          icon = <Clock className="h-9 w-9 text-[#B45F00]" aria-hidden="true" />;
-          ring = "bg-[#FFF6DD]";
+          icon = <Clock className="h-9 w-9 text-gold-700" aria-hidden="true" />;
+          ring = "bg-gold-50";
           title = "La validation prend plus de temps";
           text = "Votre paiement n'est pas perdu. Gardez votre référence et contactez-nous si vous ne recevez pas de confirmation.";
         }
@@ -281,24 +314,24 @@ export default function BookingStatus() {
         {summaryCard && <div className="mt-6 w-full">{summaryCard}</div>}
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {booking && (booking.status === "payment_failed" || booking.status === "expired") && (
+          {booking && ["payment_failed", "expired", "rejected", "cancelled"].includes(booking.status) && booking.hotelId && (
             <Link
               to={`/hotels/${booking.hotelId}?checkIn=${booking.checkIn}&checkOut=${booking.checkOut}`}
-              className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-3 text-sm font-bold text-[#06303A] shadow-md transition hover:brightness-105"
+              className="rounded-xl bg-gold-500 px-6 py-3 text-sm font-bold text-brand-950 shadow-md transition hover:bg-gold-400"
             >
               Recommencer
             </Link>
           )}
           <a
             href={phone.href}
-            className="inline-flex items-center gap-2 rounded-xl border-2 border-[#0A7C95] px-5 py-3 text-sm font-bold text-[#0A7C95] transition hover:bg-[#E8F5F8]"
+            className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-600 px-5 py-3 text-sm font-bold text-brand-600 transition hover:bg-brand-100"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {phone.display}
           </a>
           <Link
             to="/hotels-tunisie"
-            className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-gray-600 transition hover:text-[#0A7C95]"
+            className="inline-flex items-center gap-1.5 rounded-xl px-4 py-3 text-sm font-semibold text-gray-600 transition hover:text-brand-600"
           >
             <ChevronLeft className="h-4 w-4" aria-hidden="true" />
             Retour aux hôtels

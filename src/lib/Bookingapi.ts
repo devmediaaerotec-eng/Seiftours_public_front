@@ -1,5 +1,5 @@
 import type { RoomConfig } from "./booking";
-import type { Amounts, BookingMode } from "./Payment";
+import type { Amounts, BookingMode, PricingConfig } from "./Payment";
 
 const BASE: string = (import.meta as any).env?.VITE_BOOKING_API ?? "/api";
 
@@ -26,14 +26,19 @@ export interface CreateBookingPayload {
   checkOut: string;
   rooms: RoomConfig[];
   client: GuestDetails;
-  /** Agency mode: the agency where the visitor will finalise the booking ("sousse" | "jemmal") */
+  /** Optional: the agency where the visitor would like to pay ("sousse" | "jemmal") */
   branchId?: string;
-  /** What the visitor saw. The server re-checks it; it is never trusted. */
+  /** Optional remarks for the agency (max 2000 characters) */
+  notes?: string;
+  /** What the visitor saw. The server re-checks it with MyGo; it is never trusted. */
   displayedTotal: number;
 }
 
 export type BookingStatus =
-  | "pending_agency" // agency option: request saved, the agency finalises it
+  | "pending_confirmation" // reservation request saved: the agency checks availability and calls back
+  | "contacted" // the agency has called the visitor
+  | "rejected" // the request could not be satisfied (hotel full…)
+  | "pending_agency" // legacy agency quote
   | "awaiting_payment" // deposit option: waiting for the payment provider
   | "paid" // deposit received, booking with the supplier not done yet
   | "confirming" // supplier booking in progress
@@ -112,11 +117,18 @@ const data = (await res.json().catch(() => null)) as ApiErrorResponse | null;
   return data as T;
 }
 
+// Bookings are stored by the Symfony API (proxied by Vite in dev, by vercel.json in production)
 export const bookingApi = {
   create: (payload: CreateBookingPayload) =>
-    request<CreateBookingResult>("/bookings", { method: "POST", body: JSON.stringify(payload) }),
-
-  // Query string (not /bookings/:ref): the dev API plugin in vite.config.ts only maps /api/<file>
+    request<CreateBookingResult>("/public/bookings", { method: "POST", body: JSON.stringify(payload) }),
   get: (reference: string) =>
-    request<BookingView>(`/bookings?reference=${encodeURIComponent(reference)}`),
+    request<BookingView>(`/public/bookings/${encodeURIComponent(reference)}`),
+  /** Markup and deposit rules (hotelId omitted = general rule, for hotel lists) */
+  config: (hotelId?: number, checkIn?: string) => {
+    const qs = new URLSearchParams();
+    if (hotelId) qs.set("hotel", String(hotelId));
+    if (checkIn) qs.set("checkIn", checkIn);
+    const q = qs.toString();
+    return request<PricingConfig>(`/public/booking-config${q ? `?${q}` : ""}`);
+  },
 };

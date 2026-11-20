@@ -13,15 +13,15 @@ function BranchDetails({ branch }: { branch: Branch }) {
         {branch.address}
       </p>
       {branch.phone && (
-        <a href={`tel:${branch.phone.replace(/\s/g, "")}`} className="flex items-center gap-1.5 hover:text-[#0A7C95]">
+        <a href={`tel:${branch.phone.replace(/\s/g, "")}`} className="flex items-center gap-1.5 hover:text-brand-600">
           <Phone className="h-4 w-4 shrink-0" aria-hidden="true" />
           {branch.phone}
         </a>
       )}
-      <p className={`flex items-center gap-2 font-semibold ${status.open ? "text-emerald-700" : "text-[#8A5A00]"}`}>
+      <p className={`flex items-center gap-2 font-semibold ${status.open ? "text-emerald-700" : "text-gold-700"}`}>
         <span
           aria-hidden="true"
-          className={`h-2.5 w-2.5 rounded-full ${status.open ? "bg-emerald-600" : "bg-[#E3A312]"}`}
+          className={`h-2.5 w-2.5 rounded-full ${status.open ? "bg-emerald-600" : "bg-gold-500"}`}
         />
         {status.text}
       </p>
@@ -45,7 +45,7 @@ function BranchDetails({ branch }: { branch: Branch }) {
         href={directionsUrl(branch)}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 font-semibold text-[#0A7C95] hover:underline"
+        className="inline-flex items-center gap-1.5 font-semibold text-brand-600 hover:underline"
       >
         <Navigation className="h-4 w-4" aria-hidden="true" />
         Obtenir l'itinéraire
@@ -70,7 +70,7 @@ export function BranchOption({
   return (
     <div
       className={`rounded-2xl border-2 p-4 transition ${
-        selected ? "border-[#0A7C95] bg-[#E8F5F8]/60" : "border-gray-200 bg-white hover:border-gray-300"
+        selected ? "border-brand-600 bg-brand-100/60" : "border-gray-200 bg-white hover:border-gray-300"
       }`}
     >
       <label htmlFor={inputId} className="flex cursor-pointer items-center gap-3">
@@ -80,11 +80,11 @@ export function BranchOption({
           name="branch"
           checked={selected}
           onChange={onSelect}
-          className="h-4 w-4 shrink-0 accent-[#0A7C95]"
+          className="h-4 w-4 shrink-0 accent-brand-600"
         />
         <span
           aria-hidden="true"
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sm font-extrabold text-[#0A7C95] shadow-sm"
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-sm font-extrabold text-brand-600 shadow-sm"
         >
           {branch.city.slice(0, 2).toUpperCase()}
         </span>
@@ -104,7 +104,7 @@ export function BranchInfo({ branch }: { branch: Branch }) {
       <p className="mb-3 flex items-center gap-3 text-lg font-bold text-gray-900">
         <span
           aria-hidden="true"
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#E8F5F8] text-sm font-extrabold text-[#0A7C95]"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-100 text-sm font-extrabold text-brand-600"
         >
           {branch.city.slice(0, 2).toUpperCase()}
         </span>

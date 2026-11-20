@@ -141,12 +141,12 @@ function InstagramIcon({ className }: { className?: string }) {
 function ColumnTitle({ children }: { children: string }) {
   return (
     <div className="mb-4">
-      <h2 className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-[#06303A]">
+      <h2 className="text-[13px] font-extrabold uppercase tracking-[0.14em] text-brand-900">
         {children}
       </h2>
       <div className="mt-2 flex items-center gap-1.5">
-        <span className="h-0.5 w-8 rounded-full bg-[#E3A312]" />
-        <span className="h-0.5 w-2 rounded-full bg-[#0A7C95]/50" />
+        <span className="h-0.5 w-8 rounded-full bg-gold-500" />
+        <span className="h-0.5 w-2 rounded-full bg-brand-600/50" />
       </div>
     </div>
   );
@@ -163,14 +163,14 @@ function InfoRow({
 }) {
   return (
     <div className="group flex items-start gap-3">
-      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#E8F5F8] to-[#D6EEF3] text-[#0A7C95] ring-1 ring-[#0A7C95]/10 transition-colors group-hover:from-[#0A7C95] group-hover:to-[#064B5C] group-hover:text-white group-hover:ring-[#0A7C95]">
+      <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-100 to-brand-200 text-brand-600 ring-1 ring-brand-600/10 transition-colors group-hover:from-brand-600 group-hover:to-brand-800 group-hover:text-white group-hover:ring-brand-600">
         {icon}
       </span>
       <div className="min-w-0 text-sm">
         <p className="text-[11px] font-bold uppercase tracking-wider text-gray-500">
           {label}
         </p>
-        <div className="mt-0.5 font-semibold text-[#06303A]">{children}</div>
+        <div className="mt-0.5 font-semibold text-brand-900">{children}</div>
       </div>
     </div>
   );
@@ -188,9 +188,7 @@ export default function Footer() {
   )}`;
 
   return (
-    <footer className="mt-16 bg-gradient-to-b from-[#F2F9FB] to-[#EAF3F6] text-gray-600">
-      {/* Top accent line */}
-      <div className="h-1 w-full bg-gradient-to-r from-[#064B5C] via-[#0A7C95] to-[#E3A312]" />
+<footer className="mt-0 bg-gradient-to-b from-brand-50 to-brand-100 text-gray-600">      <div className="h-1 w-full bg-brand-600" />
 
       <div className="mx-auto max-w-[1700px] px-4 pb-10 pt-14 sm:px-6 lg:px-8">
         {/* ───────────────────────── Location ───────────────────────── */}
@@ -199,26 +197,22 @@ export default function Footer() {
           className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)]"
         >
           {/* Agency card */}
-          <div className="relative overflow-hidden rounded-3xl border border-[#0A7C95]/15 bg-white p-6 shadow-[0_8px_30px_-12px_rgba(6,75,92,0.15)] sm:p-7">
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gradient-to-br from-[#E3A312]/15 to-transparent blur-2xl"
-            />
+          <div className="relative overflow-hidden rounded-3xl border border-brand-600/15 bg-white p-6 shadow-[0_8px_30px_-12px_rgba(6,75,92,0.15)] sm:p-7">
 
             <div className="relative">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-[#E3A312]" aria-hidden="true" />
-                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#E3A312]">
+                <Sparkles className="h-4 w-4 text-brand-600" aria-hidden="true" />
+                <p className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-gold-600">
                   Seif Tours
                 </p>
               </div>
               <h2
                 id="footer-location"
-                className="mt-2 text-2xl font-extrabold text-[#06303A]"
+                className="mt-2 text-2xl font-extrabold text-brand-900"
               >
                 {L.findUs}
               </h2>
-              <div className="mt-2 h-1 w-10 rounded-full bg-[#E3A312]" />
+              <div className="mt-2 h-1 w-10 rounded-full bg-gold-500" />
               <p className="mt-3 text-sm leading-relaxed text-gray-600">
                 {L.findUsText}
               </p>
@@ -240,7 +234,7 @@ export default function Footer() {
                       <a
                         key={p.href}
                         href={p.href}
-                        className="transition-colors hover:text-[#0A7C95]"
+                        className="transition-colors hover:text-brand-600"
                       >
                         {p.display}
                       </a>
@@ -254,7 +248,7 @@ export default function Footer() {
                 >
                   <a
                     href={`mailto:${EMAIL}`}
-                    className="break-all transition-colors hover:text-[#0A7C95]"
+                    className="break-all transition-colors hover:text-brand-600"
                   >
                     {EMAIL}
                   </a>
@@ -282,14 +276,14 @@ export default function Footer() {
                   href={DIRECTIONS_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#0A7C95] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#064B5C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
+                  className="inline-flex items-center gap-2 rounded-xl bg-brand-600 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
                 >
                   <Navigation className="h-4 w-4" aria-hidden="true" />
                   {L.directions}
                 </a>
                 <a
                   href={PHONES[0].href}
-                  className="inline-flex items-center gap-2 rounded-xl border-2 border-[#0A7C95] px-5 py-2 text-sm font-bold text-[#0A7C95] transition hover:bg-[#E8F5F8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
+                  className="inline-flex items-center gap-2 rounded-xl border-2 border-brand-600 px-5 py-2 text-sm font-bold text-brand-600 transition hover:bg-brand-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
                 >
                   <Phone className="h-4 w-4" aria-hidden="true" />
                   {L.call}
@@ -299,7 +293,7 @@ export default function Footer() {
           </div>
 
           {/* Map */}
-          <div className="relative min-h-[340px] overflow-hidden rounded-3xl border border-[#0A7C95]/15 bg-gray-100 shadow-[0_8px_30px_-12px_rgba(6,75,92,0.15)]">
+          <div className="relative min-h-[340px] overflow-hidden rounded-3xl border border-brand-600/15 bg-gray-100 shadow-[0_8px_30px_-12px_rgba(6,75,92,0.15)]">
             <iframe
               title={L.mapTitle}
               src={MAP_EMBED_URL}
@@ -309,9 +303,9 @@ export default function Footer() {
             />
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#064B5C]/35 to-transparent"
+              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-brand-800/35 to-transparent"
             />
-            <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-[#0A7C95] shadow-sm backdrop-blur">
+            <div className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-[11px] font-bold text-brand-600 shadow-sm backdrop-blur">
               <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-75" />
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#25D366]" />
@@ -323,7 +317,7 @@ export default function Footer() {
               href={OPEN_MAP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-gray-800 shadow-md transition hover:text-[#0A7C95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+              className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-gray-800 shadow-md transition hover:text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
             >
               <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
               {L.openMap}
@@ -332,14 +326,14 @@ export default function Footer() {
         </section>
 
         {/* ───────────────────────── Brand + Socials ───────────────────────── */}
-        <div className="mt-14 grid grid-cols-1 gap-10 border-t border-[#0A7C95]/10 pt-12 lg:grid-cols-[1.8fr_1fr]">
+        <div className="mt-14 grid grid-cols-1 gap-10 border-t border-brand-600/10 pt-12 lg:grid-cols-[1.8fr_1fr]">
           {/* Brand */}
           <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+              className="inline-flex items-center gap-3 rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
             >
-              <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#E3A312]/40 bg-white p-1.5 shadow-sm">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl border border-gold-500/40 bg-white p-1.5 shadow-sm">
                 <img
                   src="/logoseif.png"
                   alt="Seif Tours"
@@ -347,10 +341,10 @@ export default function Footer() {
                 />
               </span>
               <span className="flex flex-col leading-none">
-                <span className="text-2xl font-extrabold tracking-tight text-[#06303A]">
-                  Seif<span className="text-[#B8800A]"> Tours</span>
+                <span className="text-2xl font-extrabold tracking-tight text-brand-900">
+                  Seif<span className="text-gold-700"> Tours</span>
                 </span>
-                <span className="mt-1 text-[11px] font-semibold text-[#0A7C95]">
+                <span className="mt-1 text-[11px] font-semibold text-brand-600">
                   Seif Tours is a Safe Tours
                 </span>
               </span>
@@ -360,11 +354,11 @@ export default function Footer() {
             </p>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#0A7C95]/10 px-2.5 py-1 text-[11px] font-bold text-[#0A7C95]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-brand-600/10 px-2.5 py-1 text-[11px] font-bold text-brand-600">
                 <Sparkles className="h-3 w-3" aria-hidden="true" />
                 +10 ans d'expérience
               </span>
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#E3A312]/15 px-2.5 py-1 text-[11px] font-bold text-[#B8800A]">
+              <span className="inline-flex items-center gap-1 rounded-full bg-gold-500/15 px-2.5 py-1 text-[11px] font-bold text-gold-700">
                 Agence agréée
               </span>
             </div>
@@ -381,14 +375,14 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#0A7C95] shadow-sm ring-1 ring-[#0A7C95]/15 transition hover:-translate-y-0.5 hover:bg-[#0A7C95] hover:text-white hover:ring-[#0A7C95] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-brand-600 shadow-sm ring-1 ring-brand-600/15 transition hover:-translate-y-0.5 hover:bg-brand-600 hover:text-white hover:ring-brand-600 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
                 >
                   <Icon className="h-[18px] w-[18px]" />
                 </a>
               ))}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-[#0A7C95]/15 bg-white p-4 shadow-sm">
+            <div className="mt-6 rounded-2xl border border-brand-600/15 bg-white p-4 shadow-sm">
               <p className="text-sm leading-relaxed text-gray-600">
                 {L.whatsappText}
               </p>
@@ -396,7 +390,7 @@ export default function Footer() {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#E3A312] to-[#F2B705] px-4 py-2.5 text-sm font-bold text-[#06303A] shadow-sm transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2"
+                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
               >
                 <MessageCircle className="h-4 w-4" aria-hidden="true" />
                 {L.whatsappButton}
@@ -407,7 +401,7 @@ export default function Footer() {
       </div>
 
       {/* ───────────────────────── Bottom bar ───────────────────────── */}
-      <div className="border-t border-[#0A7C95]/15 bg-[#064B5C] text-white">
+      <div className="border-t border-brand-600/15 bg-brand-800 text-white">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-3 px-4 py-4 text-xs sm:flex-row sm:px-6 lg:px-8">
           <p className="text-white/80">
             © {year}{" "}
@@ -427,7 +421,7 @@ export default function Footer() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label={L.backToTop}
               title={L.backToTop}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition hover:bg-[#E3A312] hover:text-[#06303A] hover:ring-[#E3A312] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20 transition hover:bg-brand-600 hover:text-white hover:ring-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
             >
               <ArrowUp className="h-4 w-4" aria-hidden="true" />
             </button>

@@ -25,20 +25,20 @@ export default function SectionHeading({
     <div className={center ? "mx-auto max-w-2xl text-center" : "max-w-xl"}>
       <span
         className={`inline-flex items-center gap-2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-widest ${
-          dark ? "bg-white/10 text-[#F2B705]" : "bg-[#E8F5F8] text-[#0A7C95]"
+          dark ? "bg-white/10 text-gold-400" : "bg-brand-100 text-brand-600"
         }`}
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-[#E3A312]" aria-hidden="true" />
+        <span className="h-1.5 w-1.5 rounded-full bg-gold-500" aria-hidden="true" />
         {eyebrow}
       </span>
       <h2
         className={`mt-4 text-[28px] font-extrabold leading-tight tracking-tight sm:text-4xl ${
-          dark ? "text-white" : "text-[#06303A]"
+          dark ? "text-white" : "text-brand-900"
         }`}
       >
-        {title} <span className={dark ? "text-[#06303A]" : "text-[#06303A]"}>{highlight}</span>
+        {title} <span className={dark ? "text-brand-900" : "text-brand-900"}>{highlight}</span>
       </h2>
-      <div className={`mt-3 h-1 w-12 rounded-full bg-[#E3A312] ${center ? "mx-auto" : ""}`} aria-hidden="true" />
+      <div className={`mt-3 h-1 w-12 rounded-full bg-gold-500 ${center ? "mx-auto" : ""}`} aria-hidden="true" />
       {subtitle && (
         <p className={`mt-4 text-base leading-relaxed ${dark ? "text-white/75" : "text-gray-600"}`}>{subtitle}</p>
       )}

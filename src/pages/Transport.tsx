@@ -140,7 +140,7 @@ function validate(f: FormState): Errors {
 
 const inputCls = (err?: string) =>
   `mt-1.5 block w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-gray-900 shadow-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
-    err ? "border-red-400 focus:border-red-500 focus:ring-red-200" : "border-gray-300 focus:border-[#0A7C95] focus:ring-[#0A7C95]/25"
+    err ? "border-red-400 focus:border-red-500 focus:ring-red-200" : "border-gray-300 focus:border-brand-600 focus:ring-brand-600/25"
   }`;
 
 function Field({ id, label, error, hint, children }: { id: string; label: string; error?: string; hint?: string; children: ReactNode }) {
@@ -161,8 +161,8 @@ function Field({ id, label, error, hint, children }: { id: string; label: string
 
 function SectionTitle({ icon: Icon, children }: { icon: typeof Bus; children: ReactNode }) {
   return (
-    <h3 className="mb-3 mt-7 flex items-center gap-2 border-b border-gray-100 pb-2 text-sm font-bold text-[#06303A] first:mt-0">
-      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8F5F8] text-[#0A7C95]"><Icon className="h-4 w-4" aria-hidden="true" /></span>
+    <h3 className="mb-3 mt-7 flex items-center gap-2 border-b border-gray-100 pb-2 text-sm font-bold text-brand-900 first:mt-0">
+      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand-100 text-brand-600"><Icon className="h-4 w-4" aria-hidden="true" /></span>
       {children}
     </h3>
   );
@@ -264,21 +264,21 @@ function QuoteForm({ vehicle, onVehicle, counts, maxSeats }: QuoteFormProps) {
         <span className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 ring-8 ring-emerald-50/60">
           <CheckCircle2 className="h-8 w-8" aria-hidden="true" />
         </span>
-        <h3 className="mt-5 text-2xl font-bold text-[#06303A]">Votre demande est envoyée</h3>
+        <h3 className="mt-5 text-2xl font-bold text-brand-900">Votre demande est envoyée</h3>
         <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-gray-600">
           Merci {f.name.trim().split(" ")[0]}. Notre équipe vérifie la disponibilité des véhicules et vous recontacte au{" "}
           <strong className="whitespace-nowrap">{normalizePhone(f.phone)}</strong> avec un devis.
         </p>
-        <div className="mx-auto mt-6 inline-block rounded-xl border border-dashed border-[#E3A312] bg-[#FFF6DD] px-6 py-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-[#7A5200]">Référence de votre demande</p>
-          <p className="mt-0.5 select-all font-mono text-xl font-bold tracking-widest text-[#06303A]">{reference}</p>
+        <div className="mx-auto mt-6 inline-block rounded-xl border border-dashed border-gold-500 bg-gold-50 px-6 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-gold-700">Référence de votre demande</p>
+          <p className="mt-0.5 select-all font-mono text-xl font-bold tracking-widest text-brand-900">{reference}</p>
         </div>
         <p className="mt-3 text-xs text-gray-500">Conservez cette référence : elle vous sera demandée si vous nous appelez.</p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href={AGENCY.phones[0].href} className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#0A7C95] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#064B5C]">
+          <a href={AGENCY.phones[0].href} className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-800">
             <Phone className="h-4 w-4" aria-hidden="true" /> {AGENCY.phones[0].display}
           </a>
-          <button type="button" onClick={reset} className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-[#0A7C95] hover:text-[#0A7C95]">
+          <button type="button" onClick={reset} className="inline-flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition hover:border-brand-600 hover:text-brand-600">
             Faire une autre demande
           </button>
         </div>
@@ -319,7 +319,7 @@ function QuoteForm({ vehicle, onVehicle, counts, maxSeats }: QuoteFormProps) {
         </Field>
       </div>
       {duration && (
-        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-3 py-1 text-xs font-medium text-[#064B5C]">
+        <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1 text-xs font-medium text-brand-800">
           <Clock className="h-3.5 w-3.5" aria-hidden="true" /> Durée de la location : {duration}
         </p>
       )}
@@ -347,9 +347,9 @@ function QuoteForm({ vehicle, onVehicle, counts, maxSeats }: QuoteFormProps) {
           ] as [Vehicle, string, typeof Bus, string][]).map(([value, label, Icon, hint]) => (
             <button key={value} type="button" role="radio" aria-checked={vehicle === value} onClick={() => onVehicle(value)}
                     className={`flex items-center gap-3 rounded-xl border p-3 text-left transition ${
-                      vehicle === value ? "border-[#0A7C95] bg-[#E8F5F8] ring-1 ring-[#0A7C95]" : "border-gray-200 hover:border-[#0A7C95]/60"}`}>
-              <Icon className={`h-5 w-5 shrink-0 ${vehicle === value ? "text-[#0A7C95]" : "text-gray-400"}`} aria-hidden="true" />
-              <span><span className="block text-sm font-semibold text-[#06303A]">{label}</span><span className="block text-xs text-gray-500">{hint}</span></span>
+                      vehicle === value ? "border-brand-600 bg-brand-100 ring-1 ring-brand-600" : "border-gray-200 hover:border-brand-600/60"}`}>
+              <Icon className={`h-5 w-5 shrink-0 ${vehicle === value ? "text-brand-600" : "text-gray-400"}`} aria-hidden="true" />
+              <span><span className="block text-sm font-semibold text-brand-900">{label}</span><span className="block text-xs text-gray-500">{hint}</span></span>
             </button>
           ))}
         </div>
@@ -374,7 +374,7 @@ function QuoteForm({ vehicle, onVehicle, counts, maxSeats }: QuoteFormProps) {
       )}
 
       <button type="submit" disabled={state === "sending"}
-              className="mt-6 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70">
+              className="mt-6 flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 text-base font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2 disabled:cursor-wait disabled:opacity-70">
         {state === "sending" ? <><Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" /> Envoi en cours…</> : <><Send className="h-5 w-5" aria-hidden="true" /> Envoyer ma demande de devis</>}
       </button>
       <p className="mt-3 text-center text-xs text-gray-500">
@@ -397,31 +397,31 @@ function BusCard({ bus, photoIndex, onOpen, onRequest }: { bus: FleetBus; photoI
             <img src={assetUrl(bus.image_url)} alt={`${TYPE_LABEL[bus.bus_type]} ${bus.seats} places`} loading="lazy" decoding="async"
                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
             <span className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 transition group-hover:opacity-100" />
-            <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-[#06303A] opacity-0 shadow transition group-hover:opacity-100">
+            <span className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-brand-900 opacity-0 shadow transition group-hover:opacity-100">
               <Expand className="h-3.5 w-3.5" aria-hidden="true" /> Agrandir
             </span>
           </button>
         ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-[#E8F5F8] to-[#C9E8EF] text-[#0A7C95]/50">
+          <div className="flex h-full w-full flex-col items-center justify-center gap-2 bg-gradient-to-br from-brand-100 to-brand-200 text-brand-600/50">
             <ImageOff className="h-10 w-10" strokeWidth={1.5} aria-hidden="true" />
             <span className="text-xs font-medium">Photo bientôt disponible</span>
           </div>
         )}
-        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-[#064B5C] shadow-sm">
+        <span className="absolute left-3 top-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1 text-xs font-bold text-brand-800 shadow-sm">
           <Icon className="h-3.5 w-3.5" aria-hidden="true" /> {TYPE_LABEL[bus.bus_type]}
         </span>
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-bold text-[#06303A]">{TYPE_LABEL[bus.bus_type]} {bus.seats} places</h3>
+        <h3 className="text-lg font-bold text-brand-900">{TYPE_LABEL[bus.bus_type]} {bus.seats} places</h3>
         {subtitle && <p className="mt-0.5 text-sm text-gray-500">{subtitle}</p>}
-        <ul className="mt-3 flex flex-wrap gap-2 text-xs font-medium text-[#064B5C]">
-          <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-2.5 py-1"><Users className="h-3.5 w-3.5" aria-hidden="true" /> {bus.seats} passagers</li>
-          {bus.year_made && <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-2.5 py-1"><CalendarDays className="h-3.5 w-3.5" aria-hidden="true" /> {bus.year_made}</li>}
-          <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-2.5 py-1"><UserRound className="h-3.5 w-3.5" aria-hidden="true" /> Avec chauffeur</li>
+        <ul className="mt-3 flex flex-wrap gap-2 text-xs font-medium text-brand-800">
+          <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2.5 py-1"><Users className="h-3.5 w-3.5" aria-hidden="true" /> {bus.seats} passagers</li>
+          {bus.year_made && <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2.5 py-1"><CalendarDays className="h-3.5 w-3.5" aria-hidden="true" /> {bus.year_made}</li>}
+          <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-2.5 py-1"><UserRound className="h-3.5 w-3.5" aria-hidden="true" /> Avec chauffeur</li>
         </ul>
         <button type="button" onClick={() => onRequest(bus.bus_type)}
-                className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-[#0A7C95] px-4 py-2.5 text-sm font-semibold text-[#0A7C95] transition hover:bg-[#0A7C95] hover:text-white">
+                className="mt-5 inline-flex items-center justify-center gap-2 rounded-xl border border-brand-600 px-4 py-2.5 text-sm font-semibold text-brand-600 transition hover:bg-brand-600 hover:text-white">
           Demander ce type de véhicule <ArrowRight className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
@@ -477,7 +477,7 @@ function Lightbox({ photos, index, onChange, onClose }: { photos: FleetBus[]; in
         <div className="flex shrink-0 justify-center gap-2 overflow-x-auto px-4 py-3" onClick={(e) => e.stopPropagation()}>
           {photos.map((p, i) => (
             <button key={p.id} type="button" onClick={() => onChange(i)} aria-label={`Voir la photo ${i + 1}`} aria-current={i === index}
-                    className={`h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition ${i === index ? "border-[#F2B705]" : "border-transparent opacity-60 hover:opacity-100"}`}>
+                    className={`h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition ${i === index ? "border-white" : "border-transparent opacity-60 hover:opacity-100"}`}>
               <img src={assetUrl(p.image_url)} alt="" loading="lazy" className="h-full w-full object-cover" />
             </button>
           ))}
@@ -544,7 +544,7 @@ function HeroCarousel({ photos, onOpen }: { photos: FleetBus[]; onOpen: (i: numb
               fetchPriority={i === 0 ? "high" : "auto"}
               className="h-full w-full object-cover"
             />
-            <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[#06303A]/70 to-transparent" />
+            <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-brand-900/70 to-transparent" />
           </button>
         ))}
 
@@ -553,7 +553,7 @@ function HeroCarousel({ photos, onOpen }: { photos: FleetBus[]; onOpen: (i: numb
           <span className="rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/25 backdrop-blur-md">
             {TYPE_LABEL[photos[active].bus_type]}
           </span>
-          <span className="rounded-full bg-[#F2B705] px-3 py-1 text-xs font-bold text-[#06303A]">
+          <span className="rounded-full bg-gold-50 ring-1 ring-gold-500/30 px-3 py-1 text-xs font-bold text-gold-700">
             {photos[active].seats} places
           </span>
         </div>
@@ -581,7 +581,7 @@ function HeroCarousel({ photos, onOpen }: { photos: FleetBus[]; onOpen: (i: numb
         )}
 
         {/* Points */}
-        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#06303A]/60 px-3 py-1.5 ring-1 ring-white/20 backdrop-blur-md">
+        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2 rounded-full bg-brand-900/60 px-3 py-1.5 ring-1 ring-white/20 backdrop-blur-md">
           {photos.map((_, i) => (
             <button
               key={i}
@@ -590,7 +590,7 @@ function HeroCarousel({ photos, onOpen }: { photos: FleetBus[]; onOpen: (i: numb
               aria-label={`Aller à la photo ${i + 1}`}
               aria-current={i === active}
               className={`h-1.5 rounded-full transition-all ${
-                i === active ? "w-6 bg-[#F2B705]" : "w-1.5 bg-white/50 hover:bg-white/80"
+                i === active ? "w-6 bg-white" : "w-1.5 bg-white/50 hover:bg-white/80"
               }`}
             />
           ))}
@@ -618,12 +618,12 @@ function HeroCarousel({ photos, onOpen }: { photos: FleetBus[]; onOpen: (i: numb
                   aria-label={`Voir ${TYPE_LABEL[b.bus_type]} ${b.seats} places`}
                   className={`relative h-20 w-28 shrink-0 overflow-hidden rounded-xl ring-1 transition duration-300 ${
                     isActive
-                      ? "ring-2 ring-[#F2B705] shadow-lg shadow-[#F2B705]/20"
+                      ? "ring-2 ring-brand-600 shadow-lg shadow-brand-600/20"
                       : "ring-white/20 opacity-70 hover:opacity-100 hover:ring-white/40"
                   }`}
                 >
                   <img src={assetUrl(b.image_url)} alt="" loading="lazy" className="h-full w-full object-cover" />
-                  <span className="absolute inset-0 bg-gradient-to-t from-[#06303A]/50 to-transparent" />
+                  <span className="absolute inset-0 bg-gradient-to-t from-brand-900/50 to-transparent" />
                 </button>
               );
             })}
@@ -693,9 +693,8 @@ export default function TransportPage() {
       {/* ───────────── Bandeau d'accueil ───────────── */}
     
     {/* ───────────── Bandeau d'accueil ───────────── */}
-<section className="relative overflow-hidden bg-gradient-to-br from-[#06303A] via-[#064B5C] to-[#0A7C95] text-white">
+<section className="relative overflow-hidden bg-gradient-to-br from-brand-900 via-brand-800 to-brand-600 text-white">
   {/* Décors flous */}
-  <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-[#F2B705]/10 blur-3xl" />
   <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-white/10 blur-3xl" />
   {/* Grille lumineuse subtile */}
  
@@ -708,19 +707,18 @@ export default function TransportPage() {
         <ChevronRight className="h-3 w-3" aria-hidden="true" />
         <span className="text-white">Transport</span>
       </nav>
-      <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-[#F2B705] ring-1 ring-white/20 backdrop-blur-sm">
+      <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-gold-400 ring-1 ring-white/20 backdrop-blur-sm">
         <Bus className="h-4 w-4" aria-hidden="true" /> Location de bus
       </p>
       <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
-        Location de bus et minibus <span className="text-[#F2B705]">avec chauffeur</span>
+        Location de bus et minibus <span className="text-gold-400">avec chauffeur</span>
       </h1>
       <p className="mt-5 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
-        Seif Tours met à votre disposition une flotte de minibus et de microbus pour vos mariages, excursions, transferts
-        aéroport, sorties scolaires et déplacements professionnels. Contactez-nous : nous vous répondons avec un devis adapté à votre trajet.
+        Seif Tours, votre partenaire transport pour tous vos déplacements privés et professionnels.
       </p>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-        <a href="#devis" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-base font-bold text-[#06303A] shadow-lg transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#064B5C]">
+        <a href="#devis" className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 text-base font-bold text-brand-950 shadow-lg transition hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-800">
           Demander un devis <ArrowRight className="h-5 w-5" aria-hidden="true" />
         </a>
         <Link to={CONTACT_LINK} className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-xl border border-white/40 px-6 text-base font-semibold text-white transition hover:bg-white/10">
@@ -754,20 +752,19 @@ export default function TransportPage() {
   </div>
 </section>
   {/* ───────────── Pour quels besoins ───────────── */}
-<section className="relative overflow-hidden bg-gradient-to-b from-white via-[#F7FCFD] to-white py-14 lg:py-20">
+<section className="relative overflow-hidden bg-gradient-to-b from-white via-brand-50 to-white py-14 lg:py-20">
   {/* Décors de fond discrets */}
-  <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-[#0A7C95]/5 blur-3xl" />
-  <div className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-[#F2B705]/10 blur-3xl" />
+  <div className="pointer-events-none absolute -left-24 top-10 h-72 w-72 rounded-full bg-brand-600/5 blur-3xl" />
 
   <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
     {/* En-tête */}
     <div className="mx-auto max-w-2xl text-center">
-      <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-[#E8F5F8] px-3.5 py-1.5 text-xs font-semibold text-[#0A7C95] ring-1 ring-[#0A7C95]/15">
+      <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-brand-100 px-3.5 py-1.5 text-xs font-semibold text-brand-600 ring-1 ring-brand-600/15">
         <Bus className="h-4 w-4" aria-hidden="true" />
         Nos occasions
       </p>
-      <h2 className="text-2xl font-extrabold tracking-tight text-[#06303A] sm:text-3xl lg:text-4xl">
-        Un bus pour <span className="text-[#0A7C95]">chaque occasion</span>
+      <h2 className="text-2xl font-extrabold tracking-tight text-brand-900 sm:text-3xl lg:text-4xl">
+        Un bus pour <span className="text-brand-600">chaque occasion</span>
       </h2>
       <p className="mt-3 text-gray-600">
         Quelle que soit la taille de votre groupe, nous trouvons le véhicule qui convient à votre déplacement.
@@ -793,22 +790,22 @@ export default function TransportPage() {
             rounded-2xl border border-gray-200/80 bg-white p-5
             shadow-[0_1px_2px_rgba(6,48,58,0.04)]
             transition duration-300
-            hover:-translate-y-1 hover:border-[#0A7C95]/40
+            hover:-translate-y-1 hover:border-brand-600/40
             hover:shadow-[0_12px_28px_-12px_rgba(10,124,149,0.35)]
             sm:w-auto
           "
         >
           {/* Liseré animé en haut au survol */}
-          <span className="absolute inset-x-5 top-0 h-0.5 origin-left scale-x-0 rounded-full bg-gradient-to-r from-[#F28C0F] to-[#F2B705] transition-transform duration-300 group-hover:scale-x-100" />
+          <span className="absolute inset-x-5 top-0 h-0.5 origin-left scale-x-0 rounded-full bg-brand-600 transition-transform duration-300 group-hover:scale-x-100" />
 
           {/* Icône */}
           <span className="
             relative flex h-12 w-12 items-center justify-center rounded-xl
-            bg-gradient-to-br from-[#E8F5F8] to-[#D5EEF4]
-            text-[#0A7C95] ring-1 ring-[#0A7C95]/10
+            bg-gradient-to-br from-brand-100 to-brand-200
+            text-brand-600 ring-1 ring-brand-600/10
             transition duration-300
-            group-hover:from-[#0A7C95] group-hover:to-[#064B5C]
-            group-hover:text-white group-hover:ring-[#0A7C95]
+            group-hover:from-brand-600 group-hover:to-brand-800
+            group-hover:text-white group-hover:ring-brand-600
           ">
             <Icon className="h-6 w-6" aria-hidden="true" strokeWidth={1.8} />
           </span>
@@ -816,13 +813,13 @@ export default function TransportPage() {
           {/* Numérotation discrète */}
           <span className="
             absolute right-4 top-4 text-[11px] font-bold tabular-nums
-            text-gray-300 transition group-hover:text-[#F2B705]
+            text-gray-300 transition group-hover:text-gold-400
           ">
             {String(i + 1).padStart(2, "0")}
           </span>
 
           {/* Texte */}
-          <h3 className="mt-4 text-[15px] font-bold leading-snug text-[#06303A]">
+          <h3 className="mt-4 text-[15px] font-bold leading-snug text-brand-900">
             {title}
           </h3>
           <p className="mt-1.5 text-[13px] leading-relaxed text-gray-600">
@@ -840,11 +837,11 @@ export default function TransportPage() {
 </section>
 
       {/* ───────────── Notre flotte ───────────── */}
-      <section id="flotte" className="scroll-mt-24 bg-[#F2F9FB] py-14 lg:py-20">
+      <section id="flotte" className="scroll-mt-24 bg-brand-50 py-14 lg:py-20">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-[#06303A] sm:text-3xl">Notre flotte</h2>
+              <h2 className="text-2xl font-bold text-brand-900 sm:text-3xl">Notre flotte</h2>
               <p className="mt-2 max-w-xl text-gray-600">Des véhicules entretenus, conduits par des chauffeurs professionnels. Cliquez sur une photo pour l'agrandir.</p>
             </div>
             {buses.length > 0 && (
@@ -853,7 +850,7 @@ export default function TransportPage() {
                   .filter(([k, , n]) => k === "all" || n > 0)
                   .map(([k, label, n]) => (
                     <button key={k} type="button" role="tab" aria-selected={filter === k} onClick={() => setFilter(k)}
-                            className={`flex-1 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition sm:flex-none ${filter === k ? "bg-[#0A7C95] text-white shadow-sm" : "text-gray-600 hover:text-[#0A7C95]"}`}>
+                            className={`flex-1 whitespace-nowrap rounded-lg px-4 py-2 text-sm font-semibold transition sm:flex-none ${filter === k ? "bg-brand-600 text-white shadow-sm" : "text-gray-600 hover:text-brand-600"}`}>
                       {label} <span className={filter === k ? "text-white/80" : "text-gray-400"}>({n})</span>
                     </button>
                   ))}
@@ -870,9 +867,9 @@ export default function TransportPage() {
           {error && !loading && (
             <div className="mt-8 flex flex-col items-center rounded-2xl bg-white p-8 text-center ring-1 ring-gray-200">
               <AlertCircle className="h-8 w-8 text-red-500" aria-hidden="true" />
-              <p className="mt-3 font-semibold text-[#06303A]">Impossible de charger la flotte</p>
+              <p className="mt-3 font-semibold text-brand-900">Impossible de charger la flotte</p>
               <p className="mt-1 text-sm text-gray-500">Vous pouvez tout de même nous envoyer votre demande ci-dessous.</p>
-              <button type="button" onClick={retry} className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:border-[#0A7C95] hover:text-[#0A7C95]">
+              <button type="button" onClick={retry} className="mt-4 inline-flex items-center gap-2 rounded-lg border border-gray-300 px-4 py-2 text-sm font-semibold text-gray-700 hover:border-brand-600 hover:text-brand-600">
                 <RefreshCw className="h-4 w-4" aria-hidden="true" /> Réessayer
               </button>
             </div>
@@ -880,8 +877,8 @@ export default function TransportPage() {
 
           {!loading && !error && buses.length === 0 && (
             <div className="mt-8 rounded-2xl bg-white p-10 text-center ring-1 ring-gray-200">
-              <BusFront className="mx-auto h-10 w-10 text-[#0A7C95]/40" aria-hidden="true" />
-              <p className="mt-3 font-semibold text-[#06303A]">Notre flotte sera bientôt présentée ici</p>
+              <BusFront className="mx-auto h-10 w-10 text-brand-600/40" aria-hidden="true" />
+              <p className="mt-3 font-semibold text-brand-900">Notre flotte sera bientôt présentée ici</p>
               <p className="mt-1 text-sm text-gray-500">En attendant, décrivez votre besoin : nous vous proposons le véhicule adapté.</p>
             </div>
           )}
@@ -902,21 +899,20 @@ export default function TransportPage() {
    {/* ───────────── Demande de devis ───────────── */}
 <section
   id="devis"
-  className="scroll-mt-20 relative overflow-hidden bg-gradient-to-b from-[#F7FCFD] via-white to-[#F7FCFD] py-16 lg:py-24"
+  className="scroll-mt-20 relative overflow-hidden bg-gradient-to-b from-brand-50 via-white to-brand-50 py-16 lg:py-24"
 >
   {/* Décors très discrets */}
-  <div className="pointer-events-none absolute -left-32 top-40 h-80 w-80 rounded-full bg-[#0A7C95]/5 blur-3xl" />
-  <div className="pointer-events-none absolute -right-32 bottom-20 h-80 w-80 rounded-full bg-[#F2B705]/8 blur-3xl" />
+  <div className="pointer-events-none absolute -left-32 top-40 h-80 w-80 rounded-full bg-brand-600/5 blur-3xl" />
 
   <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
     {/* ───── En-tête ───── */}
     <div className="mx-auto max-w-2xl text-center">
-      <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#0A7C95]/20 bg-white px-3.5 py-1.5 text-xs font-semibold text-[#0A7C95] shadow-sm">
+      <p className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-600/20 bg-white px-3.5 py-1.5 text-xs font-semibold text-brand-600 shadow-sm">
         <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
         Réponse sous 24 h
       </p>
-      <h2 className="text-2xl font-extrabold tracking-tight text-[#06303A] sm:text-3xl lg:text-4xl">
-        Demandez votre <span className="text-[#0A7C95]">devis gratuit</span>
+      <h2 className="text-2xl font-extrabold tracking-tight text-brand-900 sm:text-3xl lg:text-4xl">
+        Demandez votre <span className="text-brand-600">devis gratuit</span>
       </h2>
       <p className="mt-3 text-gray-600">
         Indiquez votre trajet, vos dates et vos horaires. Nous revenons vers vous avec une proposition adaptée, sans engagement.
@@ -951,17 +947,17 @@ export default function TransportPage() {
               {i < 2 && (
                 <span
                   aria-hidden="true"
-                  className="absolute left-[19px] top-11 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-[#0A7C95]/30 to-transparent"
+                  className="absolute left-[19px] top-11 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-brand-600/30 to-transparent"
                 />
               )}
-              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#0A7C95]/20 bg-white text-[#0A7C95] shadow-sm transition group-hover:border-[#0A7C95] group-hover:bg-[#E8F5F8]">
+              <span className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-brand-600/20 bg-white text-brand-600 shadow-sm transition group-hover:border-brand-600 group-hover:bg-brand-100">
                 <Icon className="h-4.5 w-4.5" aria-hidden="true" strokeWidth={1.8} />
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#F2B705] text-[10px] font-bold text-[#06303A]">
+                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-white text-[10px] font-bold text-brand-800">
                   {i + 1}
                 </span>
               </span>
               <div className="pt-0.5">
-                <h3 className="text-[15px] font-bold text-[#06303A]">{title}</h3>
+                <h3 className="text-[15px] font-bold text-brand-900">{title}</h3>
                 <p className="mt-1 text-sm leading-relaxed text-gray-600">{text}</p>
               </div>
             </li>
@@ -976,27 +972,27 @@ export default function TransportPage() {
           <div className="mt-3 space-y-2">
             <a
               href={AGENCY.phones[0].href}
-              className="group flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-[#06303A] transition hover:border-[#0A7C95] hover:shadow-sm"
+              className="group flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-semibold text-brand-900 transition hover:border-brand-600 hover:shadow-sm"
             >
               <span className="inline-flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5F8] text-[#0A7C95]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
                   <Phone className="h-4 w-4" aria-hidden="true" />
                 </span>
                 {AGENCY.phones[0].display}
               </span>
-              <ArrowRight className="h-4 w-4 text-[#0A7C95] opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true" />
+              <ArrowRight className="h-4 w-4 text-brand-600 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true" />
             </a>
             <Link
               to={CONTACT_LINK}
-              className="group flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-[#0A7C95] hover:shadow-sm"
+              className="group flex items-center justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:border-brand-600 hover:shadow-sm"
             >
               <span className="inline-flex items-center gap-2.5">
-                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition group-hover:bg-[#E8F5F8] group-hover:text-[#0A7C95]">
+                <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition group-hover:bg-brand-100 group-hover:text-brand-600">
                   <Mail className="h-4 w-4" aria-hidden="true" />
                 </span>
                 Écrire un message
               </span>
-              <ArrowRight className="h-4 w-4 text-[#0A7C95] opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true" />
+              <ArrowRight className="h-4 w-4 text-brand-600 opacity-0 transition group-hover:translate-x-0.5 group-hover:opacity-100" aria-hidden="true" />
             </Link>
           </div>
         </div>
@@ -1009,7 +1005,7 @@ export default function TransportPage() {
             { value: "0 €", label: "Engagement" },
           ].map(({ value, label }) => (
             <div key={label}>
-              <dd className="text-lg font-extrabold tabular-nums text-[#06303A]">{value}</dd>
+              <dd className="text-lg font-extrabold tabular-nums text-brand-900">{value}</dd>
               <dt className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-gray-500">{label}</dt>
             </div>
           ))}
@@ -1020,20 +1016,20 @@ export default function TransportPage() {
       <div className="relative">
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-[0_1px_3px_rgba(6,48,58,0.06),0_20px_40px_-24px_rgba(6,48,58,0.15)]">
           {/* Fine bande décorative en haut (accent jaune → bleu) */}
-          <div aria-hidden="true" className="h-1 w-full bg-gradient-to-r from-[#F28C0F] via-[#F2B705] to-[#0A7C95]" />
+          <div aria-hidden="true" className="h-1 w-full bg-brand-600" />
 
           {/* Header léger du formulaire */}
           <div className="flex items-center justify-between gap-3 border-b border-gray-100 px-5 py-4 sm:px-8">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#E8F5F8] text-[#0A7C95]">
+              <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
                 <Send className="h-4 w-4" aria-hidden="true" />
               </span>
               <div>
-                <p className="text-sm font-bold text-[#06303A]">Formulaire de devis</p>
+                <p className="text-sm font-bold text-brand-900">Formulaire de devis</p>
                 <p className="text-xs text-gray-500">Tous les champs marqués * sont requis</p>
               </div>
             </div>
-            <span className="hidden shrink-0 items-center gap-1.5 rounded-full bg-[#F2F9FB] px-2.5 py-1 text-xs font-medium text-[#064B5C] ring-1 ring-[#0A7C95]/15 sm:inline-flex">
+            <span className="hidden shrink-0 items-center gap-1.5 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800 ring-1 ring-brand-600/15 sm:inline-flex">
               <Clock className="h-3 w-3" aria-hidden="true" />
               ~2 min
             </span>

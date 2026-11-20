@@ -143,7 +143,7 @@ export default function CircuitDetailPage() {
             contactSubject="circuits"
           />
           <p className="mt-6 text-center">
-            <Link to="/circuit" className="font-semibold text-[#0A7C95] hover:underline">
+            <Link to="/circuit" className="font-semibold text-brand-600 hover:underline">
               ← Tous les circuits
             </Link>
           </p>
@@ -180,26 +180,26 @@ export default function CircuitDetailPage() {
       <section className="border-b border-gray-100 bg-white pb-6 pt-5 lg:pb-8">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <nav aria-label="Fil d'Ariane" className="mb-3 flex flex-wrap items-center gap-1.5 text-xs text-gray-500">
-            <Link to="/" className="hover:text-[#0A7C95]">Accueil</Link>
+            <Link to="/" className="hover:text-brand-600">Accueil</Link>
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
-            <Link to="/circuit" className="hover:text-[#0A7C95]">Circuits</Link>
+            <Link to="/circuit" className="hover:text-brand-600">Circuits</Link>
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
             <span className="line-clamp-1 text-gray-800">{trip.title}</span>
           </nav>
 
-          <h1 className="text-2xl font-bold leading-tight text-[#06303A] sm:text-3xl lg:text-4xl">{trip.title}</h1>
+          <h1 className="text-2xl font-bold leading-tight text-brand-900 sm:text-3xl lg:text-4xl">{trip.title}</h1>
 
-          <ul className="mt-3 flex flex-wrap gap-2 text-sm text-[#064B5C]">
-            <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-3 py-1 font-medium">
+          <ul className="mt-3 flex flex-wrap gap-2 text-sm text-brand-800">
+            <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1 font-medium">
               <Clock className="h-4 w-4" aria-hidden="true" /> {nbDays} jours / {trip.duration_nights} nuits
             </li>
             {trip.departure_city && (
-              <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-3 py-1 font-medium">
+              <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1 font-medium">
                 <MapPin className="h-4 w-4" aria-hidden="true" /> Départ de {trip.departure_city}
               </li>
             )}
             {groupSize && (
-              <li className="inline-flex items-center gap-1.5 rounded-full bg-[#E8F5F8] px-3 py-1 font-medium">
+              <li className="inline-flex items-center gap-1.5 rounded-full bg-brand-100 px-3 py-1 font-medium">
                 <Users className="h-4 w-4" aria-hidden="true" /> {groupSize}
               </li>
             )}
@@ -253,7 +253,7 @@ export default function CircuitDetailPage() {
                 })}
               </div>
             ) : (
-              <div className="flex h-[220px] items-center justify-center rounded-2xl bg-gradient-to-br from-[#064B5C] to-[#0A7C95] sm:h-[320px]">
+              <div className="flex h-[220px] items-center justify-center rounded-2xl bg-gradient-to-br from-brand-800 to-brand-600 sm:h-[320px]">
                 <RouteIcon className="h-14 w-14 text-white/40" strokeWidth={1.5} aria-hidden="true" />
               </div>
             )}
@@ -262,7 +262,7 @@ export default function CircuitDetailPage() {
               <button
                 type="button"
                 onClick={() => setLightbox(0)}
-                className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg bg-white/95 px-3.5 py-2 text-sm font-semibold text-[#06303A] shadow-md transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+                className="absolute bottom-3 right-3 inline-flex items-center gap-2 rounded-lg bg-white/95 px-3.5 py-2 text-sm font-semibold text-brand-900 shadow-md transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
               >
                 <ImageIcon className="h-4 w-4" aria-hidden="true" />
                 Voir les {photos.length} photos
@@ -273,27 +273,27 @@ export default function CircuitDetailPage() {
       </section>
 
       {/* ─────────────── Content ─────────────── */}
-      <section className="bg-[#F2F9FB] py-8 pb-28 lg:py-10">
+      <section className="bg-brand-50 py-8 pb-28 lg:py-10">
         <div className="mx-auto grid max-w-[1400px] gap-8 px-4 sm:px-6 lg:grid-cols-[1fr_380px] lg:px-8">
           <div className="min-w-0 space-y-6">
             {(trip.summary || trip.description || stops.length > 0 || highlights.length > 0) && (
               <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
-                <h2 className="text-lg font-bold text-[#06303A]">Présentation</h2>
+                <h2 className="text-lg font-bold text-brand-900">Présentation</h2>
                 {trip.summary && <p className="mt-2 font-medium text-gray-700">{trip.summary}</p>}
                 {trip.description && (
                   <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-600">{trip.description}</p>
                 )}
 
                 {stops.length > 0 && (
-                  <ol className="mt-5 flex flex-wrap items-center gap-y-2 text-sm font-semibold text-[#064B5C]" aria-label="Étapes">
+                  <ol className="mt-5 flex flex-wrap items-center gap-y-2 text-sm font-semibold text-brand-800" aria-label="Étapes">
                     {stops.map((s, i) => (
                       <li key={`${s}-${i}`} className="flex items-center">
                         <span className="flex items-center gap-1.5">
                           <span
                             className={`h-2.5 w-2.5 rounded-full ring-2 ring-offset-1 ${
                               i === 0 || i === stops.length - 1
-                                ? "bg-[#E3A312] ring-[#E3A312]/40"
-                                : "bg-[#0A7C95] ring-[#0A7C95]/30"
+                                ? "bg-gold-500 ring-gold-500/40"
+                                : "bg-brand-600 ring-brand-600/30"
                             }`}
                             aria-hidden="true"
                           />
@@ -312,7 +312,7 @@ export default function CircuitDetailPage() {
                     {highlights.map((h, i) => (
                       <span
                         key={`${h}-${i}`}
-                        className="inline-flex items-center gap-1 rounded-full bg-[#FFF6DD] px-2.5 py-1 text-xs font-medium text-[#7A5200]"
+                        className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800"
                       >
                         <Sparkles className="h-3 w-3" aria-hidden="true" /> {h}
                       </span>
@@ -325,11 +325,11 @@ export default function CircuitDetailPage() {
             {sortedDays.length > 0 && (
               <div className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6">
                 <div className="flex items-center justify-between gap-3">
-                  <h2 className="text-lg font-bold text-[#06303A]">Programme jour par jour</h2>
+                  <h2 className="text-lg font-bold text-brand-900">Programme jour par jour</h2>
                   <button
                     type="button"
                     onClick={() => setOpenDays(allOpen ? new Set() : new Set(sortedDays.map((d) => d.day_number)))}
-                    className="text-sm font-semibold text-[#0A7C95] hover:underline"
+                    className="text-sm font-semibold text-brand-600 hover:underline"
                   >
                     {allOpen ? "Tout replier" : "Tout déplier"}
                   </button>
@@ -344,13 +344,13 @@ export default function CircuitDetailPage() {
                           type="button"
                           onClick={() => toggleDay(d.day_number)}
                           aria-expanded={open}
-                          className="flex w-full items-center gap-3 bg-white px-4 py-3 text-left transition hover:bg-[#F2F9FB]"
+                          className="flex w-full items-center gap-3 bg-white px-4 py-3 text-left transition hover:bg-brand-50"
                         >
-                          <span className="flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-lg bg-[#064B5C] text-white">
+                          <span className="flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-lg bg-brand-800 text-white">
                             <span className="text-[9px] font-medium uppercase leading-none opacity-80">Jour</span>
                             <span className="text-sm font-bold leading-none">{d.day_number}</span>
                           </span>
-                          <span className="min-w-0 flex-1 text-sm font-semibold text-[#06303A] sm:text-base">
+                          <span className="min-w-0 flex-1 text-sm font-semibold text-brand-900 sm:text-base">
                             {cleanDayTitle(d.title)}
                           </span>
                           <ChevronDown
@@ -359,7 +359,7 @@ export default function CircuitDetailPage() {
                           />
                         </button>
                         {open && d.description && (
-                          <div className="border-t border-gray-100 bg-[#FAFCFD] px-4 py-3.5 pl-16">
+                          <div className="border-t border-gray-100 bg-brand-50 px-4 py-3.5 pl-16">
                             <p className="whitespace-pre-line text-sm leading-relaxed text-gray-600">{d.description}</p>
                           </div>
                         )}
@@ -374,7 +374,7 @@ export default function CircuitDetailPage() {
               <div className="grid gap-4 sm:grid-cols-2">
                 {trip.inclusions.length > 0 && (
                   <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                    <h2 className="text-base font-bold text-[#06303A]">Le prix comprend</h2>
+                    <h2 className="text-base font-bold text-brand-900">Le prix comprend</h2>
                     <ul className="mt-3 space-y-2">
                       {trip.inclusions.map((x, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
@@ -386,7 +386,7 @@ export default function CircuitDetailPage() {
                 )}
                 {trip.exclusions.length > 0 && (
                   <div className="rounded-2xl border border-gray-200 bg-white p-5">
-                    <h2 className="text-base font-bold text-[#06303A]">Le prix ne comprend pas</h2>
+                    <h2 className="text-base font-bold text-brand-900">Le prix ne comprend pas</h2>
                     <ul className="mt-3 space-y-2">
                       {trip.exclusions.map((x, i) => (
                         <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
@@ -410,18 +410,18 @@ export default function CircuitDetailPage() {
                   )}
                   <p className="text-xs text-gray-500">À partir de</p>
                   <p className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-[#0A7C95]">{amount(priceShown, trip.currency)}</span>
+                    <span className="text-3xl font-extrabold text-brand-600">{amount(priceShown, trip.currency)}</span>
                     <span className="text-sm text-gray-500">/ pers.</span>
                   </p>
                 </div>
               ) : (
-                <p className="text-2xl font-extrabold text-[#0A7C95]">Prix sur devis</p>
+                <p className="text-2xl font-extrabold text-brand-600">Prix sur devis</p>
               )}
 
               {trip.departures.length > 0 && (
                 <div className="mt-4">
                   <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-700">
-                    <Calendar className="h-4 w-4 text-[#0A7C95]" aria-hidden="true" /> Prochains départs
+                    <Calendar className="h-4 w-4 text-brand-600" aria-hidden="true" /> Prochains départs
                   </p>
                   <ul className="space-y-2" role="radiogroup" aria-label="Dates de départ">
                     {trip.departures.map((d) => {
@@ -436,12 +436,12 @@ export default function CircuitDetailPage() {
                             onClick={() => setDepartureId(active ? null : d.id)}
                             className={`flex w-full items-center justify-between gap-3 rounded-xl border px-3 py-2.5 text-left transition disabled:cursor-not-allowed disabled:opacity-50 ${
                               active
-                                ? "border-[#0A7C95] bg-[#E8F5F8] ring-1 ring-[#0A7C95]"
-                                : "border-gray-200 hover:border-[#0A7C95]"
+                                ? "border-brand-600 bg-brand-100 ring-1 ring-brand-600"
+                                : "border-gray-200 hover:border-brand-600"
                             }`}
                           >
                             <span>
-                              <span className="block text-sm font-semibold text-[#06303A]">{fmtDate(d.departure_date)}</span>
+                              <span className="block text-sm font-semibold text-brand-900">{fmtDate(d.departure_date)}</span>
                               {d.seats_left != null && d.seats_left <= 5 && (
                                 <span className="text-xs font-medium text-orange-600">
                                   {d.seats_left > 0 ? `Plus que ${d.seats_left} place${d.seats_left > 1 ? "s" : ""}` : "Complet"}
@@ -449,7 +449,7 @@ export default function CircuitDetailPage() {
                               )}
                             </span>
                             {d.price != null && (
-                              <span className="text-sm font-bold text-[#0A7C95]">{amount(d.price, trip.currency)}</span>
+                              <span className="text-sm font-bold text-brand-600">{amount(d.price, trip.currency)}</span>
                             )}
                           </button>
                         </li>
@@ -461,7 +461,7 @@ export default function CircuitDetailPage() {
 
               <Link
                 to={reserveTo}
-                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-3.5 text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+                className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-gold-500 px-5 py-3.5 text-base font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
               >
                 {priceShown != null ? "Réserver ce circuit" : "Demander un devis"}
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -469,7 +469,7 @@ export default function CircuitDetailPage() {
 
               <a
                 href={AGENCY.phones[0].href}
-                className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#0A7C95] hover:text-[#0A7C95]"
+                className="mt-3 flex items-center justify-center gap-2 rounded-xl border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-brand-600 hover:text-brand-600"
               >
                 <Phone className="h-4 w-4" aria-hidden="true" />
                 {AGENCY.phones[0].display}
@@ -483,11 +483,11 @@ export default function CircuitDetailPage() {
       <div className="fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-3 border-t border-gray-200 bg-white/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur lg:hidden">
         <div className="min-w-0">
           <p className="text-[11px] text-gray-500">{priceShown != null ? "À partir de" : "Tarif"}</p>
-          <p className="truncate text-lg font-extrabold leading-none text-[#0A7C95]">
+          <p className="truncate text-lg font-extrabold leading-none text-brand-600">
             {priceShown != null ? amount(priceShown, trip.currency) : "Sur devis"}
           </p>
         </div>
-        <Link to={reserveTo} className="rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 py-2.5 text-sm font-bold text-[#06303A] shadow-md">
+        <Link to={reserveTo} className="rounded-xl bg-gold-500 px-6 py-2.5 text-sm font-bold text-brand-950 shadow-md">
           {priceShown != null ? "Réserver" : "Demander un devis"}
         </Link>
       </div>
@@ -567,7 +567,7 @@ export default function CircuitDetailPage() {
               aria-label={`Voir la photo ${i + 1}`}
               aria-current={i === lightbox}
               className={`h-14 w-20 shrink-0 overflow-hidden rounded-md border-2 transition ${
-                i === lightbox ? "border-[#F2B705]" : "border-transparent opacity-60 hover:opacity-100"
+                i === lightbox ? "border-white" : "border-transparent opacity-60 hover:opacity-100"
               }`}
             >
               <img src={p.url} alt="" loading="lazy" className="h-full w-full object-cover" />

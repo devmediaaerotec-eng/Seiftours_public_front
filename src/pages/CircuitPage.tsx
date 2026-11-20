@@ -28,7 +28,7 @@ export default function CircuitPage() {
         breadcrumb="Circuits"
       />
 
-      <section className="bg-[#F2F9FB] py-12 lg:py-16">
+      <section className="bg-brand-50 py-12 lg:py-16">
         <div className="mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <SectionHeading
             eyebrow="Guide francophone"
@@ -39,7 +39,7 @@ export default function CircuitPage() {
 
           {region && !loading && (
             <p className="mt-6 text-sm">
-              <Link to="/circuit" className="font-semibold text-[#0A7C95] hover:underline">← Tous les circuits</Link>
+              <Link to="/circuit" className="font-semibold text-brand-600 hover:underline">← Tous les circuits</Link>
             </p>
           )}
 
@@ -62,7 +62,7 @@ export default function CircuitPage() {
                   const highlights = c.attributes?.highlights ?? [];
                   return (
                     <li key={c.id}>
-                      <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#064B5C]/10 sm:flex-row">
+                      <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand-800/10 sm:flex-row">
                         <div className="skeleton relative aspect-[16/10] shrink-0 overflow-hidden sm:aspect-auto sm:w-2/5">
                           {c.image_url ? (
                             <img
@@ -73,17 +73,17 @@ export default function CircuitPage() {
                               className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                             />
                           ) : (
-                            <div className="flex h-full min-h-40 w-full items-center justify-center bg-gradient-to-br from-[#064B5C] to-[#0A7C95]">
+                            <div className="flex h-full min-h-40 w-full items-center justify-center bg-gradient-to-br from-brand-800 to-brand-600">
                               <RouteIcon className="h-12 w-12 text-white/35" strokeWidth={1.5} aria-hidden="true" />
                             </div>
                           )}
-                          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold text-[#064B5C] shadow-sm">
+                          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-bold text-brand-800 shadow-sm">
                             <Clock className="h-3.5 w-3.5" aria-hidden="true" /> {days(c)}
                           </span>
                         </div>
 
                         <div className="flex flex-1 flex-col p-5 sm:p-6">
-                          <h3 className="text-xl font-bold text-[#06303A] transition-colors group-hover:text-[#0A7C95]">
+                          <h3 className="text-xl font-bold text-brand-900 transition-colors group-hover:text-brand-600">
                             {/* lien étendu à toute la carte (le bouton reste au-dessus) */}
                             <Link to={`/circuit/${c.slug}`} className="after:absolute after:inset-0 after:content-['']">
                               {c.title}
@@ -97,15 +97,15 @@ export default function CircuitPage() {
 
                           {/* Route: stops linked by a dashed line */}
                           {stops.length > 0 && (
-                            <ol className="mt-4 flex flex-wrap items-center gap-y-2 text-xs font-semibold text-[#064B5C]" aria-label="Étapes">
+                            <ol className="mt-4 flex flex-wrap items-center gap-y-2 text-xs font-semibold text-brand-800" aria-label="Étapes">
                               {stops.map((stop, i) => (
                                 <li key={`${stop}-${i}`} className="flex items-center">
                                   <span className="flex items-center gap-1.5">
                                     <span
                                       className={`h-2.5 w-2.5 rounded-full ring-2 ring-offset-1 ${
                                         i === 0 || i === stops.length - 1
-                                          ? "bg-[#E3A312] ring-[#E3A312]/40"
-                                          : "bg-[#0A7C95] ring-[#0A7C95]/30"
+                                          ? "bg-gold-500 ring-gold-500/40"
+                                          : "bg-brand-600 ring-brand-600/30"
                                       }`}
                                       aria-hidden="true"
                                     />
@@ -124,7 +124,7 @@ export default function CircuitPage() {
                               {highlights.map((h, i) => (
                                 <span
                                   key={`${h}-${i}`}
-                                  className="inline-flex items-center gap-1 rounded-full bg-[#FFF6DD] px-2.5 py-1 text-xs font-medium text-[#7A5200]"
+                                  className="inline-flex items-center gap-1 rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-800"
                                 >
                                   <Sparkles className="h-3 w-3" aria-hidden="true" /> {h}
                                 </span>
@@ -142,17 +142,17 @@ export default function CircuitPage() {
                                     )}
                                     <p className="text-[11px] text-gray-500">À partir de</p>
                                     <p className="flex items-baseline gap-1">
-                                      <span className="text-2xl font-extrabold text-[#0A7C95]">{amount(c.new_price, c.currency)}</span>
+                                      <span className="text-2xl font-extrabold text-brand-600">{amount(c.new_price, c.currency)}</span>
                                       <span className="text-xs text-gray-500">/ pers.</span>
                                     </p>
                                   </>
                                 ) : (
-                                  <p className="text-lg font-extrabold text-[#0A7C95]">Prix sur devis</p>
+                                  <p className="text-lg font-extrabold text-brand-600">Prix sur devis</p>
                                 )}
                               </div>
                               <Link
                                 to={`/reserver/${c.slug}`}
-                                className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-5 py-2.5 text-sm font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+                                className="relative z-10 inline-flex items-center gap-1.5 rounded-xl bg-gold-500 px-5 py-2.5 text-sm font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
                               >
                                 {c.new_price != null ? "Réserver ce circuit" : "Demander un devis"}
                                 <ArrowRight className="h-4 w-4" aria-hidden="true" />

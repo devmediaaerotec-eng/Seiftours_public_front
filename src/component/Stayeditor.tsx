@@ -50,7 +50,6 @@ export default function StayEditor({ checkIn, checkOut, rooms, today, onApply, b
   }, [checkIn, checkOut, roomsKey]);
 
   const nights = hasDates ? diffDays(checkIn, checkOut) : 0;
-  const draftNights = isISO(draft.checkIn) && isISO(draft.checkOut) ? diffDays(draft.checkIn, draft.checkOut) : 0;
 
   const apply = () => {
     if (!isISO(draft.checkIn) || !isISO(draft.checkOut)) {
@@ -81,22 +80,22 @@ export default function StayEditor({ checkIn, checkOut, rooms, today, onApply, b
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
             <span className="inline-flex items-center gap-2 font-medium text-gray-900">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5F8] text-[#0A7C95]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
                 <CalendarDays className="h-4 w-4" aria-hidden="true" />
               </span>
               {fmt(checkIn)} → {fmt(checkOut)}
-              <span className="rounded-full bg-[#E8F5F8] px-2 py-0.5 text-xs font-semibold text-[#0A7C95]">
+              <span className="rounded-full bg-brand-100 px-2 py-0.5 text-xs font-semibold text-brand-600">
                 {nights} nuit{nights > 1 ? "s" : ""}
               </span>
             </span>
             <span className="inline-flex items-center gap-2 text-gray-700">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5F8] text-[#0A7C95]">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-100 text-brand-600">
                 <Users className="h-4 w-4" aria-hidden="true" />
               </span>
               {roomSummary(rooms)}
             </span>
             {busy && (
-              <span role="status" className="inline-flex items-center gap-1.5 text-xs font-medium text-[#0A7C95]">
+              <span role="status" className="inline-flex items-center gap-1.5 text-xs font-medium text-brand-600">
                 <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden="true" />
                 Mise à jour des disponibilités…
               </span>
@@ -106,7 +105,7 @@ export default function StayEditor({ checkIn, checkOut, rooms, today, onApply, b
           <button
             type="button"
             onClick={() => setOpen(true)}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-[#0A7C95]/30 px-3.5 py-2 text-sm font-semibold text-[#0A7C95] transition hover:bg-[#E8F5F8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+            className="inline-flex items-center gap-1.5 rounded-lg border border-brand-600/30 px-3.5 py-2 text-sm font-semibold text-brand-600 transition hover:bg-brand-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
           >
             <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
             Modifier
@@ -137,7 +136,6 @@ export default function StayEditor({ checkIn, checkOut, rooms, today, onApply, b
               onChange={(r) => setDraft((d) => ({ ...d, checkIn: r.from ?? "", checkOut: r.to ?? "" }))}
               min={today}
               lang="FR"
-              badge={draftNights > 0 ? `${draftNights} nuit${draftNights > 1 ? "s" : ""}` : undefined}
             />
 
             <div>
@@ -148,7 +146,7 @@ export default function StayEditor({ checkIn, checkOut, rooms, today, onApply, b
               type="button"
               onClick={apply}
               disabled={busy}
-              className="flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-6 text-sm font-bold text-[#06303A] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2 disabled:opacity-60 md:col-span-2 lg:col-span-1"
+              className="flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gold-500 px-6 text-sm font-bold text-brand-950 transition hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:opacity-60 md:col-span-2 lg:col-span-1"
             >
               {busy ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />

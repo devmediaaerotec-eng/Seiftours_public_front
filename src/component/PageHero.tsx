@@ -8,6 +8,8 @@ interface PageHeroProps {
   badge?: string;
   breadcrumb?: string;
   image?: string;
+  /** CSS object-position of the image, e.g. "center 20%" to keep the top of a tall photo */
+  imagePosition?: string;
   children?: ReactNode;
 }
 
@@ -20,15 +22,17 @@ export default function PageHero({
   subtitle,
   badge,
   breadcrumb,
-  image = "https://mgx-backend-cdn.metadl.com/generate/images/776637/2026-04-24/nhre3qyaaflq/hero-mediterranean-coast.png",
+  // Tunisian coast (also used on the home page): matches the agency and the teal palette
+  image = "/side-right.png",
+  imagePosition = "center 55%",
   children,
 }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-[#06303A]">
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" fetchPriority="high" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#031E26]/90 via-[#064B5C]/70 to-[#064B5C]/30" />
+    <section className="relative overflow-hidden bg-brand-900">
+      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" style={{ objectPosition: imagePosition }} fetchPriority="high" />
+      <div className="absolute inset-0 bg-gradient-to-r from-brand-950/90 via-brand-800/70 to-brand-800/30" />
       <svg
-        className="pointer-events-none absolute -right-24 -top-24 h-[440px] w-[440px] text-[#E3A312] opacity-30"
+        className="pointer-events-none absolute -right-24 -top-24 h-[440px] w-[440px] text-brand-600 opacity-30"
         viewBox="0 0 200 200"
         fill="none"
         aria-hidden="true"
@@ -39,7 +43,7 @@ export default function PageHero({
 
       <div className="relative mx-auto max-w-[1400px] px-4 pb-24 pt-10 sm:px-6 lg:px-8 lg:pb-28 lg:pt-16">
         <nav aria-label="Fil d'Ariane" className="flex items-center gap-1.5 text-sm text-white/75">
-          <Link to="/" className="flex items-center gap-1 transition-colors hover:text-[#F2B705]">
+          <Link to="/" className="flex items-center gap-1 transition-colors hover:text-gold-400">
             <Home className="h-3.5 w-3.5" aria-hidden="true" />
             Accueil
           </Link>
@@ -55,14 +59,14 @@ export default function PageHero({
 
         {badge && (
           <span className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold text-white backdrop-blur-sm">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#F2B705]" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-gold-400" aria-hidden="true" />
             {badge}
           </span>
         )}
         <h1 className="mt-4 max-w-3xl text-[32px] font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
           {title}
         </h1>
-        <div className="mt-4 h-1 w-16 rounded-full bg-[#E3A312]" aria-hidden="true" />
+        <div className="mt-4 h-1 w-16 rounded-full bg-gold-500" aria-hidden="true" />
         {subtitle && <p className="mt-4 max-w-2xl text-base text-white/90 lg:text-lg">{subtitle}</p>}
         {children}
       </div>

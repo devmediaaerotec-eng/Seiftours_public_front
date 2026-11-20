@@ -22,7 +22,7 @@ export default function ImageCarousel({ photos, alt }: { photos: string[]; alt: 
           <button
             type="button"
             onClick={() => setFullscreen(true)}
-            className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-[#06303A] shadow-lg transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+            className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-white/95 px-3 py-1.5 text-xs font-bold text-brand-900 shadow-lg transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
           >
             {many ? <Images className="h-4 w-4" aria-hidden="true" /> : <Expand className="h-4 w-4" aria-hidden="true" />}
             {many ? `${photos.length} photos` : "Agrandir"}
@@ -40,7 +40,7 @@ export default function ImageCarousel({ photos, alt }: { photos: string[]; alt: 
               aria-label={`Photo ${i + 1}`}
               aria-current={i === index}
               className={`h-16 w-24 shrink-0 overflow-hidden rounded-xl ring-2 ring-offset-2 transition sm:h-[72px] sm:w-28 ${
-                i === index ? "ring-[#0A7C95]" : "opacity-60 ring-transparent hover:opacity-100"
+                i === index ? "ring-brand-600" : "opacity-60 ring-transparent hover:opacity-100"
               }`}
             >
               <img src={p} alt="" loading="lazy" className="h-full w-full object-cover" />
@@ -54,7 +54,7 @@ export default function ImageCarousel({ photos, alt }: { photos: string[]; alt: 
           role="dialog"
           aria-modal="true"
           aria-label={alt}
-          className="fixed inset-0 z-[60] flex flex-col bg-[#031E26]/95 backdrop-blur-sm"
+          className="fixed inset-0 z-[60] flex flex-col bg-brand-950/95 backdrop-blur-sm"
         >
           <div className="flex items-center justify-between px-4 py-3 text-white">
             <span className="text-sm font-semibold">
@@ -65,7 +65,7 @@ export default function ImageCarousel({ photos, alt }: { photos: string[]; alt: 
               onClick={() => setFullscreen(false)}
               autoFocus
               aria-label="Fermer"
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F2B705]"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-400"
             >
               <X className="h-5 w-5" />
             </button>
@@ -142,11 +142,11 @@ function Track({
   };
 
   const arrow =
-    "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-[#06303A] shadow-lg transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] sm:flex";
+    "absolute top-1/2 z-10 hidden h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-brand-900 shadow-lg transition hover:scale-105 hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 sm:flex";
 
   return (
     <div
-      className={`group relative overflow-hidden bg-[#06303A] ${className}`}
+      className={`group relative overflow-hidden bg-brand-900 ${className}`}
       role="region"
       aria-roledescription="carrousel"
       aria-label={alt}
@@ -191,7 +191,7 @@ function Track({
           <button type="button" onClick={() => go(index + 1)} aria-label="Photo suivante" className={`${arrow} right-3`}>
             <ChevronRight className="h-5 w-5" />
           </button>
-          <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-[#031E26]/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+          <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-brand-950/70 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur-sm">
             {index + 1} / {photos.length}
           </span>
         </>

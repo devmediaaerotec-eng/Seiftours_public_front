@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toRoomOptions } from './booking';
 
 // Server-side proxy (api/mygo.ts): it adds the MyGo credentials, so they never ship to the browser
 const API = '/api/mygo';
@@ -13,9 +14,24 @@ export class MyGoError extends Error {
   }
 }
 
+/** Turns an HTTP error from the proxy into a MyGoError carrying the server's message (not "Request failed with status code 500"). */
+function httpError(endpoint: string, err: unknown): never {
+  if (axios.isAxiosError(err)) {
+    const status = err.response?.status ?? 0;
+    const data: any = err.response?.data;
+    const message =
+      data?.ErrorMessage?.Description ??
+      (typeof data?.error === 'string' ? data.error : undefined) ??
+      (status === 0 ? 'Connexion impossible. Vérifiez votre connexion internet.' : `Erreur API (${status})`);
+    if (DEV) console.error(`[MyGo] ${endpoint} failed (HTTP ${status}):`, message);
+    throw new MyGoError(message, Number(data?.ErrorMessage?.Code) || status || 500);
+  }
+  throw err;
+}
+
 async function post<T>(endpoint: string, body: Record<string, unknown> = {}): Promise<T> {
   if (DEV) console.log(`[MyGo] POST ${endpoint}`, JSON.stringify(body, null, 2));
-  const { data } = await axios.post<unknown>(API, { endpoint, body });
+  const { data } = await axios.post<unknown>(API, { endpoint, body }).catch((e) => httpError(endpoint, e));
   return check<T>(endpoint, data);
 }
 
@@ -33,7 +49,7 @@ async function get<T>(endpoint: string, params: Record<string, unknown> = {}): P
           )
         ).toString(),
     },
-  });
+  }).catch((e) => httpError(endpoint, e));
   return check<T>(endpoint, data);
 }
 
@@ -215,8 +231,6 @@ export const mygoApi = {
 
   // Cancellation policies come with each room in the HotelSearch response
   // (the HotelCancellationPolicy endpoint always answers 400 "Rooms").
-
-  bookingCreation: (params: Record<string, unknown>) => post<any>('BookingCreation', params),
 };
 
 // ── Response helpers ────────────────────────────────────────────────────────
@@ -242,13 +256,7 @@ export function extractLowestPrice(entry: any): number | null {
     if (!isNaN(parsed) && parsed > 0) return parsed;
   }
 
-  // Fallback: minimum across all Boarding → Pax → Rooms
-  const boardings: any[] = entry?.Price?.Boarding ?? [];
-  const prices = boardings
-    .flatMap((b: any) => b?.Pax ?? [])
-    .flatMap((p: any) => p?.Rooms ?? [])
-    .map((r: any) => parseFloat(r?.Price ?? '0'))
-    .filter((p) => p > 0);
-
+  // Fallback: cheapest option, priced for all requested rooms
+  const prices = toRoomOptions(entry).map((o) => o.Price).filter((p) => p > 0);
   return prices.length > 0 ? Math.min(...prices) : null;
 }

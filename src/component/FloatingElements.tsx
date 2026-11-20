@@ -41,7 +41,7 @@ export default function FloatingElements() {
 
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        className={`fixed bottom-6 left-6 z-40 w-12 h-12 rounded-full bg-[#0A7C95] hover:bg-[#064B5C] text-white shadow-2xl flex items-center justify-center transition-all duration-300 ${
+        className={`fixed bottom-6 left-6 z-40 w-12 h-12 rounded-full bg-brand-600 hover:bg-brand-800 text-white shadow-2xl flex items-center justify-center transition-all duration-300 ${
           showTop ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
         }`}
         aria-label="Return to top"
@@ -85,13 +85,13 @@ export default function FloatingElements() {
           className={`relative w-14 h-14 rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 ${
             socialOpen
               ? "bg-gray-800 rotate-0 hover:bg-black" // Styles for the 'X' state
-              : "bg-[#E3A312] hover:bg-[#F2B705]"    // Styles for the 'Share' state
+              : "bg-brand-600 hover:bg-brand-800"    // Styles for the 'Share' state
           }`}
           aria-label={socialOpen ? "Close menu" : "Open menu"}
         >
           {/* Pulse notification only shows when menu is closed */}
           {!socialOpen && (
-            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-[#0A7C95] rounded-full border-2 border-white animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-brand-600 rounded-full border-2 border-white animate-pulse" />
           )}
           
           <svg

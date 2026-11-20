@@ -45,7 +45,7 @@ function HotelImage({ src, alt }: { src?: string; alt: string }) {
 
   if (!src || failed) {
     return (
-      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#064B5C] to-[#0A7C95]">
+      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-800 to-brand-600">
         <Building2 className="h-10 w-10 text-white/35" aria-hidden="true" />
       </div>
     );
@@ -97,7 +97,7 @@ function PriceBlock({
       )}
       <span className="text-[11px] text-gray-500">à partir de</span>
       <div className="flex items-baseline gap-1">
-        <span className="text-xl font-extrabold text-[#0A7C95]">{priceFormat.format(price)}</span>
+        <span className="text-xl font-extrabold text-brand-600">{priceFormat.format(price)}</span>
         <span className="text-xs text-gray-500">TND / nuit</span>
       </div>
     </div>
@@ -119,7 +119,7 @@ function CardInner({ hotel, searched }: { hotel: Hotel; searched: boolean }) {
         </div>
 
         {hotel.badge && (
-          <span className="absolute left-2.5 top-2.5 rounded-full bg-[#F2B705] px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-[#06303A] shadow-sm">
+          <span className="absolute left-2.5 top-2.5 rounded-full bg-white px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wide text-brand-800 shadow-sm">
             {hotel.badge}
           </span>
         )}
@@ -128,7 +128,7 @@ function CardInner({ hotel, searched }: { hotel: Hotel; searched: boolean }) {
       <div className="flex flex-1 flex-col p-3.5">
         <h3
           title={hotel.name}
-          className="line-clamp-1 text-[15px] font-semibold text-gray-900 transition-colors group-hover:text-[#0A7C95]"
+          className="line-clamp-1 text-[15px] font-semibold text-gray-900 transition-colors group-hover:text-brand-600"
         >
           {hotel.name}
         </h3>
@@ -137,7 +137,7 @@ function CardInner({ hotel, searched }: { hotel: Hotel; searched: boolean }) {
           {stars > 0 && (
             <span className="flex shrink-0 items-center gap-0.5" role="img" aria-label={`${stars} étoiles`}>
               {Array.from({ length: stars }).map((_, i) => (
-                <Star key={i} className="h-3 w-3 fill-[#E3A312] text-[#E3A312]" aria-hidden="true" />
+                <Star key={i} className="h-3 w-3 fill-gold-500 text-gold-500" aria-hidden="true" />
               ))}
             </span>
           )}
@@ -151,7 +151,7 @@ function CardInner({ hotel, searched }: { hotel: Hotel; searched: boolean }) {
           <PriceBlock price={hotel.price} oldPrice={hotel.oldPrice} searched={searched} />
           <span
             aria-hidden="true"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#E8F5F8] text-[#0A7C95] transition-colors group-hover:bg-[#0A7C95] group-hover:text-white"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-100 text-brand-600 transition-colors group-hover:bg-brand-600 group-hover:text-white"
           >
             <ArrowRight className="h-4 w-4" />
           </span>
@@ -165,7 +165,7 @@ export default function HotelCard({ hotel, searchParams }: HotelCardProps) {
   const searched = !!searchParams;
 
   const baseClass =
-    "group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:border-[#0A7C95]/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2";
+    "group flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white transition-all duration-200 hover:border-brand-600/40 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2";
 
   if (hotel.id) {
     const params = new URLSearchParams({ name: hotel.name, image: hotel.image });

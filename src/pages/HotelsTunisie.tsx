@@ -16,12 +16,13 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { mygoApi, extractSearchHotels, extractHotelId, extractLowestPrice } from "@/lib/mygoApi";
+import { perNightWithMarkup } from "@/lib/Payment";
+import { useBookingConfig } from "@/hooks/useBookingConfig";
 import { getHotelCatalog, friendlyApiError } from "@/lib/hotelCatalog";
 
 import {
   addDays,
   decodeRooms,
-  diffDays,
   encodeRooms,
   fromISO,
   isISO,
@@ -145,6 +146,7 @@ export default function HotelsTunisie() {
   const today = useMemo(() => todayISO(), []);
 
   const [hotels, setHotels] = useState<Hotel[]>([]);
+  const pricing = useBookingConfig();
   const [cities, setCities] = useState<City[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -430,7 +432,6 @@ export default function HotelsTunisie() {
     setVisibleCount(PAGE_SIZE);
   }, [activeCity, textQuery, minStars, sort, onlyAvailable, lastSearch]);
 
-  const nights = form.checkIn && form.checkOut ? diffDays(form.checkIn, form.checkOut) : 0;
 
   const resetFilters = () => {
     selectCity("");
@@ -441,17 +442,17 @@ export default function HotelsTunisie() {
   return (
     <Layout>
       {/* ─────────────────────────── Banner ─────────────────────────── */}
-      <section className="relative overflow-hidden bg-[#064B5C] pb-16 pt-6 text-white lg:pb-20">
+      <section className="relative overflow-hidden bg-brand-800 pb-16 pt-6 text-white lg:pb-20">
         <img
           src={BANNER_IMAGE}
           alt=""
           className="absolute inset-0 h-full w-full object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#031E26]/95 via-[#064B5C]/85 to-[#0A7C95]/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-950/95 via-brand-800/85 to-brand-600/50" />
 
         {/* One soft gold arc echoing the logo's ring */}
         <svg
-          className="pointer-events-none absolute -right-16 -top-28 h-80 w-80 text-[#E3A312] opacity-30"
+          className="pointer-events-none absolute -right-16 -top-28 h-80 w-80 text-brand-600 opacity-30"
           viewBox="0 0 200 200"
           fill="none"
           aria-hidden="true"
@@ -461,7 +462,7 @@ export default function HotelsTunisie() {
 
         <div className="relative mx-auto max-w-[1400px] px-4 sm:px-6 lg:px-8">
           <nav aria-label="Fil d'Ariane" className="mb-3 flex items-center gap-1.5 text-xs text-white/70">
-            <Link to="/" className="transition-colors hover:text-[#F2B705]">
+            <Link to="/" className="transition-colors hover:text-gold-400">
               Accueil
             </Link>
             <ChevronRight className="h-3 w-3" aria-hidden="true" />
@@ -471,13 +472,13 @@ export default function HotelsTunisie() {
           <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
             <div>
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">Hôtels en Tunisie</h1>
-              <div className="mt-2 h-0.5 w-12 rounded-full bg-[#E3A312]" />
+              <div className="mt-2 h-0.5 w-12 rounded-full bg-gold-500" />
             </div>
 
             {!loading && hotels.length > 0 && (
               <p className="text-sm text-white/80">
-                <span className="font-semibold text-[#F2B705]">{hotels.length}</span> hôtels ·{" "}
-                <span className="font-semibold text-[#F2B705]">{destinationOptions.length}</span> destinations
+                <span className="font-semibold text-gold-400">{hotels.length}</span> hôtels ·{" "}
+                <span className="font-semibold text-gold-400">{destinationOptions.length}</span> destinations
               </p>
             )}
           </div>
@@ -509,7 +510,6 @@ export default function HotelsTunisie() {
               onChange={(r) => setForm((f) => ({ ...f, checkIn: r.from ?? "", checkOut: r.to ?? "" }))}
               min={today}
               lang="FR"
-              badge={nights > 0 ? `${nights} nuit${nights > 1 ? "s" : ""}` : undefined}
             />
 
             <div>
@@ -522,7 +522,7 @@ export default function HotelsTunisie() {
             <button
               type="submit"
               disabled={searchLoading}
-              className="flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#F28C0F] to-[#F2B705] px-7 text-sm font-bold text-[#06303A] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95] focus-visible:ring-offset-2 disabled:opacity-60 md:col-span-2 lg:col-span-1"
+              className="flex min-h-[52px] items-center justify-center gap-2 rounded-xl bg-gold-500 px-7 text-sm font-bold text-brand-950 transition hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:opacity-60 md:col-span-2 lg:col-span-1"
             >
               {searchLoading ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
@@ -564,7 +564,7 @@ export default function HotelsTunisie() {
                       i > 0 ? "border-l border-gray-200" : ""
                     } ${
                       active
-                        ? "bg-[#E8F5F8] text-[#0A7C95]"
+                        ? "bg-brand-100 text-brand-600"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
@@ -573,7 +573,7 @@ export default function HotelsTunisie() {
                     ) : (
                       <>
                         {s}
-                        <Star className="h-3.5 w-3.5 fill-[#E3A312] text-[#E3A312]" aria-hidden="true" />
+                        <Star className="h-3.5 w-3.5 fill-gold-500 text-gold-500" aria-hidden="true" />
                         {s < 5 && <span className="text-xs text-gray-400">+</span>}
                       </>
                     )}
@@ -589,11 +589,11 @@ export default function HotelsTunisie() {
                 role="switch"
                 aria-checked={onlyAvailable}
                 onClick={() => setOnlyAvailable((v) => !v)}
-                className="flex items-center gap-2 rounded text-sm text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]"
+                className="flex items-center gap-2 rounded text-sm text-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
               >
                 <span
                   className={`relative h-5 w-9 shrink-0 rounded-full transition-colors ${
-                    onlyAvailable ? "bg-[#0A7C95]" : "bg-gray-300"
+                    onlyAvailable ? "bg-brand-600" : "bg-gray-300"
                   }`}
                 >
                   <span
@@ -617,7 +617,7 @@ export default function HotelsTunisie() {
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
               aria-label="Trier par"
-              className="cursor-pointer rounded-lg border border-gray-200 bg-white py-1.5 pl-8 pr-3 text-sm font-medium text-gray-700 outline-none transition hover:border-gray-300 focus:border-[#0A7C95] focus:ring-2 focus:ring-[#0A7C95]/20"
+              className="cursor-pointer rounded-lg border border-gray-200 bg-white py-1.5 pl-8 pr-3 text-sm font-medium text-gray-700 outline-none transition hover:border-gray-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-600/20"
             >
               <option value="recommended">Recommandés</option>
               <option value="price-asc">Prix croissant</option>
@@ -644,7 +644,7 @@ export default function HotelsTunisie() {
               <button
                 type="button"
                 onClick={loadCatalog}
-                className="inline-flex items-center gap-2 rounded-lg bg-[#0A7C95] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#064B5C]"
+                className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-800"
               >
                 <RotateCcw className="h-4 w-4" aria-hidden="true" />
                 Réessayer
@@ -655,7 +655,7 @@ export default function HotelsTunisie() {
               {searchNotice && !isPending && (
                 <p
                   role="status"
-                  className="mb-4 rounded-lg border border-[#E3A312]/40 bg-[#FFF6DD] px-4 py-3 text-sm text-[#7A5200]"
+                  className="mb-4 rounded-lg border border-gold-500/40 bg-gold-50 px-4 py-3 text-sm text-gold-700"
                 >
                   {searchNotice}
                 </p>
@@ -664,7 +664,7 @@ export default function HotelsTunisie() {
               {/* Results summary */}
               <div className="mb-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-600">
                 {isPending ? (
-                  <span className="inline-flex items-center gap-2 font-medium text-[#0A7C95]">
+                  <span className="inline-flex items-center gap-2 font-medium text-brand-600">
                     <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
                     Recherche des disponibilités en cours…
                   </span>
@@ -674,7 +674,7 @@ export default function HotelsTunisie() {
                       {availableCount} hôtel{availableCount > 1 ? "s" : ""} disponible
                       {availableCount > 1 ? "s" : ""}
                     </span>
-                    <span className="rounded-full bg-[#E8F5F8] px-3 py-1 text-xs font-semibold text-[#0A7C95]">
+                    <span className="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-600">
                       {formatDay(lastSearch.checkIn)} → {formatDay(lastSearch.checkOut)}
                     </span>
                     <span>{roomSummary(lastSearch.rooms)}</span>
@@ -708,7 +708,7 @@ export default function HotelsTunisie() {
                       <button
                         type="button"
                         onClick={() => setOnlyAvailable(false)}
-                        className="rounded-lg bg-[#0A7C95] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#064B5C]"
+                        className="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-800"
                       >
                         Afficher tous les hôtels
                       </button>
@@ -716,7 +716,7 @@ export default function HotelsTunisie() {
                     <button
                       type="button"
                       onClick={resetFilters}
-                      className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-[#0A7C95] hover:text-[#0A7C95]"
+                      className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-semibold text-gray-700 transition hover:border-brand-600 hover:text-brand-600"
                     >
                       Réinitialiser les filtres
                     </button>
@@ -730,7 +730,12 @@ export default function HotelsTunisie() {
                     }`}
                   >
                     {visibleHotels.slice(0, visibleCount).map((h) => (
-                      <HotelCard key={h.id} hotel={h} searchParams={lastSearch ?? undefined} />
+                      <HotelCard
+                        key={h.id}
+                        // MyGo price + agency markup: the same price the hotel page and checkout will show
+                        hotel={hasPrice(h) ? { ...h, price: perNightWithMarkup(h.price as number, pricing.markup) } : h}
+                        searchParams={lastSearch ?? undefined}
+                      />
                     ))}
                   </div>
 
@@ -739,7 +744,7 @@ export default function HotelsTunisie() {
                       <button
                         type="button"
                         onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                        className="rounded-full border-2 border-[#0A7C95] px-7 py-2.5 text-sm font-bold text-[#0A7C95] transition hover:bg-[#0A7C95] hover:text-white"
+                        className="rounded-full border-2 border-brand-600 px-7 py-2.5 text-sm font-bold text-brand-600 transition hover:bg-brand-600 hover:text-white"
                       >
                         Afficher plus ({visibleHotels.length - visibleCount})
                       </button>

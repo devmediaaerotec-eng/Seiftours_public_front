@@ -60,4 +60,6 @@ await test('rejects bad hotel id', async () => {
 await test('rejects endpoints outside the allowlist', async () => {
   assert.equal((await fetch(`${API}?endpoint=BookingList`)).status, 404);
   assert.equal((await post('BookingCancellation', { BookingReference: 'x' })).status, 404);
+  // Public proxy + agency credentials: real bookings must never be possible through it
+  assert.equal((await post('BookingCreation', {})).status, 404);
 });

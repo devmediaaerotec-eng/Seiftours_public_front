@@ -68,8 +68,7 @@ export default function Testimonials() {
 
   return (
     <section className="relative overflow-hidden bg-white py-14 lg:py-20">
-      <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-[#0A7C95]/5 blur-3xl" />
-      <div className="pointer-events-none absolute -right-32 bottom-0 h-72 w-72 rounded-full bg-[#F2B705]/10 blur-3xl" />
+      <div className="pointer-events-none absolute -left-32 top-20 h-72 w-72 rounded-full bg-brand-600/5 blur-3xl" />
 
       <div className="relative mx-auto max-w-[900px] px-4 sm:px-6 lg:px-8">
         <SectionHeading
@@ -91,7 +90,7 @@ export default function Testimonials() {
                 key={i}
                 className={`overflow-hidden rounded-2xl border bg-white transition ${
                   isOpen
-                    ? "border-[#0A7C95]/30 shadow-md"
+                    ? "border-brand-600/30 shadow-md"
                     : "border-gray-200 hover:border-gray-300"
                 }`}
               >
@@ -105,19 +104,19 @@ export default function Testimonials() {
                   <span
                     className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
                       isOpen
-                        ? "bg-[#E8F5F8] text-[#0A7C95]"
+                        ? "bg-brand-100 text-brand-600"
                         : "bg-gray-100 text-gray-400"
                     }`}
                     aria-hidden="true"
                   >
                     <HelpCircle className="h-4 w-4" />
                   </span>
-                  <span className="flex-1 text-[15px] font-bold text-[#06303A] sm:text-base">
+                  <span className="flex-1 text-[15px] font-bold text-brand-900 sm:text-base">
                     {item.q[fr ? "fr" : "en"]}
                   </span>
                   <ChevronDown
                     className={`h-4 w-4 shrink-0 text-gray-400 transition-transform duration-300 ${
-                      isOpen ? "rotate-180 text-[#0A7C95]" : ""
+                      isOpen ? "rotate-180 text-brand-600" : ""
                     }`}
                     aria-hidden="true"
                   />
@@ -140,7 +139,7 @@ export default function Testimonials() {
           {fr ? "Vous ne trouvez pas votre réponse ?" : "Can't find your answer?"}{" "}
           <a
             href="/contact"
-            className="font-semibold text-[#0A7C95] underline-offset-2 hover:underline"
+            className="font-semibold text-brand-600 underline-offset-2 hover:underline"
           >
             {fr ? "Contactez-nous" : "Contact us"}
           </a>

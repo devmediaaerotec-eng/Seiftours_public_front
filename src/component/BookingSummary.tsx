@@ -8,8 +8,8 @@ interface BookingSummaryProps {
   draft: CheckoutDraft;
   nights: number;
   amounts: Amounts;
-  /** "card" = online deposit, "agency" = everything paid at the agency */
-  method: "card" | "agency";
+  /** "card" = online deposit, "request" = reservation request, paid at the agency after confirmation */
+  method: "card" | "request";
   /** Time left before the prices expire, in ms */
   remainingMs: number;
   /** Where "Modifier" goes (the hotel page) */
@@ -43,7 +43,7 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
   const expired = remainingMs <= 0;
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-xl shadow-[#064B5C]/5">
+    <div className="overflow-hidden rounded-3xl border border-gray-200/70 bg-white shadow-xl shadow-brand-800/5">
       {draft.imageUrl && <img src={draft.imageUrl} alt="" loading="lazy" className="h-44 w-full object-cover" />}
 
       <div className="space-y-4 p-5">
@@ -56,7 +56,7 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
                 <Star
                   key={i}
                   aria-hidden="true"
-                  className={`h-4 w-4 ${i < draft.stars! ? "fill-[#F2B705] text-[#F2B705]" : "text-gray-300"}`}
+                  className={`h-4 w-4 ${i < draft.stars! ? "fill-gold-400 text-gold-400" : "text-gray-300"}`}
                 />
               ))}
             </div>
@@ -71,7 +71,7 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
               )}
               {draft.rating ? <span className="ml-2 font-semibold text-gray-900">{draft.rating.toFixed(1)} / 5</span> : null}
             </span>
-            <Link to={editHref} className="inline-flex items-center gap-1 font-semibold text-[#0A7C95] underline">
+            <Link to={editHref} className="inline-flex items-center gap-1 font-semibold text-brand-600 underline">
               <Pencil className="h-3.5 w-3.5" aria-hidden="true" />
               Modifier
             </Link>
@@ -102,20 +102,27 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
         </div>
 
         {/* Prices */}
-        <div className="rounded-2xl bg-[#E8F5F8] p-4">
-          <p
-            className={`mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
-              expired ? "bg-red-100 text-red-700" : "bg-[#064B5C] text-white"
-            }`}
-            role="timer"
-          >
-            <Clock className="h-3.5 w-3.5" aria-hidden="true" />
-            {expired ? "Tarif expiré" : `Tarif garanti encore ${mmss(remainingMs)}`}
-          </p>
+        <div className="rounded-2xl bg-brand-100 p-4">
+          {method === "card" ? (
+            <p
+              className={`mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold ${
+                expired ? "bg-red-100 text-red-700" : "bg-brand-800 text-white"
+              }`}
+              role="timer"
+            >
+              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+              {expired ? "Tarif expiré" : `Tarif garanti encore ${mmss(remainingMs)}`}
+            </p>
+          ) : (
+            <p className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-brand-800 px-3 py-1 text-xs font-bold text-white">
+              <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+              Prix indicatif, confirmé par notre agence
+            </p>
+          )}
 
           {saving > 0 && (
             <p className="mb-1 text-right">
-              <span className="rounded-md border border-[#F28C0F]/60 px-2 py-0.5 text-xs font-bold text-[#B45F00]">
+              <span className="rounded-md border border-gold-500/60 px-2 py-0.5 text-xs font-bold text-gold-700">
                 -{money(saving)} TND
               </span>
             </p>
@@ -138,7 +145,7 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
             <>
               <div className="flex items-baseline justify-between gap-3">
                 <dt className="font-bold text-gray-900">Je paye en ligne</dt>
-                <dd className="text-xl font-extrabold text-[#0A7C95]">
+                <dd className="text-xl font-extrabold text-brand-600">
                   <Tnd>{money(amounts.deposit)}</Tnd>
                 </dd>
               </div>
@@ -150,12 +157,15 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
               </div>
             </>
           ) : (
-            <div className="flex items-baseline justify-between gap-3">
-              <dt className="font-bold text-gray-900">Je paye à l'agence</dt>
-              <dd className="text-xl font-extrabold text-gray-900">
-                <Tnd>{money(amounts.total)}</Tnd>
-              </dd>
-            </div>
+            <>
+              <div className="flex items-baseline justify-between gap-3">
+                <dt className="font-bold text-gray-900">À payer maintenant</dt>
+                <dd className="text-xl font-extrabold text-brand-600">
+                  <Tnd>0</Tnd>
+                </dd>
+              </div>
+              <p className="text-gray-600">Règlement en agence, après confirmation de la disponibilité et du prix final.</p>
+            </>
           )}
           {draft.touristTax ? (
             <p className="text-gray-500">Taxe de séjour non comprise : {money(draft.touristTax)} TND</p>
@@ -165,7 +175,7 @@ export default function BookingSummary({ draft, nights, amounts, method, remaini
         {draft.cancellation && (
           <p
             className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2.5 text-center text-sm font-medium ${
-              draft.cancellation.tone === "free" ? "bg-emerald-50 text-emerald-700" : "bg-[#FFF6DD] text-[#8A5A00]"
+              draft.cancellation.tone === "free" ? "bg-emerald-50 text-emerald-700" : "bg-gold-50 text-gold-700"
             }`}
           >
             {draft.cancellation.tone === "free" ? (

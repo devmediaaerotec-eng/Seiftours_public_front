@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { Users, Plus, Minus, X, ChevronDown } from "lucide-react";
+import { createPortal } from "react-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { BedDouble, ChevronDown, Plus, Users, X } from "lucide-react";
+import Stepper from "@/components/Stepper";
 
 import type { RoomConfig } from "@/lib/booking";
 export type { RoomConfig };
@@ -7,10 +10,6 @@ export type { RoomConfig };
 interface Props {
   rooms: RoomConfig[];
   onChange: (rooms: RoomConfig[]) => void;
-}
-
-function clamp(v: number, min: number, max: number) {
-  return Math.max(min, Math.min(max, v));
 }
 
 export function roomSummary(rooms: RoomConfig[]): string {
@@ -29,10 +28,14 @@ export function roomSummary(rooms: RoomConfig[]): string {
 export default function RoomComposer({ rooms, onChange }: Props) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const [sheetHost, setSheetHost] = useState<HTMLDivElement | null>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     function onOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      const t = e.target as Node;
+      if (!containerRef.current?.contains(t) && !sheetRef.current?.contains(t)) {
         setOpen(false);
       }
     }
@@ -74,12 +77,14 @@ export default function RoomComposer({ rooms, onChange }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-haspopup="dialog"
-        className="flex w-full items-center gap-3 rounded-xl border border-gray-300 bg-white px-3.5 py-2 text-left transition focus-visible:border-[#0A7C95] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A7C95]/20"
+        className={`flex w-full items-center gap-3 rounded-xl border bg-white px-3.5 py-2 text-left transition hover:border-brand-600/60 focus-visible:border-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600/20 ${
+          open ? "border-brand-600 ring-2 ring-brand-600/20" : "border-gray-300"
+        }`}
       >
-        <Users className="h-5 w-5 shrink-0 text-[#064B5C]" aria-hidden="true" />
+        <Users className="h-5 w-5 shrink-0 text-brand-800" aria-hidden="true" />
         <span className="block min-w-0 flex-1">
-          <span className="block text-[11px] font-medium leading-4 text-gray-500">Chambres &amp; voyageurs</span>
-          <span className="block truncate text-[15px] font-medium text-gray-900">{roomSummary(rooms)}</span>
+          <span className="block text-[11px] font-semibold uppercase leading-4 tracking-wide text-gray-500">Chambres &amp; voyageurs</span>
+          <span className="block truncate text-[15px] font-semibold text-gray-900">{roomSummary(rooms)}</span>
         </span>
         <ChevronDown
           className={`h-4 w-4 shrink-0 text-gray-500 transition-transform ${open ? "rotate-180" : ""}`}
@@ -87,146 +92,95 @@ export default function RoomComposer({ rooms, onChange }: Props) {
         />
       </button>
 
-      {open && (
-        <div
-          role="dialog"
-          aria-label="Chambres et voyageurs"
-          className="absolute z-50 top-full mt-2 right-0 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 space-y-4"
-        >
-          {rooms.map((room, i) => (
-            <div key={i}>
-              {i > 0 && <div className="border-t border-gray-100 mb-4" />}
+      <div ref={setSheetHost} />
+      {open && sheetHost && createPortal(
+        <>
+          <div className="fixed inset-0 z-[60] bg-brand-900/40 sm:hidden" aria-hidden="true" onClick={() => setOpen(false)} />
+          <div
+            ref={sheetRef}
+            role="dialog"
+            aria-label="Chambres et voyageurs"
+            className="fixed inset-x-0 bottom-0 z-[70] sm:z-50 max-h-[88vh] space-y-3 overflow-y-auto rounded-t-3xl bg-white p-4 shadow-2xl sm:absolute sm:inset-x-auto sm:bottom-auto sm:right-0 sm:top-full sm:mt-2 sm:max-h-[70vh] sm:w-[22rem] sm:rounded-2xl sm:border sm:border-gray-100"
+          >
+            <div className="mx-auto h-1.5 w-10 rounded-full bg-gray-200 sm:hidden" aria-hidden="true" />
+            {rooms.map((room, i) => (
+              <div key={i} className="rounded-2xl border border-gray-100 bg-gray-50/70 p-3">
+                <div className="mb-1 flex items-center justify-between">
+                  <span className="flex items-center gap-2 text-sm font-extrabold text-brand-800">
+                    <BedDouble className="h-4 w-4" aria-hidden="true" />
+                    Chambre {i + 1}
+                  </span>
+                  {rooms.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeRoom(i)}
+                      className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold text-gray-500 transition hover:bg-red-50 hover:text-red-600"
+                      aria-label={`Supprimer la chambre ${i + 1}`}
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden="true" /> Retirer
+                    </button>
+                  )}
+                </div>
 
-              {/* Room header */}
-              <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-bold text-gray-800">Chambre {i + 1}</span>
-                {rooms.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeRoom(i)}
-                    className="text-gray-400 hover:text-red-500 transition-colors"
-                    aria-label="Supprimer cette chambre"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                <Stepper label="Adultes" hint="18 ans et plus" value={room.adults} min={1} max={10}
+                         onChange={(v) => updateRoom(i, { adults: v })} />
+                <Stepper label="Enfants" hint="0 à 17 ans" value={room.children} min={0} max={6}
+                         onChange={(v) => updateRoom(i, { children: v })} />
+
+                {room.children > 0 && (
+                  <div className="mt-2 border-t border-gray-200 pt-3">
+                    <p className="mb-2 text-xs font-semibold text-gray-600">
+                      Âge des enfants à la date du séjour (le prix en dépend)
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {room.childrenAges.map((age, j) => (
+                        <label key={j} className="block">
+                          <span className="mb-0.5 block text-[11px] text-gray-500">Enfant {j + 1}</span>
+                          <select
+                            value={age}
+                            onChange={(e) => {
+                              const ages = [...room.childrenAges];
+                              ages[j] = parseInt(e.target.value, 10);
+                              updateRoom(i, { childrenAges: ages });
+                            }}
+                            className="w-full cursor-pointer rounded-lg border border-gray-300 bg-white px-2 py-1.5 text-sm font-semibold text-gray-900 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+                          >
+                            {Array.from({ length: 18 }, (_, k) => (
+                              <option key={k} value={k}>
+                                {k === 0 ? "- 1 an" : `${k} an${k !== 1 ? "s" : ""}`}
+                              </option>
+                            ))}
+                          </select>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
                 )}
               </div>
+            ))}
 
-              {/* Adults */}
-              <div className="flex items-center justify-between mb-3">
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Adultes</p>
-                  <p className="text-xs text-gray-400">18 ans et plus</p>
-                </div>
-                <Counter
-                  value={room.adults}
-                  min={1}
-                  max={10}
-                  onChange={(v) => updateRoom(i, { adults: v })}
-                />
-              </div>
+            <button
+              type="button"
+              onClick={addRoom}
+              disabled={rooms.length >= 5}
+              className="flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-dashed border-brand-600/40 py-2.5 text-sm font-bold text-brand-600 transition hover:bg-brand-100 disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              <Plus className="h-4 w-4" aria-hidden="true" /> Ajouter une chambre
+              <span className="font-normal text-gray-500">(5 max.)</span>
+            </button>
 
-              {/* Children */}
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-700">Enfants</p>
-                  <p className="text-xs text-gray-400">0 – 17 ans</p>
-                </div>
-                <Counter
-                  value={room.children}
-                  min={0}
-                  max={6}
-                  onChange={(v) => updateRoom(i, { children: v })}
-                />
-              </div>
-
-              {/* Children ages */}
-              {room.children > 0 && (
-                <div className="mt-3 pt-3 border-t border-gray-50">
-                  <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">
-                    Âge des enfants
-                  </p>
-                  <div className="grid grid-cols-3 gap-2">
-                    {room.childrenAges.map((age, j) => (
-                      <div key={j}>
-                        <label className="text-[10px] text-gray-400 mb-0.5 block">
-                          Enfant {j + 1}
-                        </label>
-                        <select
-                          value={age}
-                          onChange={(e) => {
-                            const ages = [...room.childrenAges];
-                            ages[j] = parseInt(e.target.value, 10);
-                            updateRoom(i, { childrenAges: ages });
-                          }}
-                          className="w-full text-xs border border-gray-200 rounded-lg px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#0A7C95]/30 focus:border-[#0A7C95] bg-white"
-                        >
-                          {Array.from({ length: 18 }, (_, k) => (
-                            <option key={k} value={k}>
-                              {k} an{k !== 1 ? "s" : ""}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-
-          <button
-            type="button"
-            onClick={addRoom}
-            disabled={rooms.length >= 5}
-            className="w-full py-2 border border-dashed border-[#0A7C95]/40 text-[#0A7C95] text-sm font-medium rounded-xl hover:bg-[#E8F5F8] transition-colors disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
-          >
-            <Plus className="w-4 h-4" /> Ajouter une chambre
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setOpen(false)}
-            className="w-full py-2 bg-[#064B5C] hover:bg-[#0A7C95] text-white text-sm font-semibold rounded-xl transition-colors"
-          >
-            Confirmer
-          </button>
-        </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="w-full rounded-xl bg-brand-800 py-2.5 text-sm font-bold text-white transition hover:bg-brand-600"
+            >
+              Valider · {roomSummary(rooms)}
+            </button>
+          </div>
+        </>,
+        // Mobile: render on <body> so the sheet escapes the form's stacking context (it covers the whole screen)
+        isMobile ? document.body : sheetHost
       )}
-    </div>
-  );
-}
-
-function Counter({
-  value,
-  min,
-  max,
-  onChange,
-}: {
-  value: number;
-  min: number;
-  max: number;
-  onChange: (v: number) => void;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <button
-        type="button"
-        onClick={() => onChange(clamp(value - 1, min, max))}
-        disabled={value <= min}
-        className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-[#0A7C95] hover:text-[#0A7C95] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        <Minus className="w-3 h-3" />
-      </button>
-      <span className="w-5 text-center text-sm font-bold text-gray-900">{value}</span>
-      <button
-        type="button"
-        onClick={() => onChange(clamp(value + 1, min, max))}
-        disabled={value >= max}
-        className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-[#0A7C95] hover:text-[#0A7C95] disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-      >
-        <Plus className="w-3 h-3" />
-      </button>
     </div>
   );
 }

@@ -12,18 +12,17 @@ import {
   Clock,
   Users,
   Search,
-  Minus,
-  Plus,
   PlaneTakeoff,
   PlaneLanding,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import DateRangePicker from "@/components/DateRangePicker";
-import { addDays, diffDays, todayISO, type DateRange } from "@/lib/booking";
+import Stepper from "@/components/Stepper";
+import { addDays, todayISO, type DateRange } from "@/lib/booking";
 
 /* -------------------------------------------------------------------------- */
 /*  Theme (logo palette)                                                      */
-/*  teal #0A7C95 · deep teal #064B5C · gold #E3A312 / #F2B705 · orange #F28C0F */
+/*  Colours: brand-* (teal, every action) and gold-* (rare accent), see tailwind.config.ts */
 /* -------------------------------------------------------------------------- */
 
 type TabId = "hotels" | "omra" | "trips" | "flights" | "circuits";
@@ -71,6 +70,7 @@ const FR = {
   roundTrip: "Aller-retour",
   oneWay: "Aller simple",
   departure: "Départ",
+  flightDates: ["Aller", "Retour"] as [string, string],
   region: "Région",
   north: "Circuit Nord",
   south: "Circuit Sud",
@@ -109,6 +109,7 @@ const EN: typeof FR = {
   roundTrip: "Round trip",
   oneWay: "One way",
   departure: "Departure",
+  flightDates: ["Outbound", "Return"] as [string, string],
   region: "Region",
   north: "North tour",
   south: "South tour",
@@ -188,9 +189,9 @@ function Shell({
   const Tag = as;
   return (
     <Tag
-      className={`flex items-center gap-3 rounded-xl border border-gray-300 bg-white px-3.5 py-2 transition focus-within:border-[#0A7C95] focus-within:ring-2 focus-within:ring-[#0A7C95]/20 ${className}`}
+      className={`flex items-center gap-3 rounded-xl border border-gray-300 bg-white px-3.5 py-2 transition focus-within:border-brand-600 focus-within:ring-2 focus-within:ring-brand-600/20 ${className}`}
     >
-      <span className="shrink-0 text-[#064B5C]">{icon}</span>
+      <span className="shrink-0 text-brand-800">{icon}</span>
       <span className="block min-w-0 flex-1 text-left">
         <span className="block text-[11px] font-medium leading-4 text-gray-500">{label}</span>
         {children}
@@ -201,51 +202,6 @@ function Shell({
 
 const inputClass =
   "block w-full min-w-0 bg-transparent text-[15px] font-medium text-gray-900 outline-none placeholder:font-normal placeholder:text-gray-500";
-
-function Counter({
-  label,
-  value,
-  min,
-  max,
-  onChange,
-}: {
-  label: string;
-  value: number;
-  min: number;
-  max: number;
-  onChange: (v: number) => void;
-}) {
-  const btn =
-    "flex h-8 w-8 items-center justify-center rounded-full border border-gray-300 text-[#064B5C] transition hover:border-[#0A7C95] hover:text-[#0A7C95] disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:border-gray-300";
-  return (
-    <div className="flex items-center justify-between py-2">
-      <span className="text-sm font-medium text-gray-800">{label}</span>
-      <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className={btn}
-          disabled={value <= min}
-          onClick={() => onChange(Math.max(min, value - 1))}
-          aria-label={`− ${label}`}
-        >
-          <Minus className="h-4 w-4" />
-        </button>
-        <span className="w-5 text-center text-sm font-bold text-gray-900" aria-live="polite">
-          {value}
-        </span>
-        <button
-          type="button"
-          className={btn}
-          disabled={value >= max}
-          onClick={() => onChange(Math.min(max, value + 1))}
-          aria-label={`+ ${label}`}
-        >
-          <Plus className="h-4 w-4" />
-        </button>
-      </div>
-    </div>
-  );
-}
 
 function Guests({
   label,
@@ -308,14 +264,14 @@ function Guests({
           className="absolute left-0 right-0 top-full z-30 mt-2 rounded-xl border border-gray-100 bg-white p-4 shadow-2xl"
         >
           {showRooms && (
-            <Counter label={L.rooms} value={rooms} min={1} max={5} onChange={onRooms} />
+            <Stepper label={L.rooms} value={rooms} min={1} max={5} onChange={onRooms} />
           )}
-          <Counter label={L.adults} value={adults} min={1} max={10} onChange={onAdults} />
-          <Counter label={L.children} value={kids} min={0} max={6} onChange={onKids} />
+          <Stepper label={L.adults} value={adults} min={1} max={10} onChange={onAdults} />
+          <Stepper label={L.children} value={kids} min={0} max={6} onChange={onKids} />
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="mt-3 w-full rounded-lg bg-[#064B5C] py-2 text-sm font-semibold text-white transition hover:bg-[#0A7C95]"
+            className="mt-3 w-full rounded-lg bg-brand-800 py-2 text-sm font-semibold text-white transition hover:bg-brand-600"
           >
             {L.done}
           </button>
@@ -368,8 +324,6 @@ export default function HeroSearch() {
   );
   const monthValue = month || months[0].value;
 
-  const nights = dates.from && dates.to ? diffDays(dates.from, dates.to) : 0;
-  const nightsText = nights > 0 ? plural(nights, L.night, L.nights) : undefined;
 
   const guestsSummary = (withRooms: boolean) =>
     [
@@ -489,8 +443,8 @@ export default function HeroSearch() {
               onClick={() => switchTab(id)}
               className={`relative flex shrink-0 items-center gap-2 whitespace-nowrap px-3 py-3.5 text-sm transition-colors sm:px-4 ${
                 active
-                  ? "font-semibold text-[#0A7C95] after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-[#E3A312]"
-                  : "font-medium text-gray-700 hover:text-[#0A7C95]"
+                  ? "font-semibold text-brand-600 after:absolute after:inset-x-0 after:bottom-0 after:h-[3px] after:bg-gold-500"
+                  : "font-medium text-gray-700 hover:text-brand-600"
               }`}
             >
               <Icon className="h-[18px] w-[18px]" aria-hidden="true" />
@@ -533,7 +487,6 @@ export default function HeroSearch() {
                 onChange={setDates}
                 min={today}
                 lang={lang}
-                badge={nightsText}
               />
               {guests(true, L.roomsLabel)}
             </>
@@ -605,8 +558,8 @@ export default function HeroSearch() {
                     onClick={() => setTripType(type)}
                     className={`rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
                       tripType === type
-                        ? "bg-[#064B5C] text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-[#E8F5F8] hover:text-[#0A7C95]"
+                        ? "bg-brand-800 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-brand-100 hover:text-brand-600"
                     }`}
                   >
                     {type === "return" ? L.roundTrip : L.oneWay}
@@ -657,6 +610,8 @@ export default function HeroSearch() {
                 single={tripType === "oneway"}
                 minNights={0}
                 lang={lang}
+                labels={L.flightDates}
+                unit="days"
               />
               {guests(false, L.passengers)}
             </>
@@ -682,7 +637,7 @@ export default function HeroSearch() {
 
         <button
           type="submit"
-          className="mx-auto mt-4 flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#F28C0F] to-[#F2B705] text-base font-bold text-[#06303A] shadow-md transition hover:shadow-lg hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#064B5C] focus-visible:ring-offset-2"
+          className="mx-auto mt-4 flex h-12 w-full max-w-md items-center justify-center gap-2 rounded-lg bg-gold-500 text-base font-bold text-brand-950 shadow-md transition hover:shadow-lg hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
         >
           <Search className="h-5 w-5" aria-hidden="true" />
           {L.search}

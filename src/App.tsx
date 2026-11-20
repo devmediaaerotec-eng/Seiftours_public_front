@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { lazy, Suspense, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
-import { AuthProvider } from './contexts/AuthContext';
 import { PageLoader } from './component/Loader';
 import Index from './pages/Index';
 import Checkout from './pages/Checkout';
@@ -78,22 +77,14 @@ const AppRoutes = () => {
     <Route path="/transport" element={<Transport />} />
     <Route path="/vol" element={<Vol />} />
     <Route path="/bons-plans" element={<BonsPlans />} />
+    <Route path="/bons-plans/:id" element={<DealDetailPage />} />
     <Route path="/contact" element={<Contact />} />
-         import DealDetailPage from "./pages/DealDetailPage";
-
-   <Route path="/bons-plans" element={<BonsPlans />} />
-   <Route path="/bons-plans/:id" element={<DealDetailPage />} />
     <Route path="/checkout" element={<Checkout />} />
-        <Route path="/reservation/:reference" element={<BookingStatus />} />
-        <Route path="/circuit/:slug" element={<Circuitdetailpage />} />
-
-<Route path="/voyage-organise" element={<VoyageOrganise />} />
-<Route path="/voyage-organise/:slug" element={<TripDetail />} />
-<Route path="/omra/:slug" element={<TripDetail />} /> 
- 
- 
-<Route path="/reserver/:slug" element={<Reservation />} />
- 
+    <Route path="/reservation/:reference" element={<BookingStatus />} />
+    <Route path="/circuit/:slug" element={<Circuitdetailpage />} />
+    <Route path="/voyage-organise/:slug" element={<TripDetail />} />
+    <Route path="/omra/:slug" element={<TripDetail />} />
+    <Route path="/reserver/:slug" element={<Reservation />} />
   </Routes>
   </Suspense>
   );
@@ -103,14 +94,12 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
  
     <LanguageProvider>
-      <AuthProvider>
         <TooltipProvider>
           <Toaster />
           <BrowserRouter>
             <AppRoutes />
           </BrowserRouter>
         </TooltipProvider>
-      </AuthProvider>
     </LanguageProvider>
    </QueryClientProvider>
 );

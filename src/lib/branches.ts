@@ -1,6 +1,6 @@
 /**
  * The agencies where a visitor can finalise an "agency" booking.
- * No imports: used by the browser AND by api/bookings.ts.
+ * The ids must match branches.code in the database (the API checks them).
  *
  * ⚠️ PLACEHOLDER VALUES: replace the address, phone and opening hours of each agency
  * by the real ones before going live (everything marked [À COMPLÉTER]).
