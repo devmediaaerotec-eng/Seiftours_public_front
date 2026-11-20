@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getHotelCatalog } from "@/lib/hotelCatalog";
 import { useNav } from "@/hooks/Usenav";
+import LangSwitcher from "@/component/LangSwitcher";
 
 /* -------------------------------------------------------------------------- */
 /*  Coordonnées agence                                                        */
@@ -470,7 +471,7 @@ export default function Navbar() {
               ))}
             </div>
 
-      
+            <LangSwitcher tone="light" />
           </div>
         </div>
       </div>
@@ -763,6 +764,9 @@ export default function Navbar() {
 
             {/* Footer du tiroir : CTA */}
             <div className="border-t border-gray-100 px-3 py-3">
+              <div className="mb-3 flex items-center justify-center">
+                <LangSwitcher tone="dark" />
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <a
                   href={PHONE_HREF}

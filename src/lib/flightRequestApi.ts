@@ -3,7 +3,7 @@
  * There is no flight search API: the request is saved and the agency calls the visitor back
  * with the available flights and their prices.
  */
-const API = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
+const API = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
 
 export type TripType = "return" | "oneway";
 export type CabinClass = "economy" | "premium" | "business" | "first";

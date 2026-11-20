@@ -287,8 +287,8 @@ function Guests({
 export default function HeroSearch() {
   const { lang } = useLanguage();
   const navigate = useNavigate();
-  const L = lang === "FR" ? FR : EN;
-  const locale = lang === "FR" ? "fr-FR" : "en-GB";
+  const L = lang === "EN" ? EN : FR;
+  const locale = lang === "EN" ? "en-GB" : "fr-FR";
 
   const today = useMemo(() => todayISO(), []);
 

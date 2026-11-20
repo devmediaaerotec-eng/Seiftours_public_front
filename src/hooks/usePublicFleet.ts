@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-const API = (import.meta.env.VITE_API_BASE as string | undefined) ?? "";
+const API = (import.meta.env.VITE_API_URL as string | undefined) ?? "";
 const ASSETS = (import.meta.env.VITE_ASSET_BASE as string | undefined) ?? "";
 
 export type BusType = "minibus" | "microbus";

@@ -181,7 +181,7 @@ function InfoRow({
 /* -------------------------------------------------------------------------- */
 export default function Footer() {
   const { lang } = useLanguage();
-  const L = lang === "FR" ? FR : EN;
+  const L = lang === "EN" ? EN : FR;
   const year = new Date().getFullYear();
   const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
     L.whatsappMessage

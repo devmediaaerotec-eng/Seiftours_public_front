@@ -22,7 +22,7 @@ function remaining(iso: string | null): { label: string; urgent: boolean } | nul
 export default function DealDetailPage() {
   const { id } = useParams();
   const { lang } = useLanguage();
-  const { deal, loading, error, notFound, retry } = useDeal(id, lang === "FR" ? "fr" : "en");
+  const { deal, loading, error, notFound, retry } = useDeal(id, lang === "EN" ? "en" : "fr");
 
   if (loading) {
     return (

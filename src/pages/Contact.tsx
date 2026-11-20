@@ -265,7 +265,7 @@ interface FormValues {
 
 export default function Contact() {
   const { lang } = useLanguage();
-  const L = lang === "FR" ? FR : EN;
+  const L = lang === "EN" ? EN : FR;
   const [params] = useSearchParams();
   const uid = useId();
   const ids = {
@@ -490,7 +490,7 @@ export default function Contact() {
               <InfoRow icon={<Clock className="h-5 w-5" aria-hidden="true" />} label={L.hours}>
                 {HOURS.map((h) => (
                   <span key={h.fr} className="flex justify-between gap-6 font-medium text-gray-700">
-                    <span>{lang === "FR" ? h.fr : h.en}</span>
+                    <span>{lang === "EN" ? h.en : h.fr}</span>
                     <span className="text-gray-900">{h.time}</span>
                   </span>
                 ))}

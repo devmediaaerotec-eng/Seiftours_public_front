@@ -18,7 +18,7 @@ interface Props {
   single?: boolean;
   /** 1 for hotels (one night minimum), 0 allows same-day ranges */
   minNights?: number;
-  lang: "FR" | "EN";
+  lang: "FR" | "EN" | "AR";
   /** Names of the two dates; default Arrivée / Départ */
   labels?: [string, string];
   /** Length shown next to the dates: nights (hotels) or days (trips) */
@@ -77,10 +77,10 @@ export default function DateRangePicker({
   const sheetRef = useRef<HTMLDivElement>(null);
   const [sheetHost, setSheetHost] = useState<HTMLDivElement | null>(null);
   const isMobile = useIsMobile();
-  const t = TEXT[lang];
+  const t = TEXT[lang === "EN" ? "EN" : "FR"];   // AR réutilise les libellés FR du calendrier (localisation AR complète à venir)
   const [startLabel, endLabel] = labels ?? t.labels;
-  const locale = lang === "FR" ? fr : enGB;
-  const intl = lang === "FR" ? "fr-FR" : "en-GB";
+  const locale = lang === "EN" ? enGB : fr;
+  const intl = lang === "EN" ? "en-GB" : "fr-FR";
   const thisYear = new Date().getFullYear();
   // "sam. 10 juil." — the year only when it is not this year, so a 2027 stay is never ambiguous
   const shown = (iso?: string) => {
