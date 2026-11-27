@@ -32,7 +32,7 @@ export default function FloatingElements() {
 
   const socials = [
     { icon: FacebookIcon, label: "Facebook", color: "bg-[#1877F2] hover:bg-[#0f5cc5]", href: "https://www.facebook.com/share/1YMv5nJFbZ/?mibextid=wwXIfr" },
-    { icon: InstagramIcon, label: "Instagram", color: "bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-90", href: "https://www.instagram.com/safes_tour/" },
+    { icon: InstagramIcon, label: "Instagram", color: "bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] hover:opacity-90", href: "https://www.instagram.com/seif.tours/" },
     { icon: MessageCircle, label: "WhatsApp", color: "bg-[#25D366] hover:bg-[#1faa51]", href: "https://wa.me/21620965714" },
    ];
 

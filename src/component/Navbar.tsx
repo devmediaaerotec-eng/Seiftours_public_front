@@ -50,7 +50,7 @@ function InstagramIcon({ className }: { className?: string }) {
 
 const SOCIALS = [
   { label: "Facebook", href: "https://www.facebook.com/share/1YMv5nJFbZ/?mibextid=wwXIfr", Icon: FacebookIcon },
-  { label: "Instagram", href: "https://www.instagram.com/safes_tour/", Icon: InstagramIcon },
+  { label: "Instagram", href: "https://www.instagram.com/seif.tours/", Icon: InstagramIcon },
   { label: "WhatsApp", href: WHATSAPP_HREF, Icon: MessageCircle },
  ];
 
